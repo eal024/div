@@ -1,0 +1,34 @@
+---
+title: "data.table"
+author: "E"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Data.table
+
+```{r data_packages}
+library(data.table)
+
+dt <- as.data.table(mtcars)
+```
+
+```{r basic}
+# |echo: false
+
+# subsetting, rows
+dt[1:6, ]
+
+# Choosing variables
+dt[1:6, 1:2, ]
+
+```
+
+## Extract variables
+
+```{r}
+# |echo: false
+dt[ , .(1,2),]
+```
