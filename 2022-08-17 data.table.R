@@ -5,7 +5,7 @@ library(data.table)
 
 # Go trough data.table, based on:
 # http://brooksandrew.github.io/simpleblog/articles/advanced-data-table/
-#
+# and: https://www.listendata.com/2016/10/r-data-table.html
 
 
 # 1. columns of lists -----------------------------------------------------
@@ -234,25 +234,62 @@ dt <- dt[order(id)]
 dt[ , .SD[.N], by = am][]
 
 
+# -------------------------------------------------------------------------
+
+
+dt <- as.data.table( mtcars)[1:6,]
+
+# Summarise multiple var
+
+a <-dt[ , sapply(.SD, function(x) c(mean = mean(x),
+                                sd = sd(x)
+                                ))] 
+
+attr(a,"dimnames")
+
+data.table( name = names(dt), mean = a[1,], sd = a[2,])
+
+
+# By
+dt[am == 1][ , sapply(.SD, function(x) c(mean = mean(x),
+                                sd = sd(x)
+))] 
 
 
 
+# Merging  ----------------------------------------------------------------
+
+dt  <- data.table( navn = c("Eirik", "Trond", "Christoffer"),
+                   verdi = 1:3
+                   )
+
+dt2 <- data.table( navn = c("Eirik", "Trond"),
+                   dag = c("man", "tir")
+)
 
 
+merge(dt,dt2, by = "navn")
+
+# Left
+merge(dt, dt2, by = "navn", all.x = T)
+
+# Rigth
+merge(dt, dt2, by = "navn", all.y = T)
+
+# Full
+merge(dt, dt2, by = "navn", all = T)
+
+data.table::
 
 
+# reshape -----------------------------------------------------------------
 
+dt <- data.table( navn = c("Eirik", "Trond"),
+                  verdi1 = c(1,2),
+                  verdi2 = c(3,4)
+                  )
 
-
-
-
-
-
-
-
-
-
-
+dt_long <- melt(dt, id =1, measure.vars = patterns("verdi"))[order(navn)]
 
 
 
