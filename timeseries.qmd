@@ -1,0 +1,231 @@
+---
+title: "Time Series Econometrics"
+format: revealjs
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Time Series Econometrics
+
+-   Time series econometrics concerns itself with the evolvement of variables over time.
+
+. . .
+
+-   Enders: "*The task facing the modern time-series econometrician is to develop reasonably simple models capable of forecasting, interpreting, and testing hypotheses concerning economic data.*"
+
+## Time Series
+
+```{r}
+#| echo: false
+
+y <- 1 + 0.1*1:100 + rnorm(100, 0, 1)
+
+plot.ts(y)
+
+```
+
+## Noen nyttige ressurser
+
+-   [Applied Econometric Time Series, (Walter Enders)](https://new.mmf.lnu.edu.ua/wp-content/uploads/2018/03/enders_applied_econometric_time_series.pdf)
+
+-   [A little book of R for time series](https://buildmedia.readthedocs.org/media/pdf/a-little-book-of-r-for-time-series/latest/a-little-book-of-r-for-time-series.pdf)
+
+-   [Intro to Time Series Regression](https://www.econometrics-with-r.org/14-ittsraf.html)
+
+- [Big Book of R](https://www.bigbookofr.com/index.html)
+
+
+## Regresjonsproblem
+
+$y_{t} = \alpha_{o}\ + \alpha_{1}*y_{t-1} +\beta*t +\epsilon_{t}$
+
+```{r}
+# Simulerer et datasett
+
+# Simulere data
+n <- 100
+beta <- 0.9
+cons <- 0
+
+y <- rep(0,n)
+e <- rnorm(n, 0, sd = 0.2)
+y[1] <- 0
+
+for(i in 2:n){ 
+  y[i] <- cons + beta*y[i-1] + i*0.01 + e[i]}
+
+
+plot.ts(y)
+
+
+```
+
+## Regresjonsproblem
+
+```{r}
+
+model <- lm( data = data.frame(y = y, t = 1:100), formula =  y ~ t )
+summary(  model)
+
+
+```
+
+## Regresjonsproblem
+
+```{r}
+
+acf(residuals(model))
+
+```
+
+## [AR]{.underline}MA
+
+Autoregressive model, AR(p = 1):
+
+{{< pagebreak >}}
+
+-   AR(1): $y_{t} = \alpha_{o}\ + \alpha_{1}*y_{t-1} + \epsilon_{t}$
+
+-   \|$\alpha_{1}$\| \<= 1
+
+## [AR]{.underline}MA
+
+Forsoker a modellere AR(1) med simulert data:
+
+```{r }
+#| include: true
+#| eval: true
+#| echo: true
+
+# Velger optimal modell med antall lages 
+model2 <- forecast::Arima( y, order = c(1,0,0), include.drift = 1)
+
+
+```
+
+## [AR]{.underline}MA
+
+Forsoker a modellere AR(1) med simulert data:
+
+```{r }
+#| include: true
+#| eval: true
+#| echo: true
+
+# Velger optimal modell med antall lages 
+model2 <- forecast::Arima( y, order = c(1,0,0), include.drift = T)
+
+# Ser pa ko til residuals
+acf( model2$residuals)
+
+```
+
+## AR(1) data
+
+```{r}
+#| include: true
+#| eval: true
+#| echo: true
+
+ar1_data <- arima.sim( n = 100,  list(ar = 0.9) )
+
+# head(ar1_data)
+
+```
+
+## AR(1) data
+
+```{r}
+#| include: true
+#| eval: true
+#| echo: true
+
+
+fun_sim_ar1 <- function(x) arima.sim( n = 100,  list(ar = x) )
+
+```
+
+## AR(1) data
+
+```{r, message=F, warning=F}
+
+fun_sim_ar1 <- function( start = 1, a ){
+# Simulere data
+n <- 100
+cons <- 0
+
+y <- rep(0,n)
+e <- rnorm(n, 0, sd = 0.2)
+y[1] <- start
+
+for(i in 2:n){ 
+  y[i] <- cons + a*y[i-1] + e[i]}
+
+y
+    
+}
+
+
+```
+
+```{r}
+#| include: true
+#| eval: true
+#| echo: true
+
+fun_sim_ar1( start = 1 ,a = 0.5) |> head(6)
+
+```
+
+## AR(1) data
+
+```{r, message=F, warning=F}
+#| include: true
+#| eval: true
+#| echo: true
+
+# fun_sim_ar1( a = 0.5) |> head(6)
+
+library(tidyverse)
+
+# 3 ulike simmuleringer
+
+tibble( p = c(0.9, 0.5, 0.1),
+        data =  list( fun_sim_ar1(start = 1, a = 0.9),
+                      fun_sim_ar1(start = 1, a = 0.5),
+                      fun_sim_ar1(start = 1, a = 0.1)
+                    )
+        ) |> 
+    unnest( data) -> df
+
+```
+
+## AR(1) data
+
+```{r}
+
+df |>
+    mutate( tid = 1:100, .by = p) |> 
+    ggplot(aes( y = data, x = tid) ) +
+    geom_line() +
+    facet_wrap( ~p, ncol = 1)
+
+```
+
+
+
+## AR(1) 
+- Nar modellen er:
+. . . 
+
+$y_{t} = \alpha_{o}\ + \alpha_{1}*y_{t-1} + \beta*t +\epsilon_{t}$
+
+. . .
+- Modeller med trend "AR(1) + drift (trend) 
+
+
+
+
+
+

@@ -25,7 +25,7 @@ dt1 <- dt[, .(cyl, gear),][ , gearL := .(list(unique(gear))), by = cyl][]
 
 dt1[ , ':=' (gear1 = lapply(gearL, function(x) x[1]),
              gear2 = lapply(gearL, function(x) x[2])
-             ) ,][]
+) ,][]
 
 # Denne fungerer ogs??
 dt1[ ,tt := lapply(gearL,`[` ,2 ), ][]
@@ -97,7 +97,7 @@ dt[ gear == 4, .(mean = mean(mpg)), ]
 data <- data.table( 
     set = c(1,2),
     data = list(dt,dt)
-    )
+)
 
 # Nest by group 
 dt[, list(dt = list(.SD)), by = gear][]
@@ -106,7 +106,7 @@ dt_nested_gear <- dt[, list(dt = list(.SD)), by = gear][]
 
 
 dt_nested_gear[ , ny := lapply(dt,  function(x) x[,.(mean_mpg = mean(mpg)),] ),
-                ][ , ]
+][ , ]
 
 
 data.table( gear = 4, dt_nested_gear$ny[[1]])
@@ -158,11 +158,11 @@ y > median(x)
 
 if(y > median(x)){
     x[(as.integer(length(x)/2)+1):length(x)]
-    }else if(y < median(x)){
-        x[1:as.integer(length(x)/2)]
-    }else{
-        return(median(x))
-        }
+}else if(y < median(x)){
+    x[1:as.integer(length(x)/2)]
+}else{
+    return(median(x))
+}
 
 # Setting key, telles which variable the data is sorted by
 
@@ -175,7 +175,7 @@ setkey(dt2,disp)
 microbenchmark::microbenchmark(
     en = dt2[ disp %in% c(100:200),, ],
     to = as.data.table(mtcars)[ disp %in% c(100:200),, ]
-    )
+)
 
 # ID key var.
 key(dt2)
@@ -197,7 +197,7 @@ dt[ order(-mpg)]
 dt[ ,.( snitt_mpg = mean(mpg),
         dv_mgp = sd(mpg),
         min_mpg = min(mpg)
-        )][]
+)][]
 
 
 # SD
@@ -212,7 +212,7 @@ dt[ , lapply(.SD, function(x) mean(x) ),]
 microbenchmark::microbenchmark(
     by = as.data.table(mtcars)[ , lapply(.SD, function(x) mean(x) ), by = am],
     keyby = as.data.table(mtcars)[ , lapply(.SD, function(x) mean(x) ), keyby = am]
-    )
+)
 
 
 dt[order(am)][ , id := 1:.N,][]
@@ -242,8 +242,8 @@ dt <- as.data.table( mtcars)[1:6,]
 # Summarise multiple var
 
 a <-dt[ , sapply(.SD, function(x) c(mean = mean(x),
-                                sd = sd(x)
-                                ))] 
+                                    sd = sd(x)
+))] 
 
 attr(a,"dimnames")
 
@@ -252,7 +252,7 @@ data.table( name = names(dt), mean = a[1,], sd = a[2,])
 
 # By
 dt[am == 1][ , sapply(.SD, function(x) c(mean = mean(x),
-                                sd = sd(x)
+                                         sd = sd(x)
 ))] 
 
 
@@ -261,7 +261,7 @@ dt[am == 1][ , sapply(.SD, function(x) c(mean = mean(x),
 
 dt  <- data.table( navn = c("Eirik", "Trond", "Christoffer"),
                    verdi = 1:3
-                   )
+)
 
 dt2 <- data.table( navn = c("Eirik", "Trond"),
                    dag = c("man", "tir")
@@ -280,14 +280,14 @@ merge(dt, dt2, by = "navn", all.y = T)
 merge(dt, dt2, by = "navn", all = T)
 
 data.table::
-
-
-# reshape -----------------------------------------------------------------
+    
+    
+    # reshape -----------------------------------------------------------------
 
 dt <- data.table( navn = c("Eirik", "Trond"),
                   verdi1 = c(1,2),
                   verdi2 = c(3,4)
-                  )
+)
 
 dt_long <- melt(dt, id =1, measure.vars = patterns("verdi"))[order(navn)]
 

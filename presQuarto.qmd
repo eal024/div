@@ -1,0 +1,172 @@
+---
+title: "Noen slider om Quarto"
+author: "Eirik"
+format:
+  revealjs:
+    theme: dark
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## [Quarto kort fortalt](https://quarto.org/)
+
+![](1_quarto.PNG)
+
+## En presentasjon
+
+Kan for eksemepl lage en presentasjon
+
+. . .
+
+Med standard funksjoner
+
+. . .
+
+-   Et punkt
+-   Et nytt punkt
+
+. . .
+
+-   Pause
+
+. . .
+
+##  {auto-animate="true"}
+
+::: {style="margin-top: 100px;"}
+Tekst
+:::
+
+##  {auto-animate="true"}
+
+::: {style="margin-top: 200px; font-size: 3em; color: red;"}
+Tekst
+:::
+
+## Matte og likninger
+
+Kan bruke LaTex direkte:
+
+. . .
+
+mathbf{y} = mathbf{X} \* mathbf{beta} + mathbf{u}
+
+$\mathbf{y} = \mathbf{X}\; \mathbf{\beta} + \mathbf{u}$
+
+. . .
+
+## Kode og kjC8ring av kode
+
+```{r}
+#| echo: fenced
+#| output-location: column-fragment
+#| fig-cap: "Figur 1: Data i en graf med undertekst."
+#| column: margin
+
+library(ggplot2)
+dat <- data.frame(
+  cond = rep(c("A", "B"),
+             each=10),
+  xvar = 1:20 + rnorm(20,sd=3),
+  yvar = 1:20 + rnorm(20,sd=3)
+)
+
+ggplot(dat, aes(x=xvar, y=yvar)) +
+  geom_point(shape=1) + 
+  geom_smooth() 
+```
+
+## Interaktive figurer
+
+```{r output = F, echo = T}
+
+library(highcharter)
+data(penguins, package = "palmerpenguins") 
+
+# 
+hchart(
+  penguins,
+  "scatter",
+  hcaes(x = flipper_length_mm,
+        y = bill_length_mm,
+        group = species)
+)
+
+```
+
+## Interaktive figurer
+
+```{r , eval= T}
+
+
+library(highcharter)
+data(penguins, package = "palmerpenguins") 
+
+# 
+hchart(
+  penguins,
+  "scatter",
+  hcaes(x = flipper_length_mm,
+        y = bill_length_mm,
+        group = species)
+)
+
+```
+
+## Kan kombineres med Shiny {fullscreen="false"}
+
+<iframe height="700" width="100%" frameborder="no" src="https://eirik-andre-lamy.shinyapps.io/figur_med_nedtrekksvalg/">
+
+</iframe>
+
+</section>
+
+## Noen punkter til slutt
+
+::: columns
+::: {.column width="50%"}
+[Fordeler:]{.underline}
+
+-   Reproduserbar
+
+-   Mange muligheter
+
+-   Lav kostnad
+
+-   Kan brukes ved
+
+    -   Rapporter
+    -   Artikler A&V
+:::
+
+::: {.column width="50%"}
+:::
+:::
+
+## Noen punkter til slutt
+
+::: columns
+::: {.column width="50%"}
+[Fordeler:]{.underline}
+
+-   Reproduserbar
+
+-   Mange muligheter
+
+-   Lav kostnad
+
+-   Kan brukes ved
+
+    -   Rapporter
+    -   Artikler A&V
+:::
+
+::: {.column width="50%"}
+[Ulemper:]{.underline}
+
+-   MC% lC&res
+    -   I tillegg passer det best til *R*/Python/Jula
+    -   laTex, css osv
+:::
+:::

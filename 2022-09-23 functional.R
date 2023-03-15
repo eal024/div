@@ -316,22 +316,94 @@ reduce(x, sum, .init = 10) # reuce + .init = 10
 reduce("a", sum)
 reduce("a", sum, .init = 0)
 
+##
+
+# Predictive functions ----------------------------------------------------
+
+# predicitve retun T or F
+some( list("1!",c(1:10)), is.numeric )
+every(list("1!",c(1:10)), is.numeric )
+none(list("1!",c(1:10)), is.numeric)
+
+ex <- list("1!",c(1:10))
+
+# detetect
+map(ex,  ~detect(.x, is.numeric)) # return value of first index match 
+map(ex,  ~detect_index(.x, is.numeric)) # return value of first index match, not NULL if no match
+map(ex,  ~detect_index(.x, is.numeric)) # return value of first index match 
+
+keep(c(11:20), is.numeric)
 
 
 
+# 10. Function factories-------------------------------------------------------------------
+
+power1 <- function(exp){
+    function(x){
+        x^exp
+        }
+}
+power1(exp = 2)
+
+square <- power1(2)
+
+# Call the manufactured functions
+square(3)
+
+library(rlang)
+library(ggplot2)
+library(scales)
+
+# a look at the function
+square
+
+rlang::env_print(square)
+# Show binding to exp: <dbl>
+
+# what is exp?
+fn_env(square)$exp # Which behave diff fra on another
+
+#ex 
+cube <- power1(3)
+fn_env(cube)$exp
 
 
+# forcing
+x <- 2
+square(x)
+x <- 3
+square( )
+
+power2 <- function(exp){
+    force(exp)
+    function(x){ x^exp}
+}
+
+x <- 2
+square <- power2(x)
+
+square(2)
+x <- 3
+square(2)
+
+## 
+new_counter <- function( fortsett = T){
+    i <- 0 
+    function(){
+        i <<- i+1
+        i
+    }
+
+}
+
+en <- new_counter()
+to <- new_counter()
+
+en()
+to()
 
 
-
-
-
-
-
-
-
-
-
+# Graphical factories -----------------------------------------------------
 
 
 
