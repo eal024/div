@@ -2,21 +2,16 @@
 
 library(shiny)
 library(highcharter)
-library(tidyverse)
 
 # Data
 Sys.setlocale("LC_CTYPE")
-data <- vroom::vroom("data/figurdata 4.1.csv") |>
-    mutate(versjon = ifelse(versjon == "H??y nasjonal vekst", "Hoy nasjonal vekst", versjon)
-    ) |> 
-    distinct()
-
+data <- read.csv("data/figurdata 4.1.csv") |> unique()
 
 # Navngi valg i app
 omrade <- setNames(unique(data$omrade), unique(data$omrade) ) #
-versjon <- setNames( c("Hovedalternativet","Lav nasjonal vekst", "Hoy nasjonal vekst" ), c("Hovedalternativet","Lav nasjonal vekst", "Hoy nasjonal vekst" ) )
+versjon <- setNames( c("Hovedalternativet","Lav nasjonal vekst", "Høy nasjonal vekst" ), c("Hovedalternativet","Lav nasjonal vekst", "Høy nasjonal vekst" ) )
 
-
+#
 ui <- fluidPage(
     titlePanel("Figur med nedtrekksvalg"),
     sidebarLayout(
