@@ -1,0 +1,43 @@
+---
+title: "Test article"
+author: "Eirik Lamoy"
+date: "`r Sys.Date()`"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Intro
+
+```{r}
+library(fixest)
+
+model <- feols( mtcars, mpg ~cyl)
+
+```
+
+
+```{r}
+etable(model , tex = T)
+
+
+```
+
+    
+```{r, fig.cap= 'test' }
+modelsummary::modelsummary(model)
+```
+    
+    
+```{r}
+library(kableExtra)
+
+kable(etable(model, tex = T), format  = "latex")
+
+```
+    
+    

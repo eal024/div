@@ -1,0 +1,47 @@
+---
+title: "article template"
+author: "Eirik Lamoy"
+pdf-engine: lualatex
+format: pdf
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+#| echo: false
+
+# mtcars 
+
+model1 <- fixest::feols( data = mtcars, 
+                         mpg ~ cyl
+                         )
+
+```
+
+
+```{r, results='asis'}
+#| echo: false
+cat( fixest::etable(model1, digits = 1, tex = T))
+```
+
+
+```{r}
+
+library(knitr)
+kable(head(cars))
+kable(head(pressure))
+
+
+```
+
+
+
