@@ -1,0 +1,14 @@
+---
+title: "Untitled"
+format: pdf
+pdf-engine: pdflatex
+---
+
+Her er tekst.
+
+```{r}
+
+1+1
+
+
+```
