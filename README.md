@@ -11,9 +11,11 @@
 
 ## Base R
 Highlights important verb and solution in R embedded with Base R.
-- Subsamples
-- 
+- [News for R.4.4. Comparable to dplyr and data.table wrangling.]()
 
 
 ## Textanalysis
-- [Introdution to basic conspets](https://github.com/eal024/div/tree/main/Textanalysis): Use of tidyverse and the intro to the tidytext packages `unnest_tokens(word, review)`
+- [Introdution to basic conspets](https://github.com/eal024/div/tree/main/Textanalysis.R): Use of tidyverse and the intro to the tidytext packages `unnest_tokens(word, review)`
+- [Tokens and prepering data](https://github.com/eal024/div/tree/main/token_and_prepering.R)
+
+
