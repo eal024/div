@@ -3,8 +3,7 @@
 library(tidyverse)
 
 # data--------------------------------------
-review_data <- vroom::vroom("data/Roomba Reviews.csv") |> janitor::clean_names()
-
+    mtcars[ carb %in% c(1,2), let(mpg_extra = mpg + 100),][ sort(mpg)]
 # Text as data
 review_data |> 
     # Product summerise

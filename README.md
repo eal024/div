@@ -11,7 +11,11 @@
 
 ## Base R
 Highlights important verb and solution in R embedded with Base R.
-- [News for R.4.4. Comparable to dplyr and data.table wrangling.]()
+- [News for R.4.4. Comparable to dplyr and data.table wrangling.](https://github.com/eal024/div/blob/main/baseR/new_feature_4.4.R)
+
+### Handling strings
+- [string splitting with `strstring()`](https://github.com/eal024/div/blob/main/baseR/2024-05-13 stringsplit.R)
+- [Collapsing variable long into string]((https://github.com/eal024/div/tree/main/2024-05-13 collapsing_strings.R) 
 
 
 ## Textanalysis
