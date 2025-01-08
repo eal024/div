@@ -14,7 +14,7 @@ Highlights important verb and solution in R embedded with Base R.
 - [News for R.4.4. Comparable to dplyr and data.table wrangling.](https://github.com/eal024/div/blob/main/baseR/new_feature_4.4.R)
 
 ### Handling strings
-- [string splitting with `strstring()`](https://github.com/eal024/div/blob/main/baseR/2024-05-13stringsplit.R)
+- [string splitting with `strstring()`](https://github.com/eal024/div/blob/main/BaseR/2024-05-13%20string_splitting.R)
 - [Collapsing variable long into string](https://github.com/eal024/div/tree/main/2024-05-13collapsing_strings.R) 
 
 
