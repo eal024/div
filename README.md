@@ -1,8 +1,8 @@
 # Collection of differnet script and coding conspets
 
 ## Functional
-- [Iteration rows and columns](`apply()` and alternative `for looping` )
-- [purrr-recap](`keep()` and `discard()`)
+- [Iteration rows and columns(`apply()` and alternative `for looping`]()
+- [purrr-recap: `keep()` and `discard()`]()
 
 ## R and Excel
 
