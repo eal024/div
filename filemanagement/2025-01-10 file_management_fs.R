@@ -1,6 +1,12 @@
 
 
+# Based on the blog-post:https://rfortherestofus.com/2025/01/fs-file-management
+# the fs-packages: https://fs.r-lib.org/
+
+# OBS: The files are stored in subfolder, and the working dir. is one level above.
+
 library(fs)
+# getwd()
 
 # Create a test-folder for the example
 if( dir_exists("fs-example") ){
