@@ -25,3 +25,5 @@ Highlights important verb and solution in R embedded with Base R.
 - [Tokens and prepering data](https://github.com/eal024/div/tree/main/token_and_prepering.R)
 
 
+## File management
+- The [`fs packages`](https://fs.r-lib.org/) for file management:[example]()
