@@ -23,6 +23,8 @@ Highlights important verb and solution in R embedded with Base R.
 - [string splitting with `strstring()`](https://github.com/eal024/div/blob/main/BaseR/2024-05-13%20string_splitting.R)
 - [Collapsing variable long into string](https://github.com/eal024/div/tree/main/2024-05-13collapsing_strings.R) 
 
+## Regression
+- [fixest vs lm]()
 
 ## Textanalysis
 - [Introdution to basic conspets](https://github.com/eal024/div/tree/main/Textanalysis.R): Use of tidyverse and the intro to the tidytext packages `unnest_tokens(word, review)`
