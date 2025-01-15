@@ -1,8 +1,12 @@
 # Collection of differnet script and coding conspets
 
+## Small smart coding parts
+- [`expand_grid()`, combining numbers of children and minimum DI level](): 2025-01-10 creating new min.level DI and the interval between the old level and the new.
+
 ## Functional
 - [Iteration rows and columns(`apply()` and alternative `for looping`]()
 - [purrr-recap: `keep()` and `discard()`]()
+- [`negate()` and `compose()`]() for minimal lines in code.
 
 ## R and Excel
 
