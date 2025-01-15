@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!-- saved from url=(0106)https://projector.datacamp.com/?auto_play=pause&projector_key=course_6590_af25631a63a415d67a248dbfa33a6c7c -->
+<html lang="en" class="fa-events-icons-ready reveal-full-page"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style class="vjs-styles-defaults">
+      .video-js {
+        width: 300px;
+        height: 150px;
+      }
+
+      .vjs-fluid:not(.vjs-audio-only-mode) {
+        padding-top: 56.25%
+      }
+    </style><style class="vjs-styles-dimensions">
+      .vjs_video_3-dimensions {
+        width: 300px;
+        height: 168.75px;
+      }
+
+      .vjs_video_3-dimensions.vjs-fluid:not(.vjs-audio-only-mode) {
+        padding-top: 56.25%;
+      }
+    </style>
+  
+  <title></title>
+  <!--<base href="https://projector.datacamp.com">--><base href=".">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link href="./video-js.min.css" rel="stylesheet">
+  <script src="./bb4a0452c1.js.last ned"></script><link href="./bb4a0452c1.css" media="all" rel="stylesheet">
+  <link rel="stylesheet" href="./projector.css">
+</head>
+
+<body class="reveal-viewport" data-new-gr-c-s-check-loaded="14.1216.0" data-gr-ext-installed="" style="--slide-width: 760px; --slide-height: 428px; --slide-scale: 1.5560747663551402;">
+  <div class="video__container">
+    <div class="video__wrapper">
+      <div class="video-player js-player">
+        <div id="vjs_video_3" class="video-player video-js vjs-default-skin vjs-controls-enabled vjs-touch-enabled vjs-workinghover vjs-v7 vjs_video_3-dimensions vjs-has-started vjs-paused vjs-user-inactive" tabindex="-1" role="region" lang="en" translate="no" aria-label="Video Player"><div class="reveal video-slides none focused has-horizontal-slides ready" role="application" data-transition-speed="default" data-background-transition="fade" style="cursor: none;">
+      <div class="slides" style="width: 760px; height: 428px; inset: 50% auto auto 50%; transform: translate(-50%, -50%) scale(1.55607);">
+        <section class="slide__1 dc-u-wh-100pc transition-fade past" style="display: none;" data-fragment="0" hidden="" aria-hidden="true">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-pos-relative dc-u-fxi-fg-1 dc-u-fx-fdc">
+  <div class="dc-u-wh-100pc dc-u-fxi-fg-1 dc-u-fx dc-u-fx-fdc dc-u-fx-jcc dc-u-fx-aic">
+    <h1 class="dc-u-mb-8 dc-u-w-50pc">Building functions with `compose()` and `negate()`</h1>
+    <p class="dc-chapeau-title dc-u-mv-none">Intermediate Functional Programming with purrr</p>
+    <img id="tech-icon" class="dc-u-mt-24 dc-u-wh-48" src="./r.svg">
+  </div>
+  <div class="dc-instructor__details fragment dc-u-p-16 dc-u-bgc-purple dc-u-pos-absolute dc-u-brad-tr dc-u-brad-br dc-u-ta-left visible" data-fragment-index="0">
+    <p class="instructorName dc-u-m-none dc-u-color-white dc-u-tt-none dc-u-t-truncate">Colin Fay</p>
+    <p class="instructorTitle dc-u-mt-4 dc-u-color-white dc-u-m-none">Data Scientist &amp; R Hacker at ThinkR</p>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none">
+      <img class="watermark" src="./combined-grey.svg">
+    </footer>
+  </div>
+</section>
+
+        <section class="slide__2 dc-u-wh-100pc transition-fade present" style="display: block;">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-fx-fdc dc-u-pos-relative dc-u-fx dc-u-fxi-fg-1 dc-u-fx-ais dc-u-ta-left dc-u-minh-0">
+  <h2 class="dc-slide-title dc-u-m-none dc-u-pt-16 dc-u-pb-8 dc-u-ph-24 dc-u-fxi-f-none">compose() at will</h2>
+  <div class="dc-u-fx dc-u-fxi-f-1 dc-u-minh-0">
+    <div class="dc-u-fx dc-u-fxi-f-1 dc-u-fx-fdc dc-u-of-hidden">
+      <div class="dc-u-ph-16 dc-u-of-hidden dc-u-fxi-fg-1">
+        <div class="dc-slide-region dc-u-wh-100pc dc-u-ph-8">
+    <style type="text/css">
+      .cfdfdcebdcde pre code, .cfdfdcebdcde .katex-display { font-size: 98%; }
+      .cfdfdcebdcde pre { padding: 7.84px; line-height: 23.52px; }
+    </style>
+  <div class="cfdfdcebdcde dc-u-of-hidden dc-u-wh-100pc">
+    <p>Limitless compositions: </p>
+<pre class="lang-r"><code class="lang-r hljs language-r">library<span class="hljs-punctuation">(</span>broom<span class="hljs-punctuation">)</span>
+library<span class="hljs-punctuation">(</span>purrr<span class="hljs-punctuation">)</span>
+clean_aov <span class="hljs-operator">&lt;-</span> compose<span class="hljs-punctuation">(</span>tidy<span class="hljs-punctuation">,</span> anova<span class="hljs-punctuation">,</span> lm<span class="hljs-punctuation">)</span>
+</code></pre>
+<pre class="lang-out"><code class="lang-out">clean_aov(Sepal.Length ~ Sepal.Width, data = iris)
+# A tibble: 2 x 6
+  term           df  sumsq meansq statistic p.value
+  &lt;chr&gt;       &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 Sepal.Width     1   1.41  1.41       2.07   0.152
+2 Residuals     148 101.    0.681     NA     NA    
+</code></pre>
+
+  </div>
+</div>
+
+      </div>
+      <div class="dc-citations dc-u-m-8">
+  
+</div>
+
+    </div>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none with-background">
+      <img class="watermark" src="./combined-grey.svg">
+      <div class="title dc-u-fs-small">Intermediate Functional Programming with purrr</div>
+    </footer>
+  </div>
+</section>
+
+        <section class="slide__3 dc-u-wh-100pc transition-fade future" hidden="" aria-hidden="true" style="display: none;">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-fx-fdc dc-u-pos-relative dc-u-fx dc-u-fxi-fg-1 dc-u-fx-ais dc-u-ta-left dc-u-minh-0">
+  <h2 class="dc-slide-title dc-u-m-none dc-u-pt-16 dc-u-pb-8 dc-u-ph-24 dc-u-fxi-f-none">negate()</h2>
+  <div class="dc-u-fx dc-u-fxi-f-1 dc-u-minh-0">
+    <div class="dc-u-fx dc-u-fxi-f-1 dc-u-fx-fdc dc-u-of-hidden">
+      <div class="dc-u-ph-16 dc-u-of-hidden dc-u-fxi-fg-1">
+        <div class="dc-slide-region dc-u-wh-100pc dc-u-ph-8">
+    <style type="text/css">
+      .dfbdabfdabfda pre code, .dfbdabfdabfda .katex-display { font-size: 100%; }
+      .dfbdabfdabfda pre { padding: 8px; line-height: 24px; }
+    </style>
+  <div class="dfbdabfdabfda dc-u-of-hidden dc-u-wh-100pc">
+    <p>Flip the logical:</p>
+<pre class="lang-r fragment" data-fragment-index="0"><code class="lang-r fragment hljs language-r" data-fragment-index="0">is_not_na <span class="hljs-operator">&lt;-</span> negate<span class="hljs-punctuation">(</span><span class="hljs-built_in">is.na</span><span class="hljs-punctuation">)</span>
+x <span class="hljs-operator">&lt;-</span> <span class="hljs-built_in">c</span><span class="hljs-punctuation">(</span><span class="hljs-number">1</span><span class="hljs-punctuation">,</span><span class="hljs-number">2</span><span class="hljs-punctuation">,</span><span class="hljs-number">3</span><span class="hljs-punctuation">,</span><span class="hljs-number">4</span><span class="hljs-punctuation">,</span> <span class="hljs-literal">NA</span><span class="hljs-punctuation">)</span>
+<span class="hljs-built_in">is.na</span><span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span>
+</code></pre>
+<pre class="lang-out fragment" data-fragment-index="1"><code class="lang-out fragment" data-fragment-index="1">FALSE FALSE FALSE FALSE  TRUE
+</code></pre>
+<pre class="lang-r fragment" data-fragment-index="2"><code class="lang-r fragment hljs language-r" data-fragment-index="2">is_not_na<span class="hljs-punctuation">(</span>x<span class="hljs-punctuation">)</span>
+</code></pre>
+<pre class="lang-out fragment" data-fragment-index="3"><code class="lang-out fragment" data-fragment-index="3">TRUE  TRUE  TRUE  TRUE FALSE
+</code></pre>
+
+  </div>
+</div>
+
+      </div>
+      <div class="dc-citations dc-u-m-8">
+  
+</div>
+
+    </div>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none with-background">
+      <img class="watermark" src="./combined-grey.svg">
+      <div class="title dc-u-fs-small">Intermediate Functional Programming with purrr</div>
+    </footer>
+  </div>
+</section>
+
+        <section class="slide__4 dc-u-wh-100pc transition-fade future" hidden="" aria-hidden="true" style="display: none;">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-fx-fdc dc-u-pos-relative dc-u-fx dc-u-fxi-fg-1 dc-u-fx-ais dc-u-ta-left dc-u-minh-0">
+  <h2 class="dc-slide-title dc-u-m-none dc-u-pt-16 dc-u-pb-8 dc-u-ph-24 dc-u-fxi-f-none">With mappers</h2>
+  <div class="dc-u-fx dc-u-fxi-f-1 dc-u-minh-0">
+    <div class="dc-u-fx dc-u-fxi-f-1 dc-u-fx-fdc dc-u-of-hidden">
+      <div class="dc-u-ph-16 dc-u-of-hidden dc-u-fxi-fg-1">
+        <div class="dc-slide-region dc-u-wh-100pc dc-u-ph-8">
+    <style type="text/css">
+      .fbebbcfeecdece pre code, .fbebbcfeecdece .katex-display { font-size: 100%; }
+      .fbebbcfeecdece pre { padding: 8px; line-height: 24px; }
+    </style>
+  <div class="fbebbcfeecdece dc-u-of-hidden dc-u-wh-100pc">
+    <p><code>negates()</code> &amp; mappers:</p>
+<pre class="lang-r"><code class="lang-r hljs language-r">under_hundred <span class="hljs-operator">&lt;-</span> as_mapper<span class="hljs-punctuation">(</span><span class="hljs-operator">~</span> mean<span class="hljs-punctuation">(</span>.x<span class="hljs-punctuation">)</span> <span class="hljs-operator">&lt;</span> <span class="hljs-number">100</span><span class="hljs-punctuation">)</span>
+not_under_hundred <span class="hljs-operator">&lt;-</span> negate<span class="hljs-punctuation">(</span>under_hundred<span class="hljs-punctuation">)</span>
+map_lgl<span class="hljs-punctuation">(</span><span class="hljs-number">98</span><span class="hljs-operator">:</span><span class="hljs-number">102</span><span class="hljs-punctuation">,</span> under_hundred<span class="hljs-punctuation">)</span>
+</code></pre>
+<pre class="lang-out fragment" data-fragment-index="0"><code class="lang-out fragment" data-fragment-index="0">TRUE  TRUE FALSE FALSE FALSE
+</code></pre>
+<pre class="fragment" data-fragment-index="1"><code class="fragment" data-fragment-index="1">map_lgl(98:102, not_under_hundred)
+</code></pre><pre class="lang-out fragment" data-fragment-index="2"><code class="lang-out fragment" data-fragment-index="2">FALSE FALSE  TRUE  TRUE  TRUE
+</code></pre>
+
+  </div>
+</div>
+
+      </div>
+      <div class="dc-citations dc-u-m-8">
+  
+</div>
+
+    </div>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none with-background">
+      <img class="watermark" src="./combined-grey.svg">
+      <div class="title dc-u-fs-small">Intermediate Functional Programming with purrr</div>
+    </footer>
+  </div>
+</section>
+
+        <section class="slide__5 dc-u-wh-100pc transition-fade future" hidden="" aria-hidden="true" style="display: none;">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-fx-fdc dc-u-pos-relative dc-u-fx dc-u-fxi-fg-1 dc-u-fx-ais dc-u-ta-left dc-u-minh-0">
+  <h2 class="dc-slide-title dc-u-m-none dc-u-pt-16 dc-u-pb-8 dc-u-ph-24 dc-u-fxi-f-none">Digression on http codes</h2>
+  <div class="dc-u-fx dc-u-fxi-f-1 dc-u-minh-0">
+    <div class="dc-u-fx dc-u-fxi-f-1 dc-u-fx-fdc dc-u-of-hidden">
+      <div class="dc-u-ph-16 dc-u-of-hidden dc-u-fxi-fg-1">
+        <div class="dc-slide-region dc-u-wh-100pc dc-u-ph-8">
+    <style type="text/css">
+      .aaeaddafbba pre code, .aaeaddafbba .katex-display { font-size: 100%; }
+      .aaeaddafbba pre { padding: 8px; line-height: 24px; }
+    </style>
+  <div class="aaeaddafbba dc-u-of-hidden dc-u-wh-100pc">
+    <p><img src="./https-status-codes-fix.jpg" alt="http status code" style="width:60%;"></p>
+<p>From <a href="https://fixerrorcode.com/http-status-codes/">Hypertext Transfer Protocol (HTTP) Status Code Registry
+, fixerrorcode.com</a></p>
+
+  </div>
+</div>
+
+      </div>
+      <div class="dc-citations dc-u-m-8">
+  
+</div>
+
+    </div>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none with-background">
+      <img class="watermark" src="./combined-grey.svg">
+      <div class="title dc-u-fs-small">Intermediate Functional Programming with purrr</div>
+    </footer>
+  </div>
+</section>
+
+        <section class="slide__6 dc-u-wh-100pc transition-fade future" hidden="" aria-hidden="true" style="display: none;">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-fx-fdc dc-u-pos-relative dc-u-fx dc-u-fxi-fg-1 dc-u-fx-ais dc-u-ta-left dc-u-minh-0">
+  <h2 class="dc-slide-title dc-u-m-none dc-u-pt-16 dc-u-pb-8 dc-u-ph-24 dc-u-fxi-f-none">Test if in</h2>
+  <div class="dc-u-fx dc-u-fxi-f-1 dc-u-minh-0">
+    <div class="dc-u-fx dc-u-fxi-f-1 dc-u-fx-fdc dc-u-of-hidden">
+      <div class="dc-u-ph-16 dc-u-of-hidden dc-u-fxi-fg-1">
+        <div class="dc-slide-region dc-u-wh-100pc dc-u-ph-8">
+    <style type="text/css">
+      .fecaddffcfbae pre code, .fecaddffcfbae .katex-display { font-size: 100%; }
+      .fecaddffcfbae pre { padding: 8px; line-height: 24px; }
+    </style>
+  <div class="fecaddffcfbae dc-u-of-hidden dc-u-wh-100pc">
+    <p>Is x <code>%in%</code> y?</p>
+<pre class="lang-r"><code class="lang-r hljs language-r">status <span class="hljs-operator">&lt;-</span> 201
+
+good_status <span class="hljs-operator">&lt;-</span> <span class="hljs-built_in">c</span><span class="hljs-punctuation">(</span><span class="hljs-number">200</span><span class="hljs-punctuation">,</span> <span class="hljs-number">201</span><span class="hljs-punctuation">,</span> <span class="hljs-number">202</span><span class="hljs-punctuation">,</span> <span class="hljs-number">203</span><span class="hljs-punctuation">)</span>
+
+status <span class="hljs-operator">%in%</span> good_status
+</code></pre>
+<pre class="lang-out"><code class="lang-out">TRUE
+</code></pre>
+
+  </div>
+</div>
+
+      </div>
+      <div class="dc-citations dc-u-m-8">
+  
+</div>
+
+    </div>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none with-background">
+      <img class="watermark" src="./combined-grey.svg">
+      <div class="title dc-u-fs-small">Intermediate Functional Programming with purrr</div>
+    </footer>
+  </div>
+</section>
+
+        <section class="slide__7 dc-u-wh-100pc transition-fade future" hidden="" aria-hidden="true" style="display: none;">
+  <div class="slide-content dc-u-wh-100pc dc-u-fx dc-u-fx-fdc">
+    <div class="dc-should-transition dc-u-fx dc-u-pos-relative dc-u-fxi-fg-1 dc-u-fx-fdc">
+  <div class="dc-u-wh-100pc dc-u-fxi-fg-1 dc-u-fx dc-u-fx-fdc dc-u-fx-jcc dc-u-fx-aic">
+    <h1 class="dc-u-mb-8 dc-u-w-50pc">Let's practice!</h1>
+    <p class="dc-chapeau-title dc-u-mv-none">Intermediate Functional Programming with purrr</p>
+  </div>
+</div>
+
+    <footer class="dc-u-w-100pc dc-u-fx dc-u-fx-jcsb dc-u-fx-aic dc-u-fxi-f-none">
+      <img class="watermark" src="./combined-grey.svg">
+    </footer>
+  </div>
+</section>
+
+      </div>
+    <div class="backgrounds"><div class="slide-background slide__1 dc-u-wh-100pc transition-fade past" data-loaded="true" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background slide__2 dc-u-wh-100pc transition-fade present" style="display: block;" data-loaded="true"><div class="slide-background-content"></div></div><div class="slide-background slide__3 dc-u-wh-100pc transition-fade future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background slide__4 dc-u-wh-100pc transition-fade future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background slide__5 dc-u-wh-100pc transition-fade future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background slide__6 dc-u-wh-100pc transition-fade future" style="display: none;"><div class="slide-background-content"></div></div><div class="slide-background slide__7 dc-u-wh-100pc transition-fade future" style="display: none;"><div class="slide-background-content"></div></div></div><div class="slide-number" style="display: none;"></div><aside class="controls" data-controls-layout="bottom-right" data-controls-back-arrows="faded" style="display: none;"><button class="navigate-left enabled" aria-label="previous slide"><div class="controls-arrow"></div></button>
+			<button class="navigate-right highlight enabled" aria-label="next slide"><div class="controls-arrow"></div></button>
+			<button class="navigate-up" aria-label="above slide" disabled="disabled"><div class="controls-arrow"></div></button>
+			<button class="navigate-down" aria-label="below slide" disabled="disabled"><div class="controls-arrow"></div></button></aside><div class="progress" style="display: none;"><span></span></div><div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div><div class="pause-overlay"></div><div class="aria-status" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);">compose() at will Limitless compositions: library ( broom ) library ( purrr ) clean_aov &lt;- compose ( tidy , anova , lm ) clean_aov(Sepal.Length ~ Sepal.Width, data = iris)
+# A tibble: 2 x 6
+  term           df  sumsq meansq statistic p.value
+  &lt;chr&gt;       &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 Sepal.Width     1   1.41  1.41       2.07   0.152
+2 Residuals     148 101.    0.681     NA     NA Intermediate Functional Programming with purrr </div></div><video class="vjs-tech" id="vjs_video_3_html5_api" tabindex="-1" role="application" preload="auto" playsinline="playsinline" src="https://videos.datacamp.com/mp3/6590_intermediate_functional_programming_with_purrr/v1/6590_ch3_2.mp3" style="top: 0px; left: 0.691589px; height: 666px; width: 1182.62px;"></video><div class="vjs-poster vjs-hidden" tabindex="-1" aria-disabled="false"></div><div class="vjs-text-track-display" translate="yes" aria-live="off" aria-atomic="true"><div style="position: absolute; inset: 0px; margin: 1.5%;"></div></div><div class="vjs-loading-spinner" dir="ltr"><span class="vjs-control-text">Video Player is loading.</span></div><button class="vjs-big-play-button" type="button" title="Play Video" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Play Video</span></button><div class="vjs-control-bar" dir="ltr"><button class="vjs-play-control vjs-control vjs-button vjs-paused" type="button" title="Play" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Play</span></button><div class="vjs-volume-panel vjs-control vjs-volume-panel-horizontal"><button class="vjs-mute-control vjs-control vjs-button vjs-vol-3" type="button" title="Mute" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Mute</span></button><div class="vjs-volume-control vjs-control vjs-volume-horizontal"><div tabindex="0" class="vjs-volume-bar vjs-slider-bar vjs-slider vjs-slider-horizontal" role="slider" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Volume Level" aria-live="polite" aria-valuetext="100%"><div class="vjs-mouse-display"><div class="vjs-volume-tooltip" aria-hidden="true"></div></div><div class="vjs-volume-level"><span class="vjs-control-text"></span></div></div></div></div><div class="vjs-current-time vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Current Time&nbsp;</span><span class="vjs-current-time-display" aria-live="off" role="presentation">0:31</span></div><div class="vjs-time-control vjs-time-divider" aria-hidden="true"><div><span>/</span></div></div><div class="vjs-duration vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Duration&nbsp;</span><span class="vjs-duration-display" aria-live="off" role="presentation">3:12</span></div><div class="vjs-progress-control vjs-control"><div tabindex="0" class="vjs-progress-holder vjs-slider vjs-slider-horizontal" role="slider" aria-valuenow="16.16" aria-valuemin="0" aria-valuemax="100" aria-label="Progress Bar" aria-valuetext="0:31 of 3:12"><div class="vjs-load-progress" style="width: 53.69%;"><span class="vjs-control-text"><span>Loaded</span>: <span class="vjs-control-text-loaded-percentage">53.69%</span></span><div data-start="0" data-end="103.505" style="left: 0%; width: 100%;"></div></div><div class="vjs-mouse-display"><div class="vjs-time-tooltip" aria-hidden="true"></div></div><div class="vjs-play-progress vjs-slider-bar" aria-hidden="true" style="width: 16.16%;"><div class="vjs-time-tooltip" aria-hidden="true" style="right: -17px;">0:31</div></div></div></div><div class="vjs-live-control vjs-control vjs-hidden"><div class="vjs-live-display" aria-live="off"><span class="vjs-control-text">Stream Type&nbsp;</span>LIVE</div></div><button class="vjs-seek-to-live-control vjs-control" type="button" title="Seek to live, currently behind live" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Seek to live, currently behind live</span><span class="vjs-seek-to-live-text" aria-hidden="true">LIVE</span></button><div class="vjs-remaining-time vjs-time-control vjs-control"><span class="vjs-control-text" role="presentation">Remaining Time&nbsp;</span><span aria-hidden="true">-</span><span class="vjs-remaining-time-display" aria-live="off" role="presentation">2:41</span></div><div class="vjs-custom-control-spacer vjs-spacer ">&nbsp;</div><button class="vjs-download-control vjs-control vjs-button" type="button" aria-disabled="false" title="Download video"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Download video</span></button><div class="vjs-playback-rate vjs-menu-button vjs-menu-button-popup vjs-control vjs-button"><div class="vjs-playback-rate-value" id="vjs-playback-rate-value-label-vjs_video_3_component_257">2x</div><button class="vjs-playback-rate vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Playback Rate" aria-haspopup="true" aria-expanded="false" aria-describedby="vjs-playback-rate-value-label-vjs_video_3_component_257"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Playback Rate</span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">2x</span><span class="vjs-control-text" aria-live="polite">, selected</span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.5x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1.25x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">1x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">0.75x</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">0.5x</span><span class="vjs-control-text" aria-live="polite"></span></li></ul></div></div><div class="vjs-chapters-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-chapters-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Chapters" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Chapters</span></button><div class="vjs-menu"><ul class="vjs-menu-content"><li class="vjs-menu-title" tabindex="-1">Chapters</li></ul></div></div><div class="vjs-descriptions-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-descriptions-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Descriptions" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Descriptions</span></button><div class="vjs-menu"><ul class="vjs-menu-content"><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">descriptions off</span><span class="vjs-control-text" aria-live="polite">, selected</span></li></ul></div></div><div class="vjs-subs-caps-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button"><button class="vjs-subs-caps-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Captions" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Captions</span></button><div class="vjs-menu"><ul class="vjs-menu-content" role="menu"><li class="vjs-menu-item vjs-selected" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="true"><span class="vjs-menu-item-text">captions off</span><span class="vjs-control-text" aria-live="polite">, selected</span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">English</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Arabic</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Chinese simplified</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Chinese traditional</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">French</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">German</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Indonesian</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Italian</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Japanese</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Korean</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Polish</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Portuguese</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Russian</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Spanish</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Thai</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Turkish</span><span class="vjs-control-text" aria-live="polite"></span></li><li class="vjs-menu-item vjs-subtitles-menu-item" tabindex="-1" role="menuitemradio" aria-disabled="false" aria-checked="false"><span class="vjs-menu-item-text">Vietnamese</span><span class="vjs-control-text" aria-live="polite"></span></li></ul></div></div><div class="vjs-audio-button vjs-menu-button vjs-menu-button-popup vjs-control vjs-button vjs-hidden"><button class="vjs-audio-button vjs-menu-button vjs-menu-button-popup vjs-button" type="button" aria-disabled="false" title="Audio Track" aria-haspopup="true" aria-expanded="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Audio Track</span></button><div class="vjs-menu"><ul class="vjs-menu-content"></ul></div></div><button class="vjs-fullscreen-control vjs-control vjs-button" type="button" title="Fullscreen" aria-disabled="false"><span class="vjs-icon-placeholder" aria-hidden="true"></span><span class="vjs-control-text" aria-live="polite">Fullscreen</span></button></div><div class="vjs-error-display vjs-modal-dialog vjs-hidden " tabindex="-1" aria-describedby="vjs_video_3_component_535_description" aria-hidden="true" aria-label="Modal Window" role="dialog"><p class="vjs-modal-dialog-description vjs-control-text" id="vjs_video_3_component_535_description">This is a modal window.</p><div class="vjs-modal-dialog-content" role="document"></div></div><div class="video__mask-top" style="height: 0px;"></div><div class="video__mask-right" style="width: 0.691589px;"></div><div class="video__mask-bottom" style="height: 0px;"></div><div class="video__mask-left" style="width: 0.691589px;"></div></div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="global-downloading">
+    <div class="downloading-backdrop"></div>
+    <div class="downloading-message">
+      <img src="./spinner2.svg">
+      <span>Preparing Video For Download...</span>
+    </div>
+  </div>
+  
+  <input type="hidden" id="videoData" value="{&quot;video_mp4_link&quot;:&quot;https://datacamp-projector-video-recorder-uploads-prod.s3.amazonaws.com/mp4/d7dc16bd-adab-4018-a3d7-8016d73e0465.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Credential=ASIAUMJDGTMHQUW6A6CU%2F20250114%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Date=20250114T171726Z&amp;X-Amz-Expires=1200&amp;X-Amz-Security-Token=IQoJb3JpZ2luX2VjECIaCXVzLWVhc3QtMSJHMEUCIQCrNH6l8elHS4VGBZN25Bu76MYVZA6bDmUra2f2w93DEQIgK7knbLMWkJmn%2FSroxJK8CbGx%2B5BMyAzCjUDAPUiFgEsqjQUIGhAEGgwzMDEyNTg0MTQ4NjMiDJV2uK1OYRaRbpbIGCrqBDg9c53d5%2BToH0cqER6KZYehlUGs76qBkcf3hxWX6K99IlD7P2OFcluB52n%2B%2FfG4ymOygeXn1UfSnMKfOfVVaz1qbv2HdaJosSuGpeYTGvA1zvwSqMAZsJSNKiTu2G9jyWKvdgAglDfASiWpzcQE6VrSh%2FQMrfk3KtcbLaX1xgDuWqVycM4%2FO0%2FVIMe2KPJF0ABkXX2GVTMYFeRYU4u16cVoPm4oqeoj5812Q%2BIXhpur27TpZwr%2FuEUAjHhvE7qQoMNAJBpqKtDj3cIgdwa9%2FDKJmFNggb0zQOnAhA%2BwEp1ihODSPEOjz9Lmok47GSItnBv7wU%2BMh2%2F2koBeGVrraerANKpc%2FidQbsfBbXRdz5WXsjEgB1LHFglFdDsI6KOj9936tV1dLQ7UDgXlGPsQWvQNfvkQgHaCzMmOcsWndJ3ZBWMDOLU%2BjjnAUQN51D93NdkLaRVYL9JKiaMI%2FBrnlzB7%2FHF%2BLY0hpcSI7FD%2BiMV0NnowFzGspWKa5uLOiNtFt1uT%2F9LiNyVP2JQSAmOWdnEJAUEjgLsSi%2BS8%2FsiIom7BjE1trfg60QfARK%2FR2eeC7pfoclRa%2BfQn97rj%2FfppCAMrSASXPd2dPSC7GBI0nKFX%2FkodrUfmECURg4VDAjT7qgyoS3bvIC8oMvDynGU5a7mLrpuVv%2BD4sM0mWlYzmRhmBUx4m5Malllg3vadBA%2FXpntVL44vRVCIAOLKt16q%2F4QBJNuiaCeBIT%2B9YmawL7dcK3%2BLIkr43dgB14KjTNzcebjFpFhokS6qV5vwxdyXXSSwWkeiU3Gs%2Bl0hXu347DlueKfILtxlV0a4JzCnspq8BjqbAYLZb6Hgx1p5yFc3smMoPN8wCI68IFigK2Ej9fKOHxqdtuaepKk0mLnh9CsEZcA%2BMid0BZ9PehrujYNTLYKlLk0x6XMy63k2iU6oQG%2Btwwhlt0%2Bjvyi46trPZcYUXkYC4vo1b6kD48jbDEEHFvYufHdgRc7w9jX7g19ZXWhp8ydEIgik9bNxt78QsF4UG%2BIT1daarJl1V1WtfEG9&amp;X-Amz-Signature=272cbbc86786f0a664d1992e585b0890f7ffaa1b5d36a28cde578e073066e51e&amp;X-Amz-SignedHeaders=host&quot;,&quot;video_hls_link&quot;:null,&quot;audio_link&quot;:&quot;https://videos.datacamp.com/mp3/6590_intermediate_functional_programming_with_purrr/v1/6590_ch3_2.mp3&quot;,&quot;subtitle_vtt_link&quot;:&quot;https://assets.datacamp.com/production/course_6590/subtitles/course_6590_af25631a63a415d67a248dbfa33a6c7c.vtt&quot;,&quot;thumbnail_link&quot;:null,&quot;is_projector_video&quot;:true,&quot;subtitles&quot;:[{&quot;language&quot;:&quot;English&quot;,&quot;link&quot;:&quot;https://assets.datacamp.com/production/course_6590/subtitles/course_6590_af25631a63a415d67a248dbfa33a6c7c.vtt&quot;},{&quot;language&quot;:&quot;Arabic&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__ar.vtt&quot;},{&quot;language&quot;:&quot;Chinese simplified&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__zh.vtt&quot;},{&quot;language&quot;:&quot;Chinese traditional&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__zh-TW.vtt&quot;},{&quot;language&quot;:&quot;French&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__fr.vtt&quot;},{&quot;language&quot;:&quot;German&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__de.vtt&quot;},{&quot;language&quot;:&quot;Indonesian&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__id.vtt&quot;},{&quot;language&quot;:&quot;Italian&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__it.vtt&quot;},{&quot;language&quot;:&quot;Japanese&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__ja.vtt&quot;},{&quot;language&quot;:&quot;Korean&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__ko.vtt&quot;},{&quot;language&quot;:&quot;Polish&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__pl.vtt&quot;},{&quot;language&quot;:&quot;Portuguese&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__pt.vtt&quot;},{&quot;language&quot;:&quot;Russian&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__ru.vtt&quot;},{&quot;language&quot;:&quot;Spanish&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__es.vtt&quot;},{&quot;language&quot;:&quot;Thai&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__th.vtt&quot;},{&quot;language&quot;:&quot;Turkish&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__tr.vtt&quot;},{&quot;language&quot;:&quot;Vietnamese&quot;,&quot;link&quot;:&quot;https://projector-subtitles.datacamp.com/course_6590/course_6590_af25631a63a415d67a248dbfa33a6c7c__vi.vtt&quot;}]}">
+  <input type="hidden" id="slideDeckData" value="{&quot;title&quot;:&quot;Intermediate Functional Programming with purrr&quot;,&quot;structure&quot;:[{&quot;number&quot;:1,&quot;type&quot;:&quot;TitleSlide&quot;,&quot;key&quot;:&quot;53809d381b&quot;,&quot;script&quot;:&quot;In this lesson, we&#39;ll go deeper into code optimization with the compose() and negate() functions.\n\n&quot;,&quot;title&quot;:&quot;Building functions with `compose()` and `negate()`&quot;,&quot;instructor_name&quot;:&quot;Colin Fay&quot;,&quot;instructor_title&quot;:&quot;Data Scientist &amp; R Hacker at ThinkR&quot;,&quot;technology&quot;:&quot;r&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;code_zoom&quot;:100,&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false},{&quot;number&quot;:2,&quot;type&quot;:&quot;FullSlide&quot;,&quot;key&quot;:&quot;b8549f1db1&quot;,&quot;code_zoom&quot;:98,&quot;part1&quot;:&quot;Limitless compositions: \n\n``` r\nlibrary(broom)\nlibrary(purrr)\nclean_aov &lt;- compose(tidy, anova, lm)\n```\n\n```out\nclean_aov(Sepal.Length ~ Sepal.Width, data = iris)\n# A tibble: 2 x 6\n  term           df  sumsq meansq statistic p.value\n  &lt;chr&gt;       &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;\n1 Sepal.Width     1   1.41  1.41       2.07   0.152\n2 Residuals     148 101.    0.681     NA     NA    \n```\n\n&quot;,&quot;script&quot;:&quot;The composition is limitless: you can build composed functions of the size you want. This means that if, for example, you have a data manipulation process that combines 20 functions, you can create a new function with compose() that will enclose all these 20 functions. Once you have this new composed element, you can run your pipeline several times, without having to copy and paste the 20 functions over and over. And again, if you need to change one thing inside this data manipulation pipeline, you just have to do it once.\n\n&quot;,&quot;title&quot;:&quot;compose() at will&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false},{&quot;number&quot;:3,&quot;type&quot;:&quot;FullSlide&quot;,&quot;key&quot;:&quot;9f40e783bd&quot;,&quot;part1&quot;:&quot;Flip the logical:\n\n``` r\nis_not_na &lt;- negate(is.na)\nx &lt;- c(1,2,3,4, NA)\nis.na(x)\n``` {{1}}\n\n```out\nFALSE FALSE FALSE FALSE  TRUE\n```{{2}}\n\n```r\nis_not_na(x)\n```{{3}}\n\n```out\nTRUE  TRUE  TRUE  TRUE FALSE\n```{{4}}\n\n&quot;,&quot;script&quot;:&quot;If you need to use a negation of a predicate, for example, is.character(), is.na(), or others, you can use the negate() function. This function performs the original test, and inverts the results: TRUE becomes FALSE, and vice versa.\n\nFor example, you can use this function to negate the is.na() function, and get a TRUE where the value is not missing.\n\n&quot;,&quot;title&quot;:&quot;negate()&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;code_zoom&quot;:100,&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false},{&quot;number&quot;:4,&quot;type&quot;:&quot;FullSlide&quot;,&quot;key&quot;:&quot;4cf10846c4&quot;,&quot;part1&quot;:&quot;`negates()` &amp; mappers:\n\n``` r\nunder_hundred &lt;- as_mapper(~ mean(.x) &lt; 100)\nnot_under_hundred &lt;- negate(under_hundred)\nmap_lgl(98:102, under_hundred)\n```\n\n```out\nTRUE  TRUE FALSE FALSE FALSE\n```{{1}}\n\n```\nmap_lgl(98:102, not_under_hundred)\n```{{2}}\n\n```out\nFALSE FALSE  TRUE  TRUE  TRUE\n```{{3}}\n\n&quot;,&quot;script&quot;:&quot;Of course, negate() works with mappers. Here, it might seem cumbersome to use the negate() function: why not use two mappers? \n\nThe reason is simple: we are trying to make our code easier to maintain, that is to say, easier to read and change. Here, if I had chosen to use two mappers, and wanted to make a change, let&#39;s say the threshold of my mapper, I&#39;ll have to change it twice. With negate(), I only need to change it once!\n\n&quot;,&quot;title&quot;:&quot;With mappers&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;code_zoom&quot;:100,&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false},{&quot;number&quot;:5,&quot;type&quot;:&quot;FullSlide&quot;,&quot;key&quot;:&quot;6c9ab8e835&quot;,&quot;part1&quot;:&quot;![http status code](https://assets.datacamp.com/production/repositories/2201/datasets/7b5db396ef6dea25b15674df61c53c023cf2d60c/https-status-codes-fix.jpg = 60)\n\nFrom [Hypertext Transfer Protocol (HTTP) Status Code Registry\n, fixerrorcode.com](https://fixerrorcode.com/http-status-codes/)\n\n&quot;,&quot;script&quot;:&quot;Let&#39;s digress a minute on HTTP status codes, as we will still be working with them in the next exercises. \n\nHTTP status codes inform you about the status of the connection between your computer and a specific webpage. Status codes can go from 200 to 500. 200 and friends inform you that everything went well: these are the one we will focus on in the exercises. 300s say the connection is redirected, 400s that it failed, and 500s that there was an error on the server. \n\nIf you want to know more about these codes, feel free to read the blog post linked in the slide.\n\n&quot;,&quot;title&quot;:&quot;Digression on http codes&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;code_zoom&quot;:100,&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false},{&quot;number&quot;:6,&quot;type&quot;:&quot;FullSlide&quot;,&quot;key&quot;:&quot;66cff2bf76&quot;,&quot;part1&quot;:&quot;Is x `%in%` y?\n\n``` r\nstatus &lt;- 201\n\ngood_status &lt;- c(200, 201, 202, 203)\n\nstatus %in% good_status\n```\n\n```out\nTRUE\n```\n\n&quot;,&quot;script&quot;:&quot;When doing web scraping, you might want to be sure the status code returned by a page is inside a specific range of numbers. \n\nFor this, you can use the %in% operator, which tests if the element on the left is inside the element of the right. \n\nAs you can see, 201 is inside the good_status vector, so our test returns TRUE.\n\n&quot;,&quot;title&quot;:&quot;Test if in&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;code_zoom&quot;:100,&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false},{&quot;number&quot;:7,&quot;type&quot;:&quot;FinalSlide&quot;,&quot;key&quot;:&quot;8249651d27&quot;,&quot;script&quot;:&quot;Let&#39;s try negate() and compose() in the exercises.\n\n&quot;,&quot;title&quot;:&quot;Let&#39;s practice!&quot;,&quot;use_full_width&quot;:true,&quot;citations&quot;:[],&quot;code_zoom&quot;:100,&quot;disable_transition&quot;:false,&quot;hide_slide_in_video&quot;:false,&quot;hide_title&quot;:false}],&quot;timings&quot;:&quot;[{\&quot;timing\&quot;:0,\&quot;state\&quot;:{\&quot;indexh\&quot;:0,\&quot;indexf\&quot;:-1}},{\&quot;timing\&quot;:0.0025018273032665337,\&quot;state\&quot;:{\&quot;indexh\&quot;:0,\&quot;indexf\&quot;:0}},{\&quot;timing\&quot;:0.04119929688376342,\&quot;state\&quot;:{\&quot;indexh\&quot;:1,\&quot;indexf\&quot;:-1}},{\&quot;timing\&quot;:0.23403585271317828,\&quot;state\&quot;:{\&quot;indexh\&quot;:2,\&quot;indexf\&quot;:-1}},{\&quot;timing\&quot;:0.29362904610908647,\&quot;state\&quot;:{\&quot;indexh\&quot;:2,\&quot;indexf\&quot;:0}},{\&quot;timing\&quot;:0.29801848963500716,\&quot;state\&quot;:{\&quot;indexh\&quot;:2,\&quot;indexf\&quot;:1}},{\&quot;timing\&quot;:0.3167313804560374,\&quot;state\&quot;:{\&quot;indexh\&quot;:2,\&quot;indexf\&quot;:2}},{\&quot;timing\&quot;:0.32088980063848854,\&quot;state\&quot;:{\&quot;indexh\&quot;:2,\&quot;indexf\&quot;:3}},{\&quot;timing\&quot;:0.3784254423816214,\&quot;state\&quot;:{\&quot;indexh\&quot;:3,\&quot;indexf\&quot;:-1}},{\&quot;timing\&quot;:0.40047136020312823,\&quot;state\&quot;:{\&quot;indexh\&quot;:3,\&quot;indexf\&quot;:0}},{\&quot;timing\&quot;:0.40665235437149094,\&quot;state\&quot;:{\&quot;indexh\&quot;:3,\&quot;indexf\&quot;:1}},{\&quot;timing\&quot;:0.41250762229236376,\&quot;state\&quot;:{\&quot;indexh\&quot;:3,\&quot;indexf\&quot;:2}},{\&quot;timing\&quot;:0.5642684108527132,\&quot;state\&quot;:{\&quot;indexh\&quot;:4,\&quot;indexf\&quot;:-1}},{\&quot;timing\&quot;:0.8371366279069767,\&quot;state\&quot;:{\&quot;indexh\&quot;:5,\&quot;indexf\&quot;:-1}},{\&quot;timing\&quot;:0.973984662936684,\&quot;state\&quot;:{\&quot;indexh\&quot;:6,\&quot;indexf\&quot;:-1}}]&quot;,&quot;transformations&quot;:&quot;null&quot;,&quot;plain_video_hls_link&quot;:null,&quot;plain_video_mp4_link&quot;:null}">
+  <input type="hidden" id="queryData" value="{&quot;autoPlay&quot;:false,&quot;controlBar&quot;:true,&quot;mobileAppView&quot;:false,&quot;pdfView&quot;:false,&quot;pictureInPictureEnabled&quot;:false,&quot;showThumbnail&quot;:true,&quot;slidesOnly&quot;:false}">
+  <script src="./katex.min.js.last ned" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+  <script src="./auto-render.min.js.last ned" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+  <script src="./bundle.js.last ned"></script>
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true"><template shadowrootmode="open"><style>
+      div.grammarly-desktop-integration {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select:none;
+        user-select:none;
+      }
+
+      div.grammarly-desktop-integration:before {
+        content: attr(data-content);
+      }
+    </style><div aria-label="grammarly-integration" role="group" tabindex="-1" class="grammarly-desktop-integration" data-content="{&quot;mode&quot;:&quot;full&quot;,&quot;isActive&quot;:true,&quot;isUserDisabled&quot;:false}"></div></template></grammarly-desktop-integration></html>

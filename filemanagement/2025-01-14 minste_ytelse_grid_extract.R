@@ -25,3 +25,5 @@ tbl2 <- tbl1 |>
     mutate(
         hyp_minsteytelse = barn*0.2 + minsteytelse
     )
+
+
