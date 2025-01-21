@@ -3,10 +3,15 @@
 ## Small smart coding parts
 - [`expand_grid()`, combining numbers of children and minimum DI level](): 2025-01-10 creating new min.level DI and the interval between the old level and the new.
 
+
+## API and query
+- [ssb api](): Demografiske data over Norges befolkning. Data-eksempel:07459: Befolkning, etter kjønn, alder, statistikkvariabel og år. Lik API-framgang for SSB sine tabeller.
+
 ## Functional
 - [Iteration rows and columns(`apply()` and alternative `for looping`]()
 - [purrr-recap: `keep()` and `discard()`]()
 - [`negate()` and `compose()`]() for minimal lines in code.
+- [Base R and the apply-family](): For base R iteration, functional.
 
 ## R and Excel
 

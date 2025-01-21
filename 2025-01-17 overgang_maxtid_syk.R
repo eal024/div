@@ -13,7 +13,7 @@ names(df)  <- new_names
 
 # Clean
 df1 <- df  |>
-    filter( ! is.na(periode) & ! is.na(ant_oppbrukt_syk) & str_detect(periode, "[0-9]"))  |> 
+    subset( ! is.na(periode) & ! is.na(ant_oppbrukt_syk) & str_detect(periode, "[0-9]"))  |> 
     mutate(
         periode = ym(periode),
         across(
