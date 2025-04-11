@@ -2,7 +2,7 @@
 
 ## Small smart coding parts
 - [`expand_grid()`, combining numbers of children and minimum DI level](): 2025-01-10 creating new min.level DI and the interval between the old level and the new.
-
+- The `quantile()` functions, and grouping by quantile cuts.
 
 ## API and query
 - [ssb api](): Demografiske data over Norges befolkning. Data-eksempel:07459: Befolkning, etter kjønn, alder, statistikkvariabel og år. Lik API-framgang for SSB sine tabeller.
