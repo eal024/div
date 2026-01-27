@@ -1,40 +1,48 @@
-# Collection of differnet script and coding conspets
+# div
 
-## Small smart coding parts
-- [`expand_grid()`, combining numbers of children and minimum DI level](): 2025-01-10 creating new min.level DI and the interval between the old level and the new.
-- The `quantile()` functions, and grouping by quantile cuts.
+Dette repositoryet inneholder personlige R-skript, Quarto/R Markdown-notater, eksempler og små verktøy for databehandling, visualisering og rapportering. Målet er å samle gjenbrukbare funksjoner, eksperimentelle analyser og dokumentasjon på ett sted.
 
-## API and query
-- [ssb api](): Demografiske data over Norges befolkning. Data-eksempel:07459: Befolkning, etter kjønn, alder, statistikkvariabel og år. Lik API-framgang for SSB sine tabeller.
+Status
+- Nåværende status: aktiv utvikling
+- Hovedkontakt: eal024
 
-## Functional
-- [Iteration rows and columns(`apply()` and alternative `for looping`]()
-- [purrr-recap: `keep()` and `discard()`]()
-- [`negate()` and `compose()`]() for minimal lines in code.
-- [Base R and the apply-family](): For base R iteration, functional.
+Hurtigoversikt — foreslått struktur
+- `src/` — gjenbrukbare funksjoner og helper-skript (.R, .r)
+- `analyses/` — dato-stemplede analyse- og eksperiment-skript
+- `notebooks/` — Quarto / R Markdown / TeX-kilder
+- `docs/` — dokumentasjon, guider og templates
+- `assets/` — statiske filer og bygde outputs
+  - `assets/images/`
+  - `assets/outputs/`
+  - `assets/css/`
+- `data/` — datasett (xlsx, csv)
+- `scripts/` — verktøysskript for reorganisering og vedlikehold
+- `tests/` — testfiler (hvis relevant)
+- `legacy/` — eldre filer som bevares for historikk
 
-## R and Excel
+Hvorfor denne reorganiseringen
+- Bedre oversikt: samle gjenbrukbare funksjoner i `src/` og analysene i en egen mappe gjør repoet lettere å navigere.
+- Mindre rot i root: store bygde filer og outputs flyttes til `assets/`.
+- Reproduserbarhet: Quarto/RMarkdown-kilder plasseres i `notebooks/` for enklere rendering.
 
+Hva som er gjort i denne branchen
+- Denne branchen inneholder en oppdatert README.md med anbefalt struktur og et par helper-skript som genererer flytte-kommandoer (dry-run) og et Python-skript som kan brukes for å anvende flytting lokalt.
+- Merk: Jeg har ikke automatisk flyttet alle filer i denne committen. Før vi gjør masseflytt, anbefales det å kjøre dry-run, verifisere og så gjøre endringer i en PR.
 
-## Data.table::
-- [Basic conspet of data.table packages](https://github.com/eal024/div/blob/main/data.table/2022-08-17%20data.table.R)
+Hvordan bruke reorganiserings-skriptet
+1. Sjekk ut branchen:
+   git fetch origin
+   git checkout reorganize/auto
+2. Les gjennom `scripts/MOVE_LIST.sh` for en komplett liste med foreslåtte `git mv`-kommandoer.
+3. Kjør dry-run (ingen endringer gjort):
+   bash scripts/MOVE_LIST.sh --dry-run
+4. Når du er klar, kjør på din lokale maskin uten --dry-run for å utføre `git mv`-kommandoene, kjør test-suite og opprett PR.
 
+Sjekkliste før merge
+- Kjør testene (evt. render notebooks) for å avdekke eventuelle brudd i imports eller relative paths.
+- Oppdater imports/path i kode hvis nødvendig.
+- Forsikre deg om at store binærfiler som skal beholdes er ønsket i repoet (vurder Git LFS hvis nødvendig).
 
-## Base R
-Highlights important verb and solution in R embedded with Base R.
-- [News for R.4.4. Comparable to dplyr and data.table wrangling.](https://github.com/eal024/div/blob/main/baseR/new_feature_4.4.R)
-
-### Handling strings
-- [string splitting with `strstring()`](https://github.com/eal024/div/blob/main/BaseR/2024-05-13%20string_splitting.R)
-- [Collapsing variable long into string](https://github.com/eal024/div/tree/main/2024-05-13collapsing_strings.R) 
-
-## Regression
-- [fixest vs lm]()
-
-## Textanalysis
-- [Introdution to basic conspets](https://github.com/eal024/div/tree/main/Textanalysis.R): Use of tidyverse and the intro to the tidytext packages `unnest_tokens(word, review)`
-- [Tokens and prepering data](https://github.com/eal024/div/tree/main/token_and_prepering.R)
-
-
-## File management
-- The [`fs packages`](https://fs.r-lib.org/) for file management:[example]()
+Kontakt
+- Repo-eier: eal024
+- For spørsmål eller forespørsler: opprett issue i repoet.
