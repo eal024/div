@@ -1,36 +1,59 @@
-
-
 library(tidyverse)
 
+# =============================================================================
+# FUNKSJONELL VERKTØYKASSE: compose(), partial() og %in%
+# =============================================================================
+# Dette skriptet viser tre verktøy for å skrive mer konsis funksjonskode:
+#   1. compose()  — kjed funksjoner til én ny funksjon (høyre til venstre)
+#   2. partial()  — forhåndsutfyll argumenter i en funksjon
+#   3. %in%       — sjekk om verdier finnes i en vektor
+# =============================================================================
 
 vec <- c(1.5:10.1)
 
-# Example: two functions
-fpower <- function(x, p = 2) x^p
-fround <- function(x, d){ round(x, digits = d ) } 
 
+# -----------------------------------------------------------------------------
+# 1. compose() — sett sammen to eller flere funksjoner
+# -----------------------------------------------------------------------------
+# compose(f, g)(x) er det samme som f(g(x)).
+# Utføres høyre til venstre: g kjøres først, deretter f.
 #
-fround( fpower(vec, p = 2), d = 0)
+# Her: opphøy i potens (fpower), rund deretter av (fround).
 
-# or
+fpower <- function(x, p = 2) x^p
+fround <- function(x, d) round(x, digits = d)
+
+# Eksplisitt pipe — leser venstre til høyre
 vec |> fpower(p = 3) |> fround(d = 1)
 
-# Alternativ
-power_round <- compose( fround,fpower)
+# compose() — lager en ny funksjon som gjør begge steg
+power_round <- compose(fround, fpower)   # fround( fpower(x) )
+power_round(vec)                         # samme resultat
 
-power_round( vec)
 
+# -----------------------------------------------------------------------------
+# 2. %in% — sjekk om verdier finnes i en annen vektor
+# -----------------------------------------------------------------------------
+# x %in% y returnerer TRUE for hvert element i x som finnes i y.
+# Nyttig for filtrering og betingede oppslag.
 
-# Trick: Is x in y
-4 %in% vec
+4 %in% vec    # TRUE — 4 finnes i vec
 
-y <- 1:100
+y    <- 1:100
 test <- 4
 
-test %in% y
-y[y %in% test]
+test %in% y        # TRUE
+y[y %in% test]     # ekstraher elementene i y som matcher test
 
-# For mininal changing of functinal cals
+
+# -----------------------------------------------------------------------------
+# 3. partial() — forhåndsutfyll argumenter
+# -----------------------------------------------------------------------------
+# partial(.f, ...) lager en ny funksjon der ett eller flere argumenter
+# er låst til bestemte verdier. Reduserer gjentakelse i funksjonskall.
+#
+# Her: lag en avrundingsfunksjon der digits alltid er 0.
+
 round_no_digits <- partial(round, digits = 0)
 
-test( 1.4:9.2)
+round_no_digits(c(1.4, 2.7, 9.2))   # runder av til nærmeste heltall

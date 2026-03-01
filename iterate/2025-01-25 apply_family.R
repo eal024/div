@@ -1,11 +1,25 @@
-
-
-# The base functional functions
-# Based on this blog: https://www.r-bloggers.com/2025/01/r-for-seo-part-8-apply-methods-in-r/
-
-# Apply: Apply runs across a column in a matrix or dataframe. I generally use this when I want to find the maximum or minimum value of a column or if I’m trying to find the number of times a term is mentioned in a text corpus
-# Lapply: Applies a function across a list or vector and is great for using functions and API calls
-# Sapply: Similar to lapply. Sapply means “simple apply” and tries to simplify the output compared to lapply
-# Mapply: Mapply means “map apply” and is great when you need to use your apply method across multiple datasets or elements
-
-
+# =============================================================================
+# APPLY-FAMILIEN I BASE R — OVERSIKT
+# =============================================================================
+# Base R har fire hovedfunksjoner for iterasjon uten eksplisitte løkker.
+# Alle tar en liste/vektor/matrise og en funksjon som input.
+#
+#   apply(X, MARGIN, FUN)           → kjør FUN langs rader (1) eller kolonner (2)
+#                                     i en matrise eller data.frame
+#
+#   lapply(X, FUN)                  → kjør FUN på hvert element i X,
+#                                     returnerer alltid en liste
+#
+#   sapply(X, FUN)                  → som lapply(), men forenkler output
+#                                     til vektor/matrise hvis mulig
+#
+#   mapply(FUN, ...)                → multivariate versjon av sapply():
+#                                     kjør FUN over flere vektorer parallelt
+#                                     (tilsvarer purrr::pmap())
+#
+# Kilde: https://www.r-bloggers.com/2025/01/r-for-seo-part-8-apply-methods-in-r/
+#
+# Se også:
+#   - 2023-03-27 apply_family.R  → praktiske eksempler med sapply/lapply/vapply/tapply
+#   - 2025-01-08 iteration_column_or_rows.R → apply() vs. map_dbl() med benchmark
+# =============================================================================

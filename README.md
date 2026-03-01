@@ -31,14 +31,17 @@
 - [Befolkningsframskrivning](./api/befolkningsframskrivning.R)
 
 ## Functional / Iteration
-- [Iteration over rows and columns (`apply()` and `for` loops)](./iterate/2025-01-08%20iteration_column_or_rows.R)
-- [purrr-recap: `keep()` and `discard()`](./iterate/2025-01-08%20purrr_predicate.R)
-- [`negate()` and `compose()` for minimal code](./iterate/2025-01-15%20purrr_negate_compose_partial.R)
-- [Base R and the apply-family](./iterate/apply_family.R)
-- [Functional programming - functional.R (2022-09)](./iterate/2022-09-01%20functional.R)
-- [purrr - keep, discard and list](./iterate/2025-01-16%20keep_discard_and_list.R)
-- [recap: `accumulate()`](./iterate/recap_accumulate.R)
-- [accumulate function](./iterate/accumlate_function.R)
+- [Høyere-ordens funksjoner, `map()` og `pwalk()`: introduksjon til funksjonell programmering](./iterate/2022-09-01%20functional.R)
+- [Fullstendig purrr-guide: `map`, `walk`, `imap`, `pmap`, `reduce`, `accumulate`, predikatfunksjoner og funksjons-fabrikker](./iterate/2022-09-23%20functional.R)
+- [Apply-familien i base R: `sapply`, `lapply`, `vapply`, `tapply` med purrr-ekvivalenter](./iterate/2023-03-27%20apply_family.R)
+- [`keep()`, `discard()` og nestede lister med `map()`](./iterate/2025-01-06%20purrr.R)
+- [Iterasjon over rader og kolonner: `apply()`, for-løkke og `map_dbl()` med ytelsessammenligning](./iterate/2025-01-08%20iteration_column_or_rows.R)
+- [Predikatfunksjoner: `every()`, `some()` og feilhåndtering med `safely()`](./iterate/2025-01-08%20purrr_predicate.R)
+- [`compose()`, `partial()` og `%in%`: verktøy for konsis funksjonskode](./iterate/2025-01-15%20purrr_negate_compose_partial.R)
+- [`keep()`, `flatten()`, `compact()` og `compose()` på nestede lister](./iterate/2025-01-16%20keep_discard_and_list.R)
+- [Apply-familien — oversikt over `apply`, `lapply`, `sapply`, `mapply`](./iterate/2025-01-25%20apply_family.R)
+- [`accumulate()` vs `reduce()` og `compose()` med flere funksjoner samtidig](./iterate/2025-04-11%20recap_accumulate.R)
+- [`accumulate()` i dybden: retning, `done()`, random walk og Pascals trekant](./iterate/accumlate_function.R)
 
 ## R and Excel
 - [openxlsx - basic example](./excel/openxl.R)
