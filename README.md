@@ -1,5 +1,24 @@
 # Collection of different scripts and coding concepts
 
+## Innhold
+| # | Tema | Beskrivelse |
+|---|------|-------------|
+| 1 | [Small smart coding parts](#small-smart-coding-parts) | Nyttige enkeltfunksjoner og triks |
+| 2 | [API and query](#api-and-query) | SSB API og datauttak |
+| 3 | [Functional / Iteration](#functional--iteration) | map, walk, apply, reduce |
+| 4 | [R and Excel](#r-and-excel) | Les og skriv Excel-filer |
+| 5 | [Data.table](#datatable) | Rask datahåndtering med data.table |
+| 6 | [dplyr / tidyverse](#dplyr--tidyverse) | Datarensing og transformasjon |
+| 7 | [Base R](#base-r) | Innebygde R-funksjoner |
+| 8 | [Regression](#regression) | fixest og regresjonsmodeller |
+| 9 | [Visualization](#visualization) | ggplot2, plotly, tinyplot |
+| 10 | [Shiny](#shiny) | Interaktive webapper |
+| 11 | [Time series](#time-series) | Tidsserieanalyse og ARIMA |
+| 12 | [Quarto](#quarto) | Rapporter og presentasjoner |
+| 13 | [Analysis / Cases](#analysis--cases) | NAV, velferd og analysecase |
+| 14 | [Textanalysis](#textanalysis) | Tekstanalyse med tidytext |
+| 15 | [File management](#file-management) | Filhåndtering med fs og purrr |
+
 ## Small smart coding parts
 - [`expand_grid()` - combining numbers and intervals](./BaseR/expand_grid_test.R)
 - [The `quantile()` function and grouping by quantile cuts](./analysis/quantile_function.R)
