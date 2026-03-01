@@ -1,460 +1,305 @@
-
-# 
 library(tidyverse)
 
+# =============================================================================
+# FUNKSJONELL PROGRAMMERING I R: map, walk, imap, pmap, reduce, accumulate
+# =============================================================================
+# Dette skriptet dekker kjernekonseptene i funksjonell programmering med purrr:
+#   1.  Høyere-ordens funksjoner   — funksjoner som tar funksjoner som input
+#   2.  map() og typede varianter  — map_int, map_dbl, map_chr, map_lgl
+#   3.  vapply()                   — base R-alternativ med typesjekk
+#   4.  Anonyme funksjoner (~)     — lambda-syntaks i purrr
+#   5.  Ekstrahere fra lister      — map(x, "navn") og map(x, indeks)
+#   6.  Ekstra argumenter          — sende args til .f via ~
+#   7.  Subgruppe-modellering      — lm() per gruppe med map()
+#   8.  modify() / modify_if()     — modifiser og behold struktur
+#   9.  walk() / walk2()           — iterasjon med sideeffekter
+#   10. imap()                     — iterasjon med indeks/navn
+#   11. pmap()                     — iterasjon over flere lister
+#   12. reduce() / accumulate()    — aggregering og mellomresultater
+#   13. Predikatfunksjoner         — some, every, none, detect
+#   14. Funksjons-fabrikker        — funksjoner som lager funksjoner
+# =============================================================================
 
-# chapter 9: Functional: function as input, return vector
 
-# Function as input f, return vector
+# -----------------------------------------------------------------------------
+# 1. Høyere-ordens funksjoner — funksjoner som tar funksjoner som input
+# -----------------------------------------------------------------------------
+# En funksjon kan ta en annen funksjon (f) som argument.
+# Her tar `ran()` en funksjon og bruker den på 10 tilfeldige tall.
+
 ran <- function(f) f(runif(10))
 
-# Exec.
-ran(sd)
-ran(sum)
+ran(sd)   # standardavvik av 10 tilfeldige tall
+ran(sum)  # summen av 10 tilfeldige tall
 
-# 9.1 the map
-# call the function for each element in the vec
-map(1:3, function(x) x*2)
 
-# example alternativ
-mtcars
+# -----------------------------------------------------------------------------
+# 2. map() — kall en funksjon for hvert element i en vektor/liste
+# -----------------------------------------------------------------------------
+# map(.x, .f) returnerer alltid en liste.
+# Bruk typede varianter for å returnere en spesifikk vektortype:
+#   map_int()  → heltallsvektor
+#   map_dbl()  → desimalvektor
+#   map_chr()  → karaktervektor
+#   map_lgl()  → logisk vektor
+
+map(1:3, function(x) x * 2)          # liste med [2, 4, 6]
 
 n_unique <- function(x) length(unique(x))
 
-map_int(mtcars, n_unique)
-map_dbl(mtcars, mean)
-map_chr(mtcars, mean)
-map_lgl(mtcars, is.double)
-
-# Return output with same length
-
-# Base alternativ for returning spesific type
-# vapply(list, function, FUN.VALUE = type, ...)
-vapply(c(1:3), function(x) x*2, FUN.VALUE = double(1))
+map_int(mtcars, n_unique)            # antall unike verdier per kolonne
+map_dbl(mtcars, mean)                # gjennomsnitt per kolonne
+map_chr(mtcars, mean)                # gjennomsnitt som tekst
+map_lgl(mtcars, is.double)           # er kolonnen av type double?
 
 
-# Anonymous functions: Behind the scenes:
-as_mapper(~length(unique(.x)))
+# -----------------------------------------------------------------------------
+# 3. vapply() — base R med eksplisitt returtype
+# -----------------------------------------------------------------------------
+# vapply(X, FUN, FUN.VALUE) er som sapply(), men sikrere fordi du
+# oppgir forventet returtype med FUN.VALUE. Krasjer heller enn å returnere
+# feil type stille.
 
-# Example
-x <- map(1:3, ~runif(2))
+vapply(c(1:3), function(x) x * 2, FUN.VALUE = double(1))
 
+
+# -----------------------------------------------------------------------------
+# 4. Anonyme funksjoner — tilde-syntaks (~) i purrr
+# -----------------------------------------------------------------------------
+# I stedet for function(x) ... kan du bruke ~... der .x er argumentet.
+# as_mapper() viser hva purrr gjør bak kulissene.
+
+as_mapper(~length(unique(.x)))       # konverterer ~ til en funksjon
+
+x <- map(1:3, ~runif(2))             # generer 2 tilfeldige tall 3 ganger
 x
 
 
-## Extracting from a list
+# -----------------------------------------------------------------------------
+# 5. Ekstrahere fra nestede lister med map()
+# -----------------------------------------------------------------------------
+# map(x, 1)      → hent element nr. 1 fra hvert listeelement
+# map(x, "navn") → hent navngitt element fra hvert listeelement
+# map(x, list("y", 2)) → hent nestede elementer (y[[2]])
 
 x <- list(
-    list(-1,x = 1, y = c(2), z = "a"),
-    list(-2,x = 4, y = c(5,6), z = "B"),
-    list(1, x = 1, y = 1:10)
+    list(-1, x = 1, y = c(2),    z = "a"),
+    list(-2, x = 4, y = c(5, 6), z = "B"),
+    list( 1, x = 1, y = 1:10)
 )
 
-# Alternativs
-map(x,1)
-map(x,"x")
-map(x,"y")
-map(x,"z")
-
-map(x, list("y",2))
+map(x, 1)           # første element fra hvert listeelement
+map(x, "x")         # element med navn "x"
+map(x, "y")         # element med navn "y"
+map(x, "z")         # element med navn "z"
+map(x, list("y", 2))# nestede: y[[2]] fra hvert element
 
 
-x[[1]][[1]]
-
-for(i in 1:length(x)){print(x[[(2)]][i]) }
-extract_list_el <- function(list,el){
-    for(i in 1:length(list)){print(x[[(el)]][i]) }
-}
-
-extract_list_el(x, 3)
-
-
-# another argument --------------------------------------------------------
+# -----------------------------------------------------------------------------
+# 6. Ekstra argumenter til .f via ~ eller direkte
+# -----------------------------------------------------------------------------
+# Bruk ~round(mean(x), digits = .x) for å sende ekstra verdier inn i .f.
+# Alternativt: skriv ut hele funksjonen eksplisitt for bedre lesbarhet.
 
 x <- rcauchy(10)
 
-# Want to trim c(0, 0.1, 0.2, 0.5)
-mean(c(0.112,0.167,0.19), trim = 0)
-mean(c(0.112,0.167,0.19), trim = 1)
+trim <- c(0, 1, 2, 3)
 
-#
-trim <- c(0, 1,2,3)
-map(trim, ~round(mean(x ),digits = .x )) |> head()
+# Tilde-syntaks
+map(trim, ~round(mean(x), digits = .x))
 
-# making the function clearer
-map(trim, function(trim) round(x, digits =   trim))
+# Eksplisitt funksjon — tydeligere og enklere å feilsøke
+map(trim, function(trim) round(x, digits = trim))
 
 
+# -----------------------------------------------------------------------------
+# 7. Subgruppe-modellering med map()
+# -----------------------------------------------------------------------------
+# Klassisk purrr-mønster: del data i grupper → tilpass modell → ekstraher koef.
 
-# Style -------------------------------------------------------------------
+by_cyl <- split(mtcars, mtcars$cyl)   # liste med én df per sylindertall
 
-# Example using purrr: fitting model to each subgroup, extractiong coeff
-
-# data: 3 df by cyl
-by_cyl <- split(mtcars, mtcars$cyl)
-
-#
-map(by_cyl, function(x) {lm(mpg ~wt, data = x)} ) |> 
-    map( coef) |> 
+# Hent stigningstallet (koeffisient nr. 2) for wt i mpg ~ wt per gruppe
+map(by_cyl, function(x) lm(mpg ~ wt, data = x)) |>
+    map(coef) |>
     map_dbl(2)
 
-coef <- map(by_cyl, function(x) {lm(mpg ~wt, data = x)} ) |> 
-    map(coef)  
+# Hent estimate og std.error i en ryddig tibble
+coef_tbl <- map(by_cyl, function(x) lm(mpg ~ wt, data = x)) |>
+    map(summary) |>
+    map(function(x) coef(x))
 
-coef_tbl <- map(by_cyl, function(x) {lm(mpg ~wt, data = x)} ) |> 
-    map( summary) |>
-    map(function(x) coef(x))  
-
-tibble( 
-        by_cyl   = names(by_cyl),
-        estimate = map_dbl(coef_tbl, function(x) x[2,"Estimate"]),
-        st.error = map_dbl(coef_tbl, function(x) x[2,"Std. Error"])
-)    
-
-vapply(coef, function(x) x[[2]], FUN.VALUE = double(1))
-
-coef_tbl
-vapply(coef_tbl, function(x) x[[2]], FUN.VALUE = double(1))
-vapply(coef_tbl, function(x) x[[3]], FUN.VALUE = double(1))
-
-# In a for-loop
-for(i in 1:length(coef_tbl)){
-    print(coef_tbl[[i]][2])
-}
+tibble(
+    by_cyl   = names(by_cyl),
+    estimate = map_dbl(coef_tbl, function(x) x[2, "Estimate"]),
+    st.error = map_dbl(coef_tbl, function(x) x[2, "Std. Error"])
+)
 
 
+# -----------------------------------------------------------------------------
+# 8. modify() og modify_if() — modifiser og behold struktur
+# -----------------------------------------------------------------------------
+# modify() er som map(), men returnerer samme objekttype som input.
+# modify_if() anvender .f kun på elementer der predikatet er TRUE.
 
-# map variants ------------------------------------------------------------
+df <- data.frame(x = 1:4, y = 5:8)
 
-# same type of output -> input same taype
-
-df <- data.frame( x = 1:4, y = 5:8)
-
-map(df, ~.x*2) # list
-modify(df, ~.x*2) # keep the output a data.frame
-# modify return a copy
+map(df, ~.x * 2)              # returnerer liste
+modify(df, ~.x * 2)           # returnerer data.frame
 
 df$z <- letters[1:4]
 
-# modify if
-modify_if(df, ~is.numeric(.x),  ~.x*2 )
+modify_if(df, ~is.numeric(.x), ~.x * 2)  # dobler kun numeriske kolonner
 
-weighted.mean(c(1,2,3), w = c(2/3,0/3,1/3))
 
-1*(2/3)+(2*(0/3))+3/3
+# -----------------------------------------------------------------------------
+# 9. walk() og walk2() — iterasjon med sideeffekter
+# -----------------------------------------------------------------------------
+# walk() er som map(), men brukes når du bare vil ha sideeffekter
+# (print, lagre til disk, sende melding) og ikke trenger returverdien.
+# walk2() itererer over to lister parallelt.
 
-# No output, only the sideeffects
-
-# write to disck
-# Print etc.
-
-text_message <- function(name){
+text_message <- function(name) {
     cat("Hei ", name, "!\n", sep = "")
 }
 
-text_message(name = "Eirik")
+liste_navn <- c("Eirik", "Trym", "Ove")
 
-liste_navn <-  c("Eirik", "Trym", "Ove")
+map(liste_navn, function(x) text_message(x))   # returnerer liste (uønsket)
+walk(liste_navn, function(x) text_message(x))  # returnerer ingenting — bedre
 
-map(liste_navn, function(x) text_message(x))
-# Alternativ
-walk(liste_navn, function(x) text_message(x))
-
-# Saving to disk
-
-temp <- tempfile()
-dir.create("temp")
-
-cyls <- split( mtcars, mtcars$cyl)
+# Lagre delsett av mtcars til separate CSV-filer
+cyls  <- split(mtcars, mtcars$cyl)
+temp  <- tempdir()
 paths <- file.path(temp, paste0("cyl-", names(cyls), ".csv"))
-walk2(cyls, paths, write.csv)
-
-# imap = for( i in seq_alng(xs))
-
-# If first vector is unnamed, second arg. will be index:
-imap_chr( iris, ~paste0("First value of: ",.y, " is ", .x[[1]]))
-
-x <- map(1:3, ~sample(100, 10))
-
-for(i in seq_along(x) ){print( max(x[[i]])) }
-for(i in seq_along(x) ){cat( max(x[[i]]),"\n", sep = " ") }
+walk2(cyls, paths, write.csv)                  # skriver én fil per gruppe
 
 
+# -----------------------------------------------------------------------------
+# 10. imap() — iterasjon med indeks eller navn
+# -----------------------------------------------------------------------------
+# imap(.x, .f) gir .f to argumenter: .x (verdien) og .y (navn eller indeks).
+# Nyttig når du trenger å referere til kolonnenavn eller listeposisjon.
 
-# imap --------------------------------------------------------------------
+imap_chr(iris, ~paste0("Første verdi av: ", .y, " er ", .x[[1]]))
 
-a <- list( x = c(1,2,3),
-      y = c("a", "b", "c"),
-      navn = c("Eirik", "Trym", "ove")
-      )
+a <- list(
+    x    = c(1, 2, 3),
+    y    = c("a", "b", "c"),
+    navn = c("Eirik", "Trym", "ove")
+)
 
-# Nested
-b <- list( a = list(a = 1, b = c(1:5)),
-           b = list(a = 2, b = c(6:10))
-           )
+imap(a, ~.x[[2]])   # hent andre element fra hvert listeelement, med navn
 
-
-# 
 x <- map(1:6, ~sample(1000, 10))
+imap_chr(x, ~glue::glue("Høyeste verdi av element {.y} er {max(.x)}"))
 
 
-#
-imap(a, ~.x[[2]])
-imap(b, ~.x[[2]][[2]])
-
-# index by input
-library(rlang)
-imap_chr( x, ~glue::glue("Highest value of ", .y, " is ", {{max(.x)}}, "\n") )
-
-
-
-# pmap --------------------------------------------------------------------
-
-# using pmap with tibble
+# -----------------------------------------------------------------------------
+# 11. pmap() — iterasjon over flere lister/kolonner parallelt
+# -----------------------------------------------------------------------------
+# pmap(.l, .f) sender hvert sett med verdier fra listen som navngitte
+# argumenter til .f. Fungerer godt med en tibble som parameter-tabell.
 
 params <- tibble::tribble(
     ~n, ~min, ~max,
-    1L,   0,    1,
-    2L,   10,    100,
-    3L,   100,    1000
-    
+    1L,    0,    1,
+    2L,   10,  100,
+    3L,  100, 1000
 )
 
 set.seed(123)
 
-# with function
-pmap(params, function(n, min, max) {
-    runif(n = n, min = min, max = max)
-    })
+pmap(params, function(n, min, max) runif(n = n, min = min, max = max))
 
-# Short hand
+# Kortform: hvis argumentnavnene matcher, kan du sende funksjonen direkte
 pmap(params, runif)
 
 
-modify(head(mtcars), 2) # 
-modify(head(mtcars), function(x) x[2])
-head(mtcars)[2,]
+# -----------------------------------------------------------------------------
+# 12. reduce() og accumulate() — aggregering langs en vektor
+# -----------------------------------------------------------------------------
+# reduce(.x, .f) anvender .f kumulativt og returnerer ett sluttresultat.
+#   reduce(1:3, f) = f(f(1, 2), 3)
+#
+# accumulate(.x, .f) gjør det samme, men returnerer ALLE mellomresultater.
+# Nyttig for å forstå hva reduce gjør, eller for trinnvise beregninger.
 
-list(head(mtcars))
+reduce(1:3, `+`)        # 1 + 2 + 3 = 6
+reduce(1:3, sum)        # samme resultat
 
+x <- c(4, 3, 10)
+accumulate(x, sum)      # [4, 7, 17] — viser hvert steg
 
-# Reduce ------------------------------------------------------------------
-
-# reduce: vector of n, and produce vector of length 1
-
-# reduce(1:3, f) = f(f(1,2),3)
-
-reduce(1:3, sum )
-reduce(1:3, `+`)
-sum(c(sum(c(1,2)),3) )
-
-reduce(c(0.5, 1:3), sum , .init = 0.5)
-
-library(rlang)
-
-reduce(1:3, ~.x+ .y)
-reduce(1:3, function(x,y) x + y)
-
-# Direction
-reduce( 1:3, ~.x^2+.y)
-sum(sum(c(1^2,2))^2,3)
-
-# Example 3
-lim <- function(x,ord){ paste0(x, "+", ord) }
-navn <- c("Eirik", "Trym", "Ove")
-reduce( navn, lim)
-paste( paste0("Eirik","+", "Trym"), "+", "ove")
-
-# Example 4
-l <- map(1:3, ~sample(1:10, replace = T))
-
-out <- l[[1]]
-
-intersect(c(1:3), 2)
-
-l[[1]]
-l[[2]]
-intersect(out, l[[2]])
-
-vec_intersct <- (l[[1]] %in% l[[2]])
-unique(l[[1]][vec_intersct])
-
-intersect(out, l[[2]])
-
-# appear in all vectors
-reduce(l, intersect)
-
-# Appear in at least one entry
-reduce(l, union)
-
-## Accumulate: Return all the intermediate results
-
-accumulate(l, intersect)
-
-
-l[[1]] # 1
-l[[1]][l[[1]] %in% l[[2]]] |> unique() # 2
-# OSV
-accumulate(l, intersect)
-
-## Reduce
-x[[1]] + x[[2]] + x[[3]]
-
-x <- c(4,3,10)
-
-x[[1]] + x[[2]] + x[[3]] # 4+3+10
-
-reduce(x, sum)
-accumulate(x, sum)
-x[[1]]
-x[[1]] + x[[2]]
-x[[1]] + x[[2]] + x[[3]]
-
+# .init setter startverdi
 reduce(x, sum, .init = 0)
-reduce(x, sum, .init = 10) # reuce + .init = 10
-# Can  be used to make reduce able to check what to return
-reduce("a", sum)
-reduce("a", sum, .init = 0)
+reduce(x, sum, .init = 10)   # starter på 10: 10+4+3+10 = 27
 
-##
+# Praktisk eksempel: finn elementer som finnes i ALLE vektorer (intersect)
+l <- map(1:3, ~sample(1:10, replace = TRUE))
 
-# Predictive functions ----------------------------------------------------
+reduce(l, intersect)    # felles elementer i alle tre
+reduce(l, union)        # elementer som finnes i minst én
 
-# predicitve retun T or F
-some( list("1!",c(1:10)), is.numeric )
-every(list("1!",c(1:10)), is.numeric )
-none(list("1!",c(1:10)), is.numeric)
-
-ex <- list("1!",c(1:10))
-
-# detetect
-map(ex,  ~detect(.x, is.numeric)) # return value of first index match 
-map(ex,  ~detect_index(.x, is.numeric)) # return value of first index match, not NULL if no match
-map(ex,  ~detect_index(.x, is.numeric)) # return value of first index match 
-
-keep(c(11:20), is.numeric)
+accumulate(l, intersect) # viser prosessen trinn for trinn
 
 
+# -----------------------------------------------------------------------------
+# 13. Predikatfunksjoner — some, every, none, detect
+# -----------------------------------------------------------------------------
+# some(.x, .p)         → TRUE hvis minst ett element oppfyller .p
+# every(.x, .p)        → TRUE hvis alle elementer oppfyller .p
+# none(.x, .p)         → TRUE hvis ingen elementer oppfyller .p
+# detect(.x, .p)       → returnerer første element som oppfyller .p
+# detect_index(.x, .p) → returnerer indeksen til første match
 
-# 10. Function factories-------------------------------------------------------------------
+ex <- list("1!", c(1:10))
 
-power1 <- function(exp){
-    function(x){
-        x^exp
-        }
+some(ex,  is.numeric)    # TRUE  — minst ett element er numerisk
+every(ex, is.numeric)    # FALSE — ikke alle er numeriske
+none(ex,  is.numeric)    # FALSE — det finnes minst ett numerisk element
+
+map(ex, ~detect(.x,       is.numeric))  # første numeriske verdi
+map(ex, ~detect_index(.x, is.numeric))  # indeks til første numeriske verdi
+
+keep(c(11:20), is.numeric)              # behold kun numeriske verdier
+
+
+# -----------------------------------------------------------------------------
+# 14. Funksjons-fabrikker — funksjoner som lager funksjoner
+# -----------------------------------------------------------------------------
+# En funksjons-fabrikk er en funksjon som returnerer en ny funksjon.
+# Det ytre funksjonsanropet setter parametere (f.eks. eksponent),
+# og den returnerte funksjonen bruker dem.
+
+power1 <- function(exp) {
+    function(x) x^exp
 }
-power1(exp = 2)
 
-square <- power1(2)
+square <- power1(2)   # lager en "kvadrat-funksjon"
+cube   <- power1(3)   # lager en "kube-funksjon"
 
-# Call the manufactured functions
-square(3)
+square(3)  # 3^2 = 9
+cube(3)    # 3^3 = 27
 
-library(rlang)
-library(ggplot2)
-library(scales)
-
-# a look at the function
-square
-
-rlang::env_print(square)
-# Show binding to exp: <dbl>
-
-# what is exp?
-fn_env(square)$exp # Which behave diff fra on another
-
-#ex 
-cube <- power1(3)
-fn_env(cube)$exp
-
-
-# forcing
-x <- 2
-square(x)
-x <- 3
-square( )
-
-power2 <- function(exp){
+# force() låser verdien av exp ved opprettelse, unngår lazy eval-problemer
+power2 <- function(exp) {
     force(exp)
-    function(x){ x^exp}
+    function(x) x^exp
 }
 
-x <- 2
-square <- power2(x)
-
-square(2)
-x <- 3
-square(2)
-
-## 
-new_counter <- function( fortsett = T){
-    i <- 0 
-    function(){
-        i <<- i+1
+# Teller-fabrikk: hvert kall øker en intern teller med <<-
+new_counter <- function() {
+    i <- 0
+    function() {
+        i <<- i + 1   # <<- oppdaterer i i det ytre miljøet
         i
     }
-
 }
 
 en <- new_counter()
-to <- new_counter()
+to <- new_counter()   # uavhengig teller
 
-en()
-to()
-
-
-# Graphical factories -----------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+en()   # 1
+en()   # 2
+to()   # 1  — sin egen teller
