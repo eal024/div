@@ -13,6 +13,11 @@
 - [ ] **Vurdere Beamer** — er Quarto revealjs riktig format, eller passer Beamer (PDF) bedre til dette publikummet? Fordeler med Beamer: stabil layout, PDF fungerer overalt, ingen CSS-strid. Ulemper: mindre visuell kontroll, krever LaTeX-oppsett
 
 ### Innhold
+- [ ] **Slide om datasettet** — legg til en kort slide tidlig i presentasjonen som forklarer Palmer Penguins-datasettet: hva det inneholder, hvilke variabler som brukes, og hvorfor det er valgt
+- [ ] **Avansert seksjon** — legg til en egen seksjon (seksjon 04?) rettet mot viderekommende. Tittel: "Tips du kommer borti etterhvert". Mulig innhold:
+  - `nest()` og `map()` — list-kolonner og iterasjon over grupper
+  - Alternativer til dplyr: `data.table` (hastighet), `dtplyr` (dplyr-syntaks over data.table), `collapse` — med ærlig diskusjon av hva dplyr er svakt på (ytelse på store data)
+  - Andre nyttige verktøy: `janitor::clean_names()`, `across()`, `glue::glue()`
 - [ ] **Avslutningsslide: "Hva videre?"** — legg til en slide om hva som kommer etter dplyr/tidyr:
   - Visualisering med `ggplot2`
   - Modellering med `tidymodels` / `fixest`

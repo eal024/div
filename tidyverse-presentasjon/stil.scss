@@ -255,6 +255,12 @@ $code-block-font-size:           0.80em;
   border-radius: 2px;
 }
 
+// ── Kolonner ────────────────────────────────────────────────────────────────
+.reveal .columns .column {
+  overflow-y: auto;
+  max-height: 580px;
+}
+
 // ── Verbgrid (oversikt) ────────────────────────────────────────────────────
 .verb-grid {
   display: grid;
