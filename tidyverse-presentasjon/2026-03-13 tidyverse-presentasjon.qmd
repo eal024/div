@@ -1,11 +1,12 @@
 ---
 title: "Lesbare R-skript med tidyverse"
-subtitle: "dplyr og tidyr"
+subtitle: "dplyr og tidyverse"
 author: "Eirik"
 date: "2026-03-13"
 format:
   revealjs:
     theme: stil.scss
+    embed-resources: true
     slide-number: true
     code-line-numbers: false
     highlight-style: arrow-light
@@ -25,6 +26,8 @@ execute:
 library(dplyr)
 library(tidyr)
 library(knitr)
+library(stringr)
+library(forcats)
 library(palmerpenguins)
 
 vis <- function(df, n = 4) {
@@ -32,41 +35,153 @@ vis <- function(df, n = 4) {
 }
 ```
 
-## I dag ser vi på
+## Du åpner et skript fra i fjor
 
 ```{=html}
-<div style="display:flex; align-items:center; gap:14px; margin:1.8em 0 0.5em 0; font-family:'Source Sans 3',sans-serif; font-size:0.88em;">
-  <div style="padding:8px 16px; border:1.5px solid #C0B8B0; border-radius:6px; color:#A89F96;">Import</div>
-  <div style="color:#C0B8B0; font-size:1.2em;">→</div>
-  <div style="border:2.5px solid #B8734A; border-radius:10px; padding:10px 18px; background:rgba(184,115,74,0.07);">
-    <div style="font-size:0.72em; color:#B8734A; font-weight:600; letter-spacing:0.05em; margin-bottom:7px;">★ I dag</div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div style="padding:6px 14px; border:1.5px solid #B8734A; border-radius:6px; color:#1C1C1C; background:#FAFAF7;">Tidy</div>
-      <div style="color:#B8734A; font-size:1.1em;">↔</div>
-      <div style="padding:6px 14px; border:1.5px solid #B8734A; border-radius:6px; color:#1C1C1C; background:#FAFAF7;">Transform</div>
-    </div>
-  </div>
-  <div style="color:#C0B8B0; font-size:1.2em;">→</div>
-  <div style="border:1.5px solid #C0B8B0; border-radius:8px; padding:10px 14px;">
-    <div style="display:flex; flex-direction:column; align-items:center; gap:5px;">
-      <div style="padding:5px 12px; border:1.5px solid #C0B8B0; border-radius:5px; color:#A89F96;">Visualize</div>
-      <div style="color:#C0B8B0;">↕</div>
-      <div style="padding:5px 12px; border:1.5px solid #C0B8B0; border-radius:5px; color:#A89F96;">Model</div>
-    </div>
-  </div>
-  <div style="color:#C0B8B0; font-size:1.2em;">→</div>
-  <div style="padding:8px 16px; border:1.5px solid #C0B8B0; border-radius:6px; color:#A89F96;">Communicate</div>
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #B8734A;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.82em;line-height:1.7;color:#1C1C1C;margin:0.4em 0;max-width:640px;">x &lt;- read.csv("data2.csv")
+y &lt;- x[x$V3 != "", ]
+y$ny &lt;- y$V1 / y$V2
+z &lt;- aggregate(y$ny,
+  by = list(y$V4), mean)
+write.csv(z, "out.csv")</pre>
+```
+
+<div class="key-box" style="max-width:640px;">
+Hva gjør denne koden? Hva er <code>V1</code>, <code>V2</code>, <code>V4</code>? Hva er <code>ny</code>?
 </div>
-<div class="kilde-note">
-Wickham, Çetinkaya-Rundel &amp; Grolemund (2023), <em>R for Data Science</em> (2. utg.), kap. 1 — r4ds.hadley.nz
+
+---
+
+## Slik kan det samme se ut
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.4em 0;">## 1. Import ────────────────────────────────────────────────────
+
+df_uforetrygd_panel &lt;- readxl::read_excel(
+  here::here("data", "raw", "register_2024.xlsx")
+)
+
+## 2. Data rens ──────────────────────────────────────────────────
+
+df_uforetrygd_ren &lt;- df_uforetrygd_panel |&gt;
+  janitor::clean_names() |&gt;           # standardiser kolonnenavn
+  filter(kjonn == 1) |&gt;               # 1 = menn (SSB-koding)
+  filter(!is.na(ytelse_kode)) |&gt;      # fjern ukjente ytelser
+  mutate(
+    alder_kat = cut(alder, c(18, 30, 50, 67))  # gruppert alder
+  )</pre>
+```
+
+<div class="key-box">
+Beskrivende navn · seksjonsoverskrifter · kommentarer som forklarer <em>hvorfor</em>.
+</div>
+
+---
+
+## Dataflyten — fra rådata til kommunikasjon
+
+```{=html}
+<div style="position:relative; width:860px; height:200px; margin:2em auto 0; font-family:'Source Sans 3',sans-serif; font-size:1em; overflow:visible;">
+
+  <!-- Workflow boxes -->
+  <div style="position:absolute; left:0; top:79px; padding:10px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap;">Import</div>
+  <div style="position:absolute; left:118px; top:85px; color:#C0B8B0; font-size:1.3em; line-height:1;">→</div>
+  <div style="position:absolute; left:142px; top:79px; padding:10px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap;">Tidy</div>
+  <div style="position:absolute; left:230px; top:85px; color:#C0B8B0; font-size:1.3em; line-height:1;">→</div>
+  <div style="position:absolute; left:256px; top:0; width:344px; height:178px; border:1.5px solid #C0B8B0; border-radius:16px;">
+    <div style="position:absolute; top:14px; left:50%; transform:translateX(-50%); padding:7px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap; font-size:0.9em;">Transform</div>
+    <div style="position:absolute; top:55px; left:22px; color:#C0B8B0; font-size:1.1em; line-height:1;">↕</div>
+    <div style="position:absolute; top:55px; right:22px; color:#C0B8B0; font-size:1.1em; line-height:1;">↕</div>
+    <div style="position:absolute; bottom:14px; left:12px; padding:6px 12px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap; font-size:0.85em;">Visualize</div>
+    <div style="position:absolute; bottom:24px; left:50%; transform:translateX(-50%); color:#C0B8B0; font-size:1.1em; line-height:1;">↔</div>
+    <div style="position:absolute; bottom:14px; right:12px; padding:6px 12px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap; font-size:0.85em;">Model</div>
+  </div>
+  <div style="position:absolute; left:612px; top:85px; color:#C0B8B0; font-size:1.3em; line-height:1;">→</div>
+  <div style="position:absolute; left:636px; top:79px; padding:10px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap;">Communicate</div>
+
+</div>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:1.6em;">Kilde: Wickham, Çetinkaya-Rundel &amp; Grolemund — <em>R for Data Science</em> (2. utg.)</p>
+
+---
+
+## tidyverse — pakker for hvert steg i dataflyten
+
+```{=html}
+<div style="position:relative; width:860px; height:250px; margin:2em auto 0; font-family:'Source Sans 3',sans-serif; font-size:1em; overflow:visible;">
+
+  <!-- Workflow boxes — identical positions to previous slide -->
+  <div style="position:absolute; left:0; top:79px; padding:10px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap;">Import</div>
+  <div style="position:absolute; left:118px; top:85px; color:#C0B8B0; font-size:1.3em; line-height:1;">→</div>
+  <div style="position:absolute; left:142px; top:79px; padding:10px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap;">Tidy</div>
+  <div style="position:absolute; left:230px; top:85px; color:#C0B8B0; font-size:1.3em; line-height:1;">→</div>
+  <div style="position:absolute; left:256px; top:0; width:344px; height:178px; border:1.5px solid #C0B8B0; border-radius:16px;">
+    <div style="position:absolute; top:14px; left:50%; transform:translateX(-50%); padding:7px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap; font-size:0.9em;">Transform</div>
+    <div style="position:absolute; top:55px; left:22px; color:#C0B8B0; font-size:1.1em; line-height:1;">↕</div>
+    <div style="position:absolute; top:55px; right:22px; color:#C0B8B0; font-size:1.1em; line-height:1;">↕</div>
+    <div style="position:absolute; bottom:14px; left:12px; padding:6px 12px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap; font-size:0.85em;">Visualize</div>
+    <div style="position:absolute; bottom:24px; left:50%; transform:translateX(-50%); color:#C0B8B0; font-size:1.1em; line-height:1;">↔</div>
+    <div style="position:absolute; bottom:14px; right:12px; padding:6px 12px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap; font-size:0.85em;">Model</div>
+  </div>
+  <div style="position:absolute; left:612px; top:85px; color:#C0B8B0; font-size:1.3em; line-height:1;">→</div>
+  <div style="position:absolute; left:636px; top:79px; padding:10px 18px; border:1.5px solid #C0B8B0; border-radius:8px; color:#A89F96; white-space:nowrap;">Communicate</div>
+
+  <!-- Terracotta hexes: dplyr, stringr, forcats, lubridate — over Transform box -->
+  <div style="position:absolute; top:-57px; left:284px; width:66px; height:74px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#B8734A; display:flex; align-items:center; justify-content:center; color:white; font-size:0.78em; font-weight:700; z-index:10;">dplyr</div>
+  <div style="position:absolute; top:-57px; left:358px; width:66px; height:74px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#B8734A; display:flex; align-items:center; justify-content:center; color:white; font-size:0.78em; font-weight:700; z-index:10;">stringr</div>
+  <div style="position:absolute; top:-57px; left:432px; width:66px; height:74px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#B8734A; display:flex; align-items:center; justify-content:center; color:white; font-size:0.78em; font-weight:700; z-index:10;">forcats</div>
+  <div style="position:absolute; top:-57px; left:506px; width:66px; height:74px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#B8734A; display:flex; align-items:center; justify-content:center; color:white; font-size:0.7em; font-weight:700; z-index:10; text-align:center; line-height:1.3;">lubri­date</div>
+
+  <!-- Faint hexes: readr (Import), tibble + tidyr (Tidy), ggplot2 (Visualize), broom (Model), Quarto (Communicate) -->
+  <div style="position:absolute; top:181px; left:8px; width:52px; height:60px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#EDE8E2; display:flex; align-items:center; justify-content:center; color:#C0B8B0; font-size:0.65em; font-weight:600;">readr</div>
+  <div style="position:absolute; top:181px; left:148px; width:52px; height:60px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#EDE8E2; display:flex; align-items:center; justify-content:center; color:#C0B8B0; font-size:0.65em; font-weight:600;">tibble</div>
+  <div style="position:absolute; top:181px; left:206px; width:52px; height:60px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#EDE8E2; display:flex; align-items:center; justify-content:center; color:#C0B8B0; font-size:0.65em; font-weight:600;">tidyr</div>
+  <div style="position:absolute; top:181px; left:270px; width:52px; height:60px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#EDE8E2; display:flex; align-items:center; justify-content:center; color:#C0B8B0; font-size:0.62em; font-weight:600;">ggplot2</div>
+  <div style="position:absolute; top:181px; left:530px; width:52px; height:60px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#EDE8E2; display:flex; align-items:center; justify-content:center; color:#C0B8B0; font-size:0.65em; font-weight:600;">broom</div>
+  <div style="position:absolute; top:181px; left:648px; width:52px; height:60px; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); background:#EDE8E2; display:flex; align-items:center; justify-content:center; color:#C0B8B0; font-size:0.65em; font-weight:600;">Quarto</div>
 </div>
 ```
 
 ---
 
-## Seks verktøy
+## Palmer Penguins — datasettet vi bruker i dag
+
+::: {.columns}
+::: {.column width="76%"}
+
+<p style="font-size:0.82em; color:#A89F96; margin:0 0 0.6em 0;">3 arter · 3 øyer i Antarktis · 344 observasjoner · mål av nebb, finner og kroppsmasse</p>
+
+::: {style="font-size:0.95em;"}
+```{r}
+#| echo: false
+penguins |>
+  select(species, island, bill_length_mm, bill_depth_mm,
+         flipper_length_mm, body_mass_g) |>
+  head(6) |>
+  kable()
+```
+:::
+
+:::
+::: {.column width="24%"}
 
 ```{=html}
+<div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; height:460px; padding-right:4px;">
+  <div style="font-size:4.2em; line-height:1; margin-bottom:0.05em;">🐧</div>
+  <div style="font-size:5.2em; line-height:1;">🐧</div>
+</div>
+```
+
+:::
+:::
+
+---
+
+## dplyr gir deg seks verb for å transformere data
+
+```{=html}
+<p style="font-size:0.8em; color:#A89F96; margin:0 0 1em 0;">De viktigste verbene for å transformere data</p>
 <div class="verb-grid">
   <div class="verb-card">
     <div class="verb-card-name">filter()</div>
@@ -82,190 +197,192 @@ Wickham, Çetinkaya-Rundel &amp; Grolemund (2023), <em>R for Data Science</em> (
   </div>
   <div class="verb-card">
     <div class="verb-card-name">summarise()</div>
-    <div class="verb-card-desc">Aggregerer per gruppe</div>
+    <div class="verb-card-desc">Aggregerer til sammendrag</div>
   </div>
   <div class="verb-card">
-    <div class="verb-card-name">pivot_longer()</div>
-    <div class="verb-card-desc">Bredt &#x2192; langt format</div>
+    <div class="verb-card-name">group_by()</div>
+    <div class="verb-card-desc">Gruppert analyse</div>
   </div>
   <div class="verb-card">
-    <div class="verb-card-name">pivot_wider()</div>
-    <div class="verb-card-desc">Langt &#x2192; bredt format</div>
+    <div class="verb-card-name">arrange()</div>
+    <div class="verb-card-desc">Sorterer rader</div>
   </div>
-</div>
-<div class="key-box">
-Alle seks følger samme mønster: <strong>data inn &#x2192; transformasjon &#x2192; data ut</strong>.
-Og de kobles med pipe: <code>|&gt;</code>
 </div>
 ```
 
 ---
 
-## Hvorfor tidyverse?
+## Pipe — |> sender resultatet videre til neste steg
 
-Samme oppgave — to måter:
-
-::: {.columns}
-::: {.column width="48%"}
-<p class="col-label">Base R</p>
-
-```{r}
-#| eval: false
-df <- penguins[
-  !is.na(penguins$bill_length_mm), ]
-
-df$ratio <- df$bill_length_mm /
-            df$bill_depth_mm
-
-aggregate(ratio ~ species,
-          data = df, FUN = mean)
+```{=html}
+<div style="display:flex; align-items:center; justify-content:center; gap:0; margin:2em auto 1.6em;">
+  <div style="background:#F0EBE3; border:1.5px solid #C0B8B0; border-radius:8px; padding:12px 22px; font-family:'Fira Code','Courier New',monospace; font-size:0.88em; color:#1C1C1C; white-space:nowrap;">data</div>
+  <div style="color:#B8734A; font-size:1.6em; padding:0 10px; font-weight:700; line-height:1;">|&gt;</div>
+  <div style="background:#F0EBE3; border:1.5px solid #C0B8B0; border-radius:8px; padding:12px 22px; font-family:'Fira Code','Courier New',monospace; font-size:0.88em; color:#1C1C1C; white-space:nowrap;">steg 1</div>
+  <div style="color:#B8734A; font-size:1.6em; padding:0 10px; font-weight:700; line-height:1;">|&gt;</div>
+  <div style="background:#F0EBE3; border:1.5px solid #C0B8B0; border-radius:8px; padding:12px 22px; font-family:'Fira Code','Courier New',monospace; font-size:0.88em; color:#1C1C1C; white-space:nowrap;">steg 2</div>
+  <div style="color:#B8734A; font-size:1.6em; padding:0 10px; font-weight:700; line-height:1;">|&gt;</div>
+  <div style="background:#F0EBE3; border:1.5px solid #C0B8B0; border-radius:8px; padding:12px 22px; font-family:'Fira Code','Courier New',monospace; font-size:0.88em; color:#1C1C1C; white-space:nowrap;">steg 3</div>
+  <div style="color:#B8734A; font-size:1.6em; padding:0 10px; font-weight:700; line-height:1;">|&gt;</div>
+  <div style="background:#F0EBE3; border:1.5px solid #6B8C7E; border-radius:8px; padding:12px 22px; font-family:'Fira Code','Courier New',monospace; font-size:0.88em; color:#1C1C1C; white-space:nowrap;">resultat</div>
+</div>
 ```
-:::
-::: {.column width="4%"}
-:::
-::: {.column width="48%"}
-<p class="col-label">tidyverse</p>
 
-```{r}
-#| eval: false
-penguins |>
-  filter(!is.na(bill_length_mm)) |>
+<div class="key-box">
+Resultatet fra venstre sendes videre som første argument til høyre — leses ovenfra og ned.
+</div>
+
+---
+
+## Én operasjon — nestingen er grei
+
+<p style="font-size:0.82em; color:#A89F96; margin:0 0 0.5em 0;">Med én operasjon er det ingen problem å lese koden.</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #C0B8B0;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.88em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;max-width:560px;">filter(penguins, !is.na(bill_length_mm))</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:1em;">Men hva skjer når vi trenger å gjøre <em>mer</em> med dataene?</p>
+
+---
+
+## Tre operasjoner — les innenfra og ut
+
+<p style="font-size:0.82em; color:#A89F96; margin:0 0 0.5em 0;">Filter, lag ny variabel, aggreger — nå må du lese innenfra og ut.</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #B8734A;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.82em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;max-width:580px;">summarise(
   mutate(
-    ratio = bill_length_mm /
-            bill_depth_mm
-  ) |>
+    filter(
+      penguins,
+      !is.na(bill_length_mm)
+    ),
+    ratio = bill_length_mm / bill_depth_mm
+  ),
+  snitt = mean(ratio),
+  .by   = species
+)</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:0.6em;">Start innerst — <code>filter()</code> — og les utover. Rekkefølgen i koden er omvendt av rekkefølgen i tankene.</p>
+
+---
+
+## Med pipe — ovenfra og ned
+
+<p style="font-size:0.82em; color:#A89F96; margin:0 0 0.5em 0;">Samme tre operasjoner — nå i den rekkefølgen du faktisk tenker dem.</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.82em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;max-width:580px;">penguins |&gt;
+  filter(!is.na(bill_length_mm)) |&gt;
+  mutate(ratio = bill_length_mm / bill_depth_mm) |&gt;
   summarise(
     snitt = mean(ratio),
     .by   = species
-  )
+  )</pre>
 ```
-:::
-:::
+
+<div class="key-box">
+Ta data, gjør dette, så dette, så dette — samme rekkefølge som du tenker.
+</div>
 
 ---
 
-## Uten pipe
+## filter() beholder kun gyldige rader
 
 ::: {.columns}
-::: {.column width="55%"}
-<p class="col-label">Kode leses innenfra og ut</p>
-
-```{r}
-#| eval: false
-summarise(
-  mutate(
-    filter(penguins,
-           !is.na(bill_length_mm)),
-    ratio = bill_length_mm /
-            bill_depth_mm
-  ),
-  snitt = mean(ratio),
-  .by = species
-)
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Tre operasjoner — øyet må starte i midten og jobbe seg ut.
-</p>
-:::
-::: {.column width="45%"}
-<p class="col-label">Data</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, island, bill_length_mm, body_mass_g) |>
-  vis()
-```
-:::
-:::
-
----
-
-## Med pipe `|>` — steg 1
-
-::: {.columns}
-::: {.column width="55%"}
-<p class="col-label">Kode</p>
-
-```{r}
-#| eval: false
-penguins
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Data inn — 344 pingviner, 8 variabler.
-</p>
-:::
-::: {.column width="45%"}
-<p class="col-label">Data</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, island, bill_length_mm, body_mass_g) |>
-  vis()
-```
-:::
-:::
-
----
-
-## Med pipe `|>` — steg 2
-
-::: {.columns}
-::: {.column width="55%"}
-<p class="col-label">Kode</p>
+::: {.column width="57%"}
+<p class="col-label">Steg 1 — behold gyldige rader</p>
 
 ```{=html}
 <pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
   <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">filter</mark>(!is.na(bill_length_mm))</pre>
 ```
 
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-<code>filter()</code> beholder kun rader der bill_length_mm ikke er NA.
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+<code>filter()</code> beholder kun rader der betingelsen er sann — her 333 av 344.
 </p>
 :::
-::: {.column width="45%"}
-<p class="col-label">Data</p>
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Etter filter</p>
 
 ```{r}
 #| echo: false
 penguins |>
   filter(!is.na(bill_length_mm)) |>
-  select(species, island, bill_length_mm, body_mass_g) |>
-  vis()
+  select(species, bill_length_mm, body_mass_g) |>
+  vis(n = 4)
 ```
+</div>
 :::
 :::
 
 ---
 
-## Med pipe `|>` — ferdig
+## mutate() legger til uten å slette
 
 ::: {.columns}
-::: {.column width="55%"}
-<p class="col-label">Kode</p>
+::: {.column width="57%"}
+<p class="col-label">Steg 2 — lag ny variabel</p>
 
-```{r}
-#| eval: false
-penguins |>
-  filter(!is.na(bill_length_mm)) |>
-  mutate(
-    ratio = bill_length_mm / bill_depth_mm
-  ) |>
-  summarise(
-    snitt = mean(ratio),
-    .by   = species
-  )
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
+  filter(!is.na(bill_length_mm)) |&gt;
+  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">mutate</mark>(
+    ratio = bill_length_mm /
+            bill_depth_mm
+  )</pre>
 ```
 
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Tre steg — leses ovenfra og ned, som en oppskrift.
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+<code>mutate()</code> legger til kolonnen <code>ratio</code> — alle andre kolonner beholdes.
 </p>
 :::
-::: {.column width="45%"}
-<p class="col-label">Resultat</p>
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Etter mutate</p>
+
+```{r}
+#| echo: false
+penguins |>
+  filter(!is.na(bill_length_mm)) |>
+  mutate(ratio = round(bill_length_mm / bill_depth_mm, 2)) |>
+  select(species, bill_length_mm, bill_depth_mm, ratio) |>
+  vis(n = 4)
+```
+</div>
+:::
+:::
+
+---
+
+## summarise() komprimerer til ett tall per gruppe
+
+::: {.columns}
+::: {.column width="57%"}
+<p class="col-label">Steg 3 — aggreger per gruppe</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
+  filter(!is.na(bill_length_mm)) |&gt;
+  mutate(
+    ratio = bill_length_mm /
+            bill_depth_mm
+  ) |&gt;
+  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">summarise</mark>(
+    snitt = mean(ratio),
+    .by   = species
+  )</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+344 rader → 3 rader. Leses ovenfra og ned — som en oppskrift.
+</p>
+:::
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Resultat</p>
 
 ```{r}
 #| echo: false
@@ -275,6 +392,149 @@ penguins |>
   summarise(snitt = round(mean(ratio), 2), .by = species) |>
   kable()
 ```
+</div>
+:::
+:::
+
+---
+
+## mutate() er åpen for hele R — også stringr og forcats
+
+::: {.columns}
+::: {.column width="57%"}
+<p class="col-label">Samme mønster — andre funksjoner</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
+  filter(!is.na(bill_length_mm)) |&gt;
+  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">mutate</mark>(
+    # TRUE der artsnavn inneholder "Gentoo"
+    er_stor = <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">stringr::str_detect</mark>(species, "Gentoo"),
+    # Slå "Adelie" og "Chinstrap" sammen til "Andre"
+    art     = <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">forcats::fct_other</mark>(species, keep = "Gentoo")
+  )</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+<code>str_detect()</code> søker i tekst · <code>fct_other()</code> slår sammen nivåer i en faktor.
+</p>
+:::
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Etter mutate</p>
+
+```{r}
+#| echo: false
+penguins |>
+  filter(!is.na(bill_length_mm)) |>
+  mutate(
+    er_stor = str_detect(species, "Gentoo"),
+    art     = fct_other(species, keep = "Gentoo")
+  ) |>
+  select(species, er_stor, art) |>
+  vis(n = 5)
+```
+</div>
+:::
+:::
+
+---
+
+## select() beholder kun kolonnene du trenger
+
+::: {.columns}
+::: {.column width="57%"}
+<p class="col-label">Velg relevante kolonner</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
+  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">select</mark>(species, island,
+         bill_length_mm)</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+Fra 8 kolonner til 3. Bruk <code>starts_with()</code>, <code>ends_with()</code> og <code>contains()</code> for å velge etter mønster.
+</p>
+:::
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Etter select</p>
+
+```{r}
+#| echo: false
+penguins |>
+  select(species, island, bill_length_mm) |>
+  vis(n = 4)
+```
+</div>
+:::
+:::
+
+---
+
+## arrange() sorterer rader
+
+::: {.columns}
+::: {.column width="57%"}
+<p class="col-label">Sorter etter variabel</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
+  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">arrange</mark>(<mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">desc</mark>(body_mass_g))</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+Standard stigende rekkefølge — pakk inn i <code>desc()</code> for synkende.
+</p>
+:::
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Etter arrange</p>
+
+```{r}
+#| echo: false
+penguins |>
+  arrange(desc(body_mass_g)) |>
+  select(species, island, body_mass_g) |>
+  vis(n = 4)
+```
+</div>
+:::
+:::
+
+---
+
+## group_by() grupperer for videre analyse
+
+::: {.columns}
+::: {.column width="57%"}
+<p class="col-label">Analyser per gruppe</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
+  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">group_by</mark>(species) |&gt;
+  summarise(
+    snitt = mean(body_mass_g,
+                 na.rm = TRUE)
+  )</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:6px;">
+Moderne snarvei: <code>.by = species</code> direkte i <code>summarise()</code> — ingen eksplisitt <code>group_by()</code>.
+</p>
+:::
+::: {.column width="43%"}
+<div style="font-size:0.82em;">
+<p class="col-label-after">Resultat</p>
+
+```{r}
+#| echo: false
+penguins |>
+  group_by(species) |>
+  summarise(snitt = round(mean(body_mass_g, na.rm = TRUE))) |>
+  kable()
+```
+</div>
 :::
 :::
 
@@ -283,194 +543,33 @@ penguins |>
 ##  {background-color="#FAFAF7"}
 
 ```{=html}
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:75%;text-align:center;">
-  <div style="font-family:'Lora',serif;font-size:4em;color:#E0D8D0;line-height:1;margin-bottom:0.05em;">01</div>
-  <div style="width:60px;height:3px;background:#B8734A;margin:0.5em auto;border-radius:2px;"></div>
-  <div style="font-family:'Lora',serif;font-size:1.8em;font-weight:400;color:#1C1C1C;margin-bottom:0.2em;">dplyr</div>
-  <div style="font-family:'Source Sans 3',sans-serif;font-size:0.9em;color:#A89F96;">filter · select · mutate · summarise</div>
+<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:80%; text-align:center; font-family:'Source Sans 3', sans-serif;">
+  <div style="font-family:'Lora', serif; font-size:2.2em; font-weight:400; color:#1C1C1C; margin-bottom:0.5em;">5 tips for lesbare skript</div>
+  <div style="width:60px; height:3px; background:#B8734A; border-radius:2px; margin-bottom:1.4em;"></div>
+  <div style="text-align:left; width:520px;">
+    <div style="font-size:1.05em; color:#1C1C1C; padding:0.4em 0; border-bottom:1px solid #E8E3D9; display:flex; align-items:baseline; gap:0.8em;">
+      <span style="color:#B8734A; font-weight:700; font-size:1.1em; min-width:2em;">01</span>
+      <span>Bruk pipe <code style="background:#F0EBE3; padding:2px 6px; border-radius:3px; font-family:'Fira Code',monospace; font-size:0.85em;">|&gt;</code></span>
+    </div>
+    <div style="font-size:1.05em; color:#1C1C1C; padding:0.4em 0; border-bottom:1px solid #E8E3D9; display:flex; align-items:baseline; gap:0.8em;">
+      <span style="color:#B8734A; font-weight:700; font-size:1.1em; min-width:2em;">02</span>
+      <span>Prosjektstruktur</span>
+    </div>
+    <div style="font-size:1.05em; color:#1C1C1C; padding:0.4em 0; border-bottom:1px solid #E8E3D9; display:flex; align-items:baseline; gap:0.8em;">
+      <span style="color:#B8734A; font-weight:700; font-size:1.1em; min-width:2em;">03</span>
+      <span>Seksjonsoverskrifter med <code style="background:#F0EBE3; padding:2px 6px; border-radius:3px; font-family:'Fira Code',monospace; font-size:0.85em;">##</code></span>
+    </div>
+    <div style="font-size:1.05em; color:#1C1C1C; padding:0.4em 0; border-bottom:1px solid #E8E3D9; display:flex; align-items:baseline; gap:0.8em;">
+      <span style="color:#B8734A; font-weight:700; font-size:1.1em; min-width:2em;">04</span>
+      <span>Kommentarer med <code style="background:#F0EBE3; padding:2px 6px; border-radius:3px; font-family:'Fira Code',monospace; font-size:0.85em;">#</code></span>
+    </div>
+    <div style="font-size:1.05em; color:#1C1C1C; padding:0.4em 0; display:flex; align-items:baseline; gap:0.8em;">
+      <span style="color:#B8734A; font-weight:700; font-size:1.1em; min-width:2em;">05</span>
+      <span>Egne funksjoner med <code style="background:#F0EBE3; padding:2px 6px; border-radius:3px; font-family:'Fira Code',monospace; font-size:0.85em;">function()</code></span>
+    </div>
+  </div>
 </div>
 ```
-
----
-
-## `filter()` — velg rader
-
-::: {.columns}
-::: {.column width="57%"}
-<p class="col-label">Behold rader som oppfyller en betingelse</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">filter</mark>(
-    species == "Chinstrap",
-    !is.na(body_mass_g)
-  )</pre>
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Flere betingelser separeres med komma — alle må være sanne (AND).
-</p>
-:::
-::: {.column width="43%"}
-<div style="font-size:0.82em;">
-<p class="col-label">Før</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, island, body_mass_g) |>
-  vis(n = 2)
-```
-
-<p class="col-label-after">Etter</p>
-
-```{r}
-#| echo: false
-penguins |>
-  filter(species == "Chinstrap", !is.na(body_mass_g)) |>
-  select(species, island, body_mass_g) |>
-  vis(n = 3)
-```
-</div>
-:::
-:::
-
----
-
-## `select()` — velg kolonner
-
-::: {.columns}
-::: {.column width="57%"}
-<p class="col-label">Behold utvalgte kolonner</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">select</mark>(species, island, body_mass_g)</pre>
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Bruk <code>-kolonne</code> for å fjerne, <code>starts_with()</code> / <code>ends_with()</code> for mønstre.
-</p>
-:::
-::: {.column width="43%"}
-<div style="font-size:0.82em;">
-<p class="col-label">Før</p>
-
-```{r}
-#| echo: false
-penguins |> vis(n = 2)
-```
-
-<p class="col-label-after">Etter</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, island, body_mass_g) |>
-  vis(n = 3)
-```
-</div>
-:::
-:::
-
----
-
-## `mutate()` — lag nye variabler
-
-::: {.columns}
-::: {.column width="57%"}
-<p class="col-label">Legg til eller endre kolonner</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">mutate</mark>(
-    masse_kg  = body_mass_g / 1000,
-    stor_fugl = body_mass_g &gt; 4500
-  ) |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">select</mark>(species, body_mass_g,
-         masse_kg, stor_fugl)</pre>
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Originale kolonner beholdes — nye legges til på høyre side.
-</p>
-:::
-::: {.column width="43%"}
-<div style="font-size:0.82em;">
-<p class="col-label">Før</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, body_mass_g) |>
-  vis(n = 2)
-```
-
-<p class="col-label-after">Etter</p>
-
-```{r}
-#| echo: false
-penguins |>
-  mutate(
-    masse_kg  = body_mass_g / 1000,
-    stor_fugl = body_mass_g > 4500
-  ) |>
-  select(species, body_mass_g, masse_kg, stor_fugl) |>
-  vis(n = 3)
-```
-</div>
-:::
-:::
-
----
-
-## `summarise()` — aggreger per gruppe
-
-::: {.columns}
-::: {.column width="57%"}
-<p class="col-label">Reduser til sammendrag per gruppe</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
-  filter(!is.na(body_mass_g)) |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">summarise</mark>(
-    snitt_g = mean(body_mass_g),
-    n       = n(),
-    .by     = species
-  )</pre>
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-<code>.by = species</code> gir én rad per art — 344 rader → 3 rader.
-</p>
-:::
-::: {.column width="43%"}
-<div style="font-size:0.82em;">
-<p class="col-label">Før</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, body_mass_g) |>
-  vis(n = 2)
-```
-
-<p class="col-label-after">Etter</p>
-
-```{r}
-#| echo: false
-penguins |>
-  filter(!is.na(body_mass_g)) |>
-  summarise(
-    snitt_g = round(mean(body_mass_g)),
-    n       = n(),
-    .by     = species
-  ) |>
-  kable()
-```
-</div>
-:::
-:::
 
 ---
 
@@ -480,347 +579,305 @@ penguins |>
 <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:75%;text-align:center;">
   <div style="font-family:'Lora',serif;font-size:4em;color:#E0D8D0;line-height:1;margin-bottom:0.05em;">02</div>
   <div style="width:60px;height:3px;background:#B8734A;margin:0.5em auto;border-radius:2px;"></div>
-  <div style="font-family:'Lora',serif;font-size:1.8em;font-weight:400;color:#1C1C1C;margin-bottom:0.2em;">tidyr</div>
-  <div style="font-family:'Source Sans 3',sans-serif;font-size:0.9em;color:#A89F96;">pivot_longer · pivot_wider</div>
-</div>
-```
-
----
-
-## `pivot_longer()` — bredt → langt
-
-::: {.columns}
-::: {.column width="57%"}
-<p class="col-label">Samle flere kolonner til rader</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.78em;line-height:1.65;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;">penguins |&gt;
-  select(species, bill_length_mm,
-         bill_depth_mm) |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">pivot_longer</mark>(
-    cols      = ends_with("mm"),
-    names_to  = "mål",
-    values_to = "verdi_mm"
-  )</pre>
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Nyttig for plotting — <code>ggplot2</code> liker langt format.
-</p>
-:::
-::: {.column width="43%"}
-<div style="font-size:0.82em;">
-<p class="col-label">Før</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, bill_length_mm, bill_depth_mm) |>
-  vis(n = 2)
-```
-
-<p class="col-label-after">Etter</p>
-
-```{r}
-#| echo: false
-penguins |>
-  select(species, bill_length_mm, bill_depth_mm) |>
-  pivot_longer(
-    cols      = ends_with("mm"),
-    names_to  = "mål",
-    values_to = "verdi_mm"
-  ) |>
-  vis(n = 3)
-```
-</div>
-:::
-:::
-
----
-
-## `pivot_wider()` — langt → bredt
-
-::: {.columns}
-::: {.column width="57%"}
-<p class="col-label">Spre rader ut til kolonner</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;">penguins |&gt;
-  filter(!is.na(body_mass_g)) |&gt;
-  summarise(
-    snitt = mean(body_mass_g),
-    .by   = c(species, island)
-  ) |&gt;
-  <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">pivot_wider</mark>(
-    names_from  = island,
-    values_from = snitt
-  )</pre>
-```
-
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Nyttig for rapporttabeller og krysstabell-visning.
-</p>
-:::
-::: {.column width="43%"}
-<div style="font-size:0.82em;">
-<p class="col-label">Før</p>
-
-```{r}
-#| echo: false
-penguins |>
-  filter(!is.na(body_mass_g)) |>
-  summarise(
-    snitt = round(mean(body_mass_g)),
-    .by   = c(species, island)
-  ) |>
-  kable()
-```
-
-<p class="col-label-after">Etter</p>
-
-```{r}
-#| echo: false
-penguins |>
-  filter(!is.na(body_mass_g)) |>
-  summarise(
-    snitt = round(mean(body_mass_g)),
-    .by   = c(species, island)
-  ) |>
-  pivot_wider(names_from = island, values_from = snitt) |>
-  kable()
-```
-</div>
-:::
-:::
-
----
-
-##  {background-color="#FAFAF7"}
-
-```{=html}
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:75%;text-align:center;">
-  <div style="font-family:'Lora',serif;font-size:4em;color:#E0D8D0;line-height:1;margin-bottom:0.05em;">03</div>
-  <div style="width:60px;height:3px;background:#B8734A;margin:0.5em auto;border-radius:2px;"></div>
   <div style="font-family:'Lora',serif;font-size:1.8em;font-weight:400;color:#1C1C1C;margin-bottom:0.2em;">Lesbar og reproduserbar kode</div>
-  <div style="font-family:'Source Sans 3',sans-serif;font-size:0.9em;color:#A89F96;">fem prinsipper</div>
+  <div style="font-family:'Source Sans 3',sans-serif;font-size:0.9em;color:#A89F96;">tips 02 – 05</div>
 </div>
 ```
 
 ---
 
-## 1. Prosjektstruktur
-
-::: {.columns}
-::: {.column width="50%"}
-<p class="col-label">Aldri <code>setwd()</code> — bruk RStudio-prosjekt</p>
+## 2. Én mappe per prosjekt — aldri setwd()
 
 ```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;">mitt-prosjekt/
-├── data/
-│   ├── raw/        # les kun, aldri skriv
-│   └── processed/
-├── scripts/
-├── output/
-│   ├── figures/
-│   └── tables/
-├── renv.lock
-└── README.md</pre>
-```
-:::
-::: {.column width="50%"}
-<p class="col-label">Bruk <code>here::here()</code> for alle stier</p>
+<p style="font-size:0.82em; color:#A89F96; margin:0 0 0.8em 0;">Én mappe per prosjekt — alt på ett sted, filstier som fungerer på alle maskiner.</p>
 
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Fungerer på alle maskiner
-read_csv(here::here(
-  "data", "raw", "survey.csv"
-))
+<svg width="860" height="210" viewBox="0 0 860 210" xmlns="http://www.w3.org/2000/svg" font-family="'Fira Code', 'Courier New', monospace" style="display:block; margin:0 auto;">
 
-# Brytes på andres PC
-read_csv("C:/Users/eirik/
-         prosjekt/data/survey.csv")</pre>
-```
+  <!-- Trunk: root to junction -->
+  <line x1="430" y1="56" x2="430" y2="96" stroke="#C0B8B0" stroke-width="2"/>
+  <!-- Horizontal connector -->
+  <line x1="108" y1="96" x2="752" y2="96" stroke="#C0B8B0" stroke-width="2"/>
+  <!-- Vertical drops -->
+  <line x1="108" y1="96" x2="108" y2="126" stroke="#C0B8B0" stroke-width="2"/>
+  <line x1="300" y1="96" x2="300" y2="126" stroke="#C0B8B0" stroke-width="2"/>
+  <line x1="560" y1="96" x2="560" y2="126" stroke="#C0B8B0" stroke-width="2"/>
+  <line x1="752" y1="96" x2="752" y2="126" stroke="#C0B8B0" stroke-width="2"/>
 
-<p style="font-size:0.70em; color:#A89F96; margin-top:3px;">
-<code>here</code> finner <code>.Rproj</code>-filen og forankrer alle stier der — uavhengig av OS.
+  <!-- Root node -->
+  <rect x="300" y="14" width="260" height="42" rx="8" fill="#F0EBE3" stroke="#B8734A" stroke-width="1.5"/>
+  <text x="430" y="40" text-anchor="middle" font-size="15" font-weight="600" fill="#1C1C1C">📁  mitt-prosjekt/</text>
+
+  <!-- data/ -->
+  <rect x="28" y="126" width="160" height="42" rx="7" fill="#F0EBE3" stroke="#C0B8B0" stroke-width="1.5"/>
+  <text x="108" y="152" text-anchor="middle" font-size="14" fill="#1C1C1C">📁  data/</text>
+  <text x="108" y="190" text-anchor="middle" font-size="12" fill="#A89F96" font-family="'Source Sans 3', sans-serif">raw/  ·  processed/</text>
+
+  <!-- kode/ -->
+  <rect x="216" y="126" width="168" height="42" rx="7" fill="#F0EBE3" stroke="#C0B8B0" stroke-width="1.5"/>
+  <text x="300" y="152" text-anchor="middle" font-size="14" fill="#1C1C1C">📁  kode/</text>
+  <text x="300" y="190" text-anchor="middle" font-size="12" fill="#A89F96" font-family="'Source Sans 3', sans-serif">01_import.R  ·  …</text>
+
+  <!-- data_export/ -->
+  <rect x="440" y="126" width="240" height="42" rx="7" fill="#F0EBE3" stroke="#C0B8B0" stroke-width="1.5"/>
+  <text x="560" y="152" text-anchor="middle" font-size="14" fill="#1C1C1C">📁  data_export/</text>
+  <text x="560" y="190" text-anchor="middle" font-size="12" fill="#A89F96" font-family="'Source Sans 3', sans-serif">tabeller/  ·  figurer/</text>
+
+  <!-- plot/ -->
+  <rect x="692" y="126" width="120" height="42" rx="7" fill="#F0EBE3" stroke="#C0B8B0" stroke-width="1.5"/>
+  <text x="752" y="152" text-anchor="middle" font-size="14" fill="#1C1C1C">📁  plot/</text>
+  <text x="752" y="190" text-anchor="middle" font-size="12" fill="#A89F96" font-family="'Source Sans 3', sans-serif">*.png  ·  *.pdf</text>
+
+</svg>
+
+<p style="font-size:0.75em; color:#1C1C1C; margin-top:0.6em;">
+Bruk <code style="background:#F0EBE3; padding:1px 5px; border-radius:3px; font-family:'Fira Code',monospace;">here::here("data", "raw", "survey.csv")</code> — aldri <code style="background:#F0EBE3; padding:1px 5px; border-radius:3px; font-family:'Fira Code',monospace;">setwd()</code>. Fungerer på alle maskiner.
 </p>
-:::
-:::
+```
 
 ---
 
-## 2. Kommenter hvorfor, ikke hva
+## 3. Seksjonsoverskrifter gjør skriptet navigerbart
+
+```{=html}
+<p style="font-size:0.82em; color:#A89F96; margin:0 0 0.6em 0;">RStudio viser <code>##</code>-overskrifter i Outline-panelet — skriptet blir navigerbart.</p>
+
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.7em 1em;font-family:'Fira Code','Courier New',monospace;font-size:0.82em;line-height:1.7;color:#1C1C1C;margin:0.3em 0;">## 1. Import ──────────────────────────────────────────
+
+data_raw &lt;- readxl::read_excel(here::here("data", "raw", "survey.xlsx"))
+
+## 2. Data rens ─────────────────────────────────────────
+
+data_clean &lt;- data_raw |&gt;
+  janitor::clean_names() |&gt;  # "First Name" → first_name
+  filter(!is.na(id))
+
+## 3. Export ────────────────────────────────────────────
+
+writexl::write_xlsx(data_clean, here::here("data_export", "survey_clean.xlsx"))</pre>
+```
+
+<div class="key-box">
+<strong>Tips:</strong> RStudio har hurtigtast for seksjonsoverskrifter — <code>Ctrl+Shift+R</code> setter inn overskrift med strekene automatisk.
+</div>
+
+---
+
+## 4. Forklar hvorfor, ikke hva
 
 ::: {.columns}
 ::: {.column width="50%"}
 <p class="col-label" style="color:#B8734A;">Unngå dette</p>
 
 ```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #B8734A;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Filtrer rader
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #B8734A;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.55;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"><span style="background:#FFD0CE;color:#8B2020;border-radius:2px;padding:0 2px;"># Filtrer rader</span>
 df |&gt; filter(age &gt; 18)
 
-# Lag ny variabel
-df |&gt; mutate(ratio = a / b)</pre>
+<span style="background:#FFD0CE;color:#8B2020;border-radius:2px;padding:0 2px;"># Lag ny variabel</span>
+df |&gt; mutate(ratio = a / b)
+
+<span style="background:#FFD0CE;color:#8B2020;border-radius:2px;padding:0 2px;"># Behold bare kvinner</span>
+df |&gt; filter(kjonn == 2)</pre>
 ```
 :::
 ::: {.column width="50%"}
 <p class="col-label" style="color:#6B8C7E;">Gjør dette</p>
 
 ```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Ekskluder mindreårige (jf. protokoll)
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.55;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Ekskluder mindreårige (jf. protokoll)
 df |&gt; filter(age &gt; 18)
 
 # Nebbdybde-ratio brukes i modell 2
-df |&gt; mutate(ratio = a / b)</pre>
+df |&gt; mutate(ratio = a / b)
+
+# 2 = kvinner (SSB-koding)
+df |&gt; filter(kjonn == 2)</pre>
 ```
 :::
 :::
 
-<p style="font-size:0.75em; color:#1C1C1C; margin-top:0.4em;">Bruk seksjonsoverskrifter — vises i RStudios <em>Outline</em>-panel:</p>
-
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.4em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.15em 0;max-width:100%;overflow:hidden;">## 1. Import og rensing ─────────────────────────
-## 2. Konstruer variabler ────────────────────────
-## 3. Modeller og figurer ─────────────────────────</pre>
-```
+<div class="key-box">
+Kommenter <em>hvorfor</em>, ikke hva — koden viser hva som skjer. Nummerkoder skal alltid forklares.
+</div>
 
 ---
 
-## 3. Lesbar R-kode
+## 4. Forklar hvorfor, ikke hva
 
 ::: {.columns}
 ::: {.column width="50%"}
-<p class="col-label">Navngiving — snake_case, alltid</p>
+<p class="col-label" style="color:#B8734A;">Unngå dette</p>
 
 ```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Variabler: substantiv
-sick_leave_days &lt;- 14
-monthly_benefit &lt;- 22000
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #B8734A;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.55;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Filtrer rader
+df |&gt; filter(age &gt; 18)
 
-# Funksjoner: verb
-calculate_rate &lt;- function(x, n) {
-  x / n
-}</pre>
+# Lag ny variabel
+df |&gt; mutate(ratio = a / b)
+
+# Behold bare kvinner
+df |&gt; filter(kjonn == 2)</pre>
 ```
-
-<p style="font-size:0.70em; color:#A89F96; margin-top:3px;">
-Unngå <code>camelCase</code>, punktum (<code>my.var</code>), og enkeltbokstaver.
-</p>
 :::
 ::: {.column width="50%"}
-<p class="col-label">Pipe: én operasjon per linje</p>
+<p class="col-label" style="color:#6B8C7E;">Gjør dette</p>
 
 ```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"># Vanskelig å lese
-summarise(filter(df, !is.na(x)),
-          snitt = mean(x))
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.55;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;"><span style="background:#D4F0D4;color:#1A5C1A;border-radius:2px;padding:0 2px;"># Ekskluder mindreårige (jf. protokoll)</span>
+df |&gt; filter(age &gt; 18)
 
-# Lesbart
-df |&gt;
-  filter(!is.na(x)) |&gt;
-  summarise(snitt = mean(x))</pre>
+<span style="background:#D4F0D4;color:#1A5C1A;border-radius:2px;padding:0 2px;"># Nebbdybde-ratio brukes i modell 2</span>
+df |&gt; mutate(ratio = a / b)
+
+<span style="background:#D4F0D4;color:#1A5C1A;border-radius:2px;padding:0 2px;"># 2 = kvinner (SSB-koding)</span>
+df |&gt; filter(kjonn == 2)</pre>
 ```
+:::
+:::
 
-<p style="font-size:0.70em; color:#A89F96; margin-top:3px;">
-<code>styler</code>: <em>Addins → Style active file</em> — automatisk formatering.
-</p>
-:::
-:::
+<div class="key-box">
+Kommenter <em>hvorfor</em>, ikke hva — koden viser hva som skjer. Nummerkoder skal alltid forklares.
+</div>
 
 ---
 
-## 4. RStudio — viktigste innstilling
+## 5. Kopiert kode er teknisk gjeld
+
+<p class="col-label" style="color:#B8734A;">Uten funksjon — copy/paste-fellen</p>
 
 ```{=html}
-<div style="display:flex;gap:20px;margin:0.6em 0 0.8em 0;font-family:'Source Sans 3',sans-serif;font-size:0.85em;">
-  <div style="flex:1;border:2px solid #B8734A;border-radius:8px;padding:12px 16px;background:rgba(184,115,74,0.05);">
-    <div style="font-weight:600;color:#B8734A;margin-bottom:6px;">Tools → Global Options → Workspace</div>
-    <div style="color:#1C1C1C;">Restore .RData on startup: <strong>Never</strong></div>
-    <div style="color:#1C1C1C;">Save workspace on exit: <strong>Never</strong></div>
-    <div style="font-size:0.85em;color:#A89F96;margin-top:6px;">Tvinger deg til å skrive skript som alltid fungerer fra topp til bunn.</div>
-  </div>
-  <div style="flex:1;border:1.5px solid #D8D0C4;border-radius:8px;padding:12px 16px;">
-    <div style="font-weight:600;color:#1C1C1C;margin-bottom:6px;">renv — lås pakkeversjonene</div>
-    <div style="font-family:'Fira Code',monospace;font-size:0.82em;color:#1C1C1C;line-height:1.7;">renv::init()<br>renv::snapshot()<br>renv::restore()</div>
-    <div style="font-size:0.85em;color:#A89F96;margin-top:6px;">Lagrer <code>renv.lock</code> — en kollega kan reprodusere nøyaktig ditt miljø.</div>
-  </div>
-</div>
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #B8734A;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;max-width:640px;">snitt_oslo &lt;- mean(
+  df |&gt; filter(region == "Oslo") |&gt; pull(inntekt),
+  na.rm = TRUE
+)
+snitt_bergen &lt;- mean(
+  df |&gt; filter(region == "Bergen") |&gt; pull(inntekt),
+  na.rm = TRUE
+)</pre>
+```
+
+<p style="font-size:0.80em; color:#A89F96; margin-top:0.6em;">Samme logikk kopiert — hvis feilen er ett sted, er den alle steder.</p>
+
+---
+
+## 5. Kopiert kode er teknisk gjeld
+
+<p class="col-label" style="color:#6B8C7E;">Med funksjon — skriv én gang, bruk mange</p>
+
+```{=html}
+<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.7em 1.1em;font-family:'Fira Code','Courier New',monospace;font-size:0.80em;line-height:1.75;color:#1C1C1C;margin:0.3em 0;max-width:640px;">snitt_region &lt;- function(df, <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">reg</mark>) {
+  df |&gt;
+    filter(region == <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">reg</mark>) |&gt;
+    summarise(snitt = mean(inntekt,
+                           na.rm = TRUE))
+}
+
+snitt_region(df, <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">"Oslo"</mark>)
+snitt_region(df, <mark style="background:#FFF0A0;color:#5C3D00;border-radius:3px;padding:1px 4px;font-weight:600;">"Bergen"</mark>)</pre>
 ```
 
 <div class="key-box">
-Kode som bare fungerer fordi du husker noe fra forrige økt er ikke reproduserbar — det er flaks.
+Tommelfingerregel: kopier du kode mer enn to ganger — skriv en funksjon.
 </div>
 
 ---
 
-## 5. Filorganisering
-
-::: {.columns}
-::: {.column width="50%"}
-<p class="col-label">Nummererte skript — ett skript, én oppgave</p>
+## tidyverse er ikke alltid svaret
 
 ```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;">scripts/
-├── 01_import.R      # kun innlasting
-├── 02_clean.R       # rensing og koding
-├── 03_analyse.R     # modeller
-├── 04_visualise.R   # figurer
-└── run_all.R        # kjør alt</pre>
-```
-:::
-::: {.column width="50%"}
-<p class="col-label"><code>run_all.R</code> — én kommando kjører alt</p>
+<div style="display:flex; flex-direction:column; gap:14px; margin-top:0.4em; font-family:'Source Sans 3',sans-serif;">
 
-```{=html}
-<pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.6em 0.9em;font-family:'Fira Code','Courier New',monospace;font-size:0.73em;line-height:1.45;color:#1C1C1C;margin:0.3em 0;max-width:100%;overflow:hidden;">source(here::here(
-  "scripts", "01_import.R"))
-source(here::here(
-  "scripts", "02_clean.R"))
-source(here::here(
-  "scripts", "03_analyse.R"))
-source(here::here(
-  "scripts", "04_visualise.R"))</pre>
-```
+  <div style="border:1.5px solid #D8D0C4; border-radius:8px; padding:14px 16px;">
+    <div style="font-weight:700; color:#B8734A; font-size:0.95em; margin-bottom:6px;">1. Hastighet</div>
+    <div style="font-size:0.82em; color:#1C1C1C; line-height:1.6; margin-bottom:10px;">dplyr er treg på store datasett. På millioner av rader kan <code style="background:#F0EBE3; padding:1px 4px; border-radius:3px; font-family:'Fira Code',monospace;">data.table</code> gi 10–100× speedup.</div>
+    <pre style="background:#F0EBE3;border:1px solid #D8D0C4;border-left:4px solid #6B8C7E;border-radius:6px;padding:0.5em 0.8em;font-family:'Fira Code','Courier New',monospace;font-size:0.72em;line-height:1.55;color:#1C1C1C;margin:0;">library(data.table)
+dt &lt;- as.data.table(df)
+dt[!is.na(x), .(snitt = mean(x)), by = gruppe]</pre>
+    <div style="font-size:0.75em; color:#A89F96; margin-top:6px;"><code>dtplyr</code> gir dplyr-syntaks over data.table — beste av begge verdener.</div>
+  </div>
 
-<p style="font-size:0.72em; color:#A89F96; margin-top:6px;">
-Rådata er hellig — les kun, aldri overskriv. Lagre prosesserte data til <code>data/processed/</code>.
-</p>
-:::
-:::
+  <div style="border:1.5px solid #D8D0C4; border-radius:8px; padding:14px 16px;">
+    <div style="font-weight:700; color:#B8734A; font-size:0.95em; margin-bottom:6px;">2. Avhengigheter</div>
+    <div style="font-size:0.82em; color:#1C1C1C; line-height:1.6; margin-bottom:8px;">tidyverse installerer 30+ pakker og trekker med seg mange <em>dependencies</em>. Kan bli problematisk i produksjonsmiljøer, egne R-pakker (CRAN krever minimale imports) og Docker-images der størrelse er kritisk.</div>
+    <div style="font-size:0.75em; color:#A89F96;">Alternativ: importer kun pakken du trenger — <code>library(dplyr)</code>, ikke <code>library(tidyverse)</code>.</div>
+  </div>
+
+</div>
+```
 
 ---
 
-## Oppsummering
-
-::: {.columns}
-::: {.column width="50%"}
-**dplyr og tidyr**
-
-| Funksjon | Hva den gjør |
-|----------|--------------|
-| `filter()` | Velger rader |
-| `select()` | Velger kolonner |
-| `mutate()` | Nye variabler |
-| `summarise()` | Aggregerer per gruppe |
-| `pivot_longer()` | Bredt → langt |
-| `pivot_wider()` | Langt → bredt |
-:::
-::: {.column width="50%"}
-**Lesbarhet**
-
-| | |
-|--|--|
-| 📁 | RStudio-prosjekt + `here::here()` |
-| 💬 | Kommenter *hvorfor*, ikke *hva* |
-| 🐍 | `snake_case`, pipe `\|>`, én linje |
-| ⚙️ | Aldri lagre `.RData` + `renv` |
-| 📄 | Nummererte skript + `run_all.R` |
-:::
-:::
+## Lesetips
 
 ```{=html}
-<div class="closing-quote">
-"The goal of tidyverse is to make data science faster, easier and more fun."<br>
-<span style="font-size:0.8em; font-style:normal; color:#A89F96;">— Hadley Wickham</span>
+<div style="display:flex; flex-direction:column; gap:10px; margin-top:0.2em; font-family:'Source Sans 3', sans-serif;">
+
+  <div style="display:flex; gap:16px; align-items:flex-start; border:1.5px solid #D8D0C4; border-radius:8px; padding:10px 16px; background:#fff;">
+    <div style="font-size:1.6em; line-height:1; flex-shrink:0;">📖</div>
+    <div>
+      <div style="font-weight:600; color:#1C1C1C; font-size:0.88em;">R for Data Science (2. utg.)</div>
+      <div style="font-size:0.75em; color:#A89F96; margin:2px 0 3px;">Wickham, Çetinkaya-Rundel &amp; Grolemund</div>
+      <div style="font-family:'Fira Code', monospace; font-size:0.72em; color:#B8734A;">r4ds.hadley.nz</div>
+      <div style="font-size:0.75em; color:#6B6560; margin-top:2px;">Gratis online — det beste stedet å starte med tidyverse.</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:16px; align-items:flex-start; border:1.5px solid #D8D0C4; border-radius:8px; padding:10px 16px; background:#fff;">
+    <div style="font-size:1.6em; line-height:1; flex-shrink:0;">📄</div>
+    <div>
+      <div style="font-weight:600; color:#1C1C1C; font-size:0.88em;">Posit Cheat Sheets</div>
+      <div style="font-size:0.75em; color:#A89F96; margin:2px 0 3px;">Fungerer i både RStudio og Positron</div>
+      <div style="font-family:'Fira Code', monospace; font-size:0.72em; color:#B8734A;">posit.co/resources/cheatsheets</div>
+      <div style="font-size:0.75em; color:#6B6560; margin-top:2px;">Én side per pakke: dplyr · tidyr · stringr · forcats · ggplot2 · purrr</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:16px; align-items:flex-start; border:1.5px solid #D8D0C4; border-radius:8px; padding:10px 16px; background:#fff;">
+    <div style="font-size:1.6em; line-height:1; flex-shrink:0;">✏️</div>
+    <div>
+      <div style="font-weight:600; color:#1C1C1C; font-size:0.88em;">Tidyverse Style Guide</div>
+      <div style="font-size:0.75em; color:#A89F96; margin:2px 0 3px;">Hadley Wickham</div>
+      <div style="font-family:'Fira Code', monospace; font-size:0.72em; color:#B8734A;">style.tidyverse.org</div>
+      <div style="font-size:0.75em; color:#6B6560; margin-top:2px;">Navngiving, innrykk, pipes — fellesskapets konvensjoner.</div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:16px; align-items:flex-start; border:1.5px solid #D8D0C4; border-radius:8px; padding:10px 16px; background:#fff;">
+    <div style="font-size:1.6em; line-height:1; flex-shrink:0;">⚡</div>
+    <div>
+      <div style="font-weight:600; color:#1C1C1C; font-size:0.88em;">data.table</div>
+      <div style="font-size:0.75em; color:#A89F96; margin:2px 0 3px;">Matt Dowle m.fl.</div>
+      <div style="font-family:'Fira Code', monospace; font-size:0.72em; color:#B8734A;">rdatatable.gitlab.io/data.table</div>
+      <div style="font-size:0.75em; color:#6B6560; margin-top:2px;">Raskere enn dplyr på store datasett — syntaksen <code style="background:#F0EBE3; padding:0 3px; border-radius:2px;">DT[i, j, by]</code> er kompakt og kraftig.</div>
+    </div>
+  </div>
+
+</div>
+```
+
+---
+
+##  {background-color="#FAFAF7"}
+
+```{=html}
+<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:80%; text-align:center; font-family:'Source Sans 3', sans-serif;">
+
+  <div style="font-family:'Lora', Georgia, serif; font-size:1.6em; font-weight:400; font-style:italic; color:#1C1C1C; line-height:1.55; max-width:680px; margin-bottom:0.6em;">
+    «Piner du dataene lenge nok,<br>vil de tilstå hva som helst.»
+  </div>
+
+  <div style="font-size:0.82em; color:#A89F96; margin-bottom:1.8em;">
+    — Ronald Coase, økonom (1910–2013)
+  </div>
+
+  <div style="width:50px; height:2px; background:#D8D0C4; border-radius:2px; margin-bottom:1.4em;"></div>
+
+  <div style="font-size:0.78em; color:#6B8C7E; font-style:italic; max-width:560px; line-height:1.6;">
+    Gode variabelnavn, pipe og seksjonsoverskrifter reduserer pining-behovet betraktelig.
+  </div>
+
+  <div style="font-size:0.65em; color:#C0B8B0; margin-top:1.4em; font-family:'Fira Code', monospace;">
+    — Claude
+  </div>
+
 </div>
 ```
