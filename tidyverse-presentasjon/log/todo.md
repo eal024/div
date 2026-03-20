@@ -6,10 +6,6 @@
 
 ## Neste økt
 
-### PDF-eksport
-- [ ] **Kjør render + PDF-kommando manuelt i terminal** — se kommando i progress.md (2026-03-18 økt 2). Snap-begrensning hindrer subprocess-kall, men direkte i terminal fungerer det.
-- [ ] **Slett hjelpeskript** — `make_pdf.py` og `make_pdf.js` trengs ikke lenger
-
 ### Innhold
 - [ ] **Palmer Penguins-pakken i lesetips** — legg til Horst et al. som fjerde kilde (data.table er nå fjerde — blir femte)
 
@@ -43,3 +39,5 @@
 - [x] embed-resources: true lagt til — presentasjon fungerer på Quarto Pub
 - [x] Publisert til Quarto Pub
 - [x] GitHub remote endret til SSH
+- [x] PDF-eksport via innebygd print i HTML-versjon — hjelpeskript og genererte PDF-er slettet
+- [x] GitHub repo-beskrivelse lagt til

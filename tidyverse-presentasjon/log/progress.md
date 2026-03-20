@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-03-20 (økt 4)
+
+### Hva ble gjort
+
+**Rydding**
+- Slettet PDF-eksportfiler: `make_pdf.py`, `make_pdf.js`, `tidyverse-2026.pdf` (x2), `tidyverse-2026-landscape.pdf`, `2026-03-13 tidyverse-presentasjon.pdf`
+- PDF-eksport løses via HTML-versjonen direkte (innebygd print-funksjon i nettleser)
+
+**Todo-oppdatering**
+- Fjernet PDF-eksportoppgave fra todo (ikke aktuelt lenger)
+- Fjernet Cunningham-koblingspunkt fra todo
+
+**GitHub**
+- Lagt til repo-beskrivelse: "Collection of R scripts and concepts organized by topic — dplyr, purrr, ggplot2, fixest, and more"
+
+**Git**
+- Committed og pushet alle ucommittede endringer fra økt 2–3 + rydding
+
+### Kjente problemer ved avslutning
+- Ingen kritiske.
+
+---
+
 ## 2026-03-19 (økt 3)
 
 ### Hva ble gjort
