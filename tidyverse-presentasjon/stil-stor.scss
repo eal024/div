@@ -1,0 +1,363 @@
+/*-- scss:defaults --*/
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&family=Fira+Code:wght@400;500&display=swap');
+
+// ── Farger ─────────────────────────────────────────────────────────────────
+$theme-bg:         #FAFAF7;
+$theme-text:       #1C1C1C;
+$theme-terracotta: #B8734A;
+$theme-sage:       #6B8C7E;
+$theme-cream:      #F0EBE3;
+$theme-grey:       #A89F96;
+
+// ── Quarto/revealjs kjernvariabler ─────────────────────────────────────────
+$body-bg:                        $theme-bg;
+$body-color:                     $theme-text;
+$link-color:                     $theme-terracotta;
+$selection-bg:                   rgba(184, 115, 74, 0.2);
+$font-family-sans-serif:         "Source Sans 3", "Helvetica Neue", sans-serif;
+$presentation-font-size-root:    26px;
+$presentation-heading-font:      "Lora", Georgia, serif;
+$presentation-heading-color:     $theme-text;
+$presentation-heading-font-weight: 400;
+$presentation-h1-font-size:      1.8em;
+$presentation-h2-font-size:      1.25em;
+$code-block-font-size:           0.80em;
+
+/*-- scss:rules --*/
+
+// ── Slide-bakgrunn ─────────────────────────────────────────────────────────
+.reveal-viewport { background: $theme-bg !important; }
+
+.reveal .slides section {
+  background: $theme-bg !important;
+  color: $theme-text !important;
+  text-align: left;
+  padding: 24px 48px !important;
+  overflow: hidden !important;
+}
+
+// ── Dekorativ bunntekstlinje på alle slides ─────────────────────────────────
+.reveal .slides section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, transparent 5%, rgba(184,115,74,0.30) 25%, rgba(184,115,74,0.30) 75%, transparent 95%);
+  pointer-events: none;
+}
+
+// ── Tittelsiden ────────────────────────────────────────────────────────────
+.reveal .slides section.quarto-title-block,
+.reveal .title-slide {
+  background: #2A1F1A !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.reveal .title-slide h1 {
+  color: #FAF5F0 !important;
+  border-left: 5px solid $theme-terracotta !important;
+  padding-left: 20px !important;
+  font-size: 1.7em !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  margin-bottom: 0.3em !important;
+}
+
+.reveal .title-slide p,
+.reveal .quarto-title-block p,
+.reveal .quarto-title-block .author,
+.reveal .quarto-title-block .date,
+.reveal section.title-slide p,
+.reveal .quarto-title-author-name,
+.reveal .quarto-title-author {
+  color: #FAF5F0 !important;
+  font-family: "Source Sans 3", sans-serif !important;
+}
+
+.reveal .title-slide .subtitle {
+  color: $theme-terracotta !important;
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: 1.1em !important;
+}
+
+// ── Overskrifter ───────────────────────────────────────────────────────────
+.reveal h2 {
+  font-family: "Lora", Georgia, serif !important;
+  font-weight: 400 !important;
+  color: $theme-text !important;
+  border-left: 4px solid $theme-terracotta;
+  padding-left: 14px;
+  margin-bottom: 0.5em !important;
+  text-transform: none !important;
+  text-align: left !important;
+}
+
+// ── Brødtekst ──────────────────────────────────────────────────────────────
+.reveal p, .reveal li {
+  line-height: 1.6;
+  color: $theme-text;
+}
+
+.reveal ul { margin-left: 1.1em; }
+.reveal ul li { margin-bottom: 0.25em; }
+.reveal ul li::marker { color: $theme-terracotta; }
+
+// ── Kodeblokker ────────────────────────────────────────────────────────────
+.reveal pre {
+  background: $theme-cream !important;
+  border: 1px solid #D8D0C4 !important;
+  border-left: 4px solid $theme-sage !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  line-height: 1.75 !important;
+  margin: 0.3em 0 !important;
+  padding: 0.6em 0.9em !important;
+  width: 100% !important;
+}
+
+.reveal code {
+  font-family: "Fira Code", "Courier New", monospace !important;
+  background: $theme-cream !important;
+  color: $theme-text !important;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+// ── Verb-highlight ─────────────────────────────────────────────────────────
+.verb {
+  background: #FFF0A0;
+  color: #5C3D00;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-weight: 600;
+  font-family: "Fira Code", monospace;
+}
+
+// ── Tabeller ───────────────────────────────────────────────────────────────
+.reveal table {
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: 0.88em !important;
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin: 0.2em 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.reveal table thead th {
+  color: $theme-text !important;
+  font-weight: 600 !important;
+  border-top: 2px solid $theme-text !important;
+  border-bottom: 1px solid $theme-grey !important;
+  border-left: none !important;
+  border-right: none !important;
+  padding: 2px 8px !important;
+  text-align: left !important;
+  background: transparent !important;
+}
+
+.reveal table tbody td {
+  padding: 2px 8px !important;
+  border: none !important;
+  color: $theme-text !important;
+  background: transparent !important;
+}
+
+.reveal table tbody tr:nth-child(even) td {
+  background: rgba(0,0,0,0.03) !important;
+}
+
+.reveal table tbody tr:last-child td {
+  border-bottom: 2px solid $theme-text !important;
+}
+
+// ── Sidenummerering ────────────────────────────────────────────────────────
+.reveal .slide-number {
+  font-family: "Source Sans 3", sans-serif !important;
+  font-size: 0.72em !important;
+  color: $theme-grey !important;
+  background: transparent !important;
+}
+
+// ── Nøkkelboks ─────────────────────────────────────────────────────────────
+.key-box {
+  margin-top: 0.7em;
+  border: 1.5px solid #D8D0C4;
+  border-radius: 7px;
+  padding: 10px 20px;
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.88em;
+  color: $theme-text;
+  background: $theme-cream;
+  line-height: 1.5;
+}
+
+// ── Kolonne-etikett ────────────────────────────────────────────────────────
+.col-label {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.65em;
+  color: $theme-grey;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 4px 0;
+}
+
+.col-label-after {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.65em;
+  color: $theme-sage;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 4px 0 4px 0;
+}
+
+.transform-arrow {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.72em;
+  color: $theme-terracotta;
+  margin: 2px 0;
+}
+
+// ── Kilde-note ─────────────────────────────────────────────────────────────
+.kilde-note {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.65em;
+  color: $theme-grey;
+  margin-top: 1.2em;
+  font-style: italic;
+}
+
+// ── Seksjonsskiller ────────────────────────────────────────────────────────
+.section-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80%;
+  font-family: "Source Sans 3", sans-serif;
+  text-align: center;
+}
+
+.section-num {
+  font-family: "Lora", serif;
+  font-size: 3.5em;
+  color: #EDE8DF;
+  line-height: 1;
+  margin-bottom: 0.1em;
+}
+
+.section-title {
+  font-family: "Lora", serif;
+  font-size: 1.6em;
+  font-weight: 400;
+  color: $theme-text;
+  margin-bottom: 0.2em;
+}
+
+.section-subtitle {
+  font-family: "Source Sans 3", sans-serif;
+  font-size: 0.9em;
+  color: $theme-grey;
+}
+
+.section-line {
+  width: 60px;
+  height: 3px;
+  background: $theme-terracotta;
+  margin: 0.6em auto;
+  border-radius: 2px;
+}
+
+// ── Kolonner ────────────────────────────────────────────────────────────────
+.reveal .columns .column {
+  overflow-y: auto;
+  max-height: 580px;
+}
+
+// ── Print / PDF-eksport ─────────────────────────────────────────────────────
+@media print {
+  @page {
+    size: 11in 6.875in;
+    margin: 0;
+  }
+
+  // Skjul nettlesertekst og sidetall fra nettleseren
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  // Kodeblokker — ikke klipp horisonalt, brekk lange linjer
+  .reveal pre {
+    overflow: hidden !important;
+    white-space: pre-wrap !important;
+    word-break: break-all !important;
+  }
+
+  .reveal pre code {
+    overflow: hidden !important;
+    white-space: pre-wrap !important;
+  }
+
+  // Kolonner — ingen scroll i PDF
+  .reveal .columns .column {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  // Seksjon — ingen clip
+  .reveal .slides section {
+    overflow: visible !important;
+  }
+}
+
+// ── Verbgrid (oversikt) ────────────────────────────────────────────────────
+.verb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0.8em 0;
+  font-family: "Source Sans 3", sans-serif;
+}
+
+.verb-card {
+  background: #fff;
+  border: 1.5px solid #D8D0C4;
+  border-radius: 8px;
+  padding: 12px 10px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.verb-card-name {
+  font-family: "Fira Code", monospace;
+  font-size: 0.85em;
+  color: $theme-terracotta;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.verb-card-desc {
+  font-size: 0.72em;
+  color: $theme-grey;
+  line-height: 1.3;
+}
+
+// ── Avslutningsslide ───────────────────────────────────────────────────────
+.closing-quote {
+  font-family: "Lora", Georgia, serif;
+  font-size: 1.3em;
+  font-style: italic;
+  color: $theme-text;
+  border-left: 4px solid $theme-terracotta;
+  padding: 0.6em 1em;
+  margin: 1em 0;
+  background: $theme-cream;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.6;
+}

@@ -37,6 +37,18 @@ $code-block-font-size:           0.80em;
   overflow: hidden !important;
 }
 
+// ── Dekorativ bunntekstlinje på alle slides ─────────────────────────────────
+.reveal .slides section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, transparent 5%, rgba(184,115,74,0.30) 25%, rgba(184,115,74,0.30) 75%, transparent 95%);
+  pointer-events: none;
+}
+
 // ── Tittelsiden ────────────────────────────────────────────────────────────
 .reveal .slides section.quarto-title-block,
 .reveal .title-slide {
@@ -56,8 +68,14 @@ $code-block-font-size:           0.80em;
   margin-bottom: 0.3em !important;
 }
 
-.reveal .title-slide p {
-  color: $theme-grey !important;
+.reveal .title-slide p,
+.reveal .quarto-title-block p,
+.reveal .quarto-title-block .author,
+.reveal .quarto-title-block .date,
+.reveal section.title-slide p,
+.reveal .quarto-title-author-name,
+.reveal .quarto-title-author {
+  color: #FAF5F0 !important;
   font-family: "Source Sans 3", sans-serif !important;
 }
 

@@ -1,34 +1,45 @@
 # Todo — tidyverse-presentasjon
 
+> **Overordnet:** Maks 40 min. Lesbare skript — ikke for detaljert.
+
 ---
 
 ## Neste økt
 
-### Formatering og overlapp
-- [ ] **Løs overlapp i verb-slides** — tabellene i høyre kolonne (Før/Etter) passer ikke. Vurder:
-  - Bytte til én tabell per slide (kun "Etter") og beskrive "Før" i teksten
-  - Bruke `kableExtra` for å styre tabellhøyde eksplisitt
-  - Redusere til én kolonne og vise Før → Etter vertikalt med pilsymbol
-- [ ] **Overlapp i lesbarhetsslides (18–20)** — `<pre>`-blokkene er fortsatt for store på noen skjermer
-- [ ] **Vurdere Beamer** — er Quarto revealjs riktig format, eller passer Beamer (PDF) bedre til dette publikummet? Fordeler med Beamer: stabil layout, PDF fungerer overalt, ingen CSS-strid. Ulemper: mindre visuell kontroll, krever LaTeX-oppsett
+### PDF-eksport
+- [ ] **Kjør render + PDF-kommando manuelt i terminal** — se kommando i progress.md (2026-03-18 økt 2). Snap-begrensning hindrer subprocess-kall, men direkte i terminal fungerer det.
+- [ ] **Slett hjelpeskript** — `make_pdf.py` og `make_pdf.js` trengs ikke lenger
 
 ### Innhold
-- [ ] **Slide om datasettet** — legg til en kort slide tidlig i presentasjonen som forklarer Palmer Penguins-datasettet: hva det inneholder, hvilke variabler som brukes, og hvorfor det er valgt
-- [ ] **Avansert seksjon** — legg til en egen seksjon (seksjon 04?) rettet mot viderekommende. Tittel: "Tips du kommer borti etterhvert". Mulig innhold:
-  - `nest()` og `map()` — list-kolonner og iterasjon over grupper
-  - Alternativer til dplyr: `data.table` (hastighet), `dtplyr` (dplyr-syntaks over data.table), `collapse` — med ærlig diskusjon av hva dplyr er svakt på (ytelse på store data)
-  - Andre nyttige verktøy: `janitor::clean_names()`, `across()`, `glue::glue()`
-- [ ] **Avslutningsslide: "Hva videre?"** — legg til en slide om hva som kommer etter dplyr/tidyr:
-  - Visualisering med `ggplot2`
-  - Modellering med `tidymodels` / `fixest`
-  - Rapportering med Quarto / R Markdown
-  - Henvisning til R for Data Science (r4ds.hadley.nz)
-- [ ] **Legg til kilder** — slide eller fotnote med referanser:
-  - Wickham et al. (2023), *R for Data Science*, 2. utg.
-  - Tidyverse Style Guide (style.tidyverse.org)
-  - Palmer Penguins-pakken (Horst et al.)
+- [ ] **Palmer Penguins-pakken i lesetips** — legg til Horst et al. som fjerde kilde (data.table er nå fjerde — blir femte)
 
 ### Valgfritt / fremtidig
-- [ ] PDF-eksport som backup (via `chromium --headless --print-to-pdf`)
 - [ ] Vurder `{.incremental}`-lister på lesbarhetsslidene for bedre flyt i presentasjon
 - [ ] Sjekk om `kableExtra` er tilgjengelig — kan gi bedre kontroll over tabellstørrelse
+- [ ] Sjekk overlapp på verb-slides (select, arrange, group_by) på mindre skjermer
+
+---
+
+## Fullført
+
+- [x] Workflow-figur: hekser frikoblet fra bokser, fargede hekser over Transform med z-index
+- [x] Slide 1 heter "Å gjøre dataanalyse", slide 2 heter "tidyverse" → erstattet med ny struktur
+- [x] Palmer Penguins: pingviner nederst til høyre, større tabell, uten heksogram
+- [x] Pipe-seksjon: filter → mutate → summarise med gul highlight
+- [x] Ny slide: mutate() med stringr::str_detect() og forcats::fct_other()
+- [x] 5 tips oppdatert: pipe · prosjektstruktur · seksjonsoverskrifter · kommentarer · function()
+- [x] Tip 3: Seksjonsoverskrifter med ## og Ctrl+Shift+R-tips
+- [x] Tip 4: Kommentarer — rød på dårlige, grønn på gode (to slides)
+- [x] Tip 5: Egne funksjoner — copy/paste-fellen vs. function(), reg markert gult
+- [x] Prosjektstruktur: SVG-tre, sentrert
+- [x] Lesetips: r4ds · posit cheatsheets · style.tidyverse.org · data.table
+- [x] Åpningsslide splittet: dårlig kode alene, deretter rent eksempel med df_uforetrygd_panel
+- [x] Workflow-figur uten pakker (slide 3), med pakker (slide 4)
+- [x] Ny slide: "Uten pipe — innenfra og ut" + "Pipe gir en logisk rekkefølge"
+- [x] Nye verb-slides: select(), arrange(), group_by()
+- [x] "5 tips"-oversikt flyttet til etter verbdemo
+- [x] "tidyverse ikke alltid svaret" flyttet til før lesetips, boksene stablet vertikalt
+- [x] Avslutning: Coase-sitat + Claude-signatur
+- [x] embed-resources: true lagt til — presentasjon fungerer på Quarto Pub
+- [x] Publisert til Quarto Pub
+- [x] GitHub remote endret til SSH
