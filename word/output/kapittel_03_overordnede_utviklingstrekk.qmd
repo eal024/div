@@ -1,11 +1,11 @@
 ---
-title: "3. Overordnede utviklingstrekk"
+title: "Overordnede utviklingstrekk"
 format: html
 ---
 
-# 3. Overordnede utviklingstrekk
+# Overordnede utviklingstrekk
 
-## 3.1 Utviklingen fra 2015 til 2025
+## Utviklingen fra 2015 til 2025
 
 Figur 1. Utviklingen i folketrygdens utgifter, etter stønadstype. Faktisk utvikling 2015–2025, prognose 2026–2035. Realverdi i milliarder 2026-kroner[^2]
 
@@ -73,7 +73,7 @@ Kilde: Nav.
 
 Utgiftsutviklingen for de største trygdeytelsene følger i stor grad utviklingen i antall mottakere (figur 5). Samlet var det rundt 2,1 millioner mottakere[^6] av de største trygdeytelsene i 2025 (gjennomsnittstall for året, der kun ytelsene som inngår i figur 5 er medregnet). Det er en økning fra 1,8 millioner i 2014. Økningen skyldes i stor grad alderspensjon, der antall mottakere har økt med rundt 220 000 fra 2015 til 2025. I tillegg har det blitt 63 000 flere med uføretrygd, 22 000 flere med sykepenger eller pleiepenger og 21 000 flere med grunnstønad.
 
-## 3.2 Utviklingen fra 2025 til 2035
+## Utviklingen fra 2025 til 2035
 
 Fram mot 2035 venter vi at utgiftene til folketrygden, gitt videreføring av dagens regelverk samt Stortingets pensjonsforlik, vil øke fra 736 milliarder kroner i 2025 til 831 milliarder kroner i 2035 (tall i 2026-kroner). Det er en økning på 95 milliarder kroner, eller 13 prosent.
 

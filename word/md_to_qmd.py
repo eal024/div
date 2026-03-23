@@ -109,9 +109,8 @@ def process_file(path: str) -> None:
     # Mønster: "N.  Tittel" (etter at span er fjernet)
     # Pandoc lager "1.  Tittel" som ordered list item for H1
     def replace_chapter(m):
-        num = m.group(1).rstrip('.')
         title = m.group(2).strip()
-        return f'# {num}. {title}'
+        return f'# {title}'
 
     content = re.sub(
         r'^(\d+)\.\s{2}(.+)$',
@@ -123,9 +122,8 @@ def process_file(path: str) -> None:
     # --- Trinn 5: Konverter delkapitteloverskrifter (N.N Tittel på egen linje)
     # Mønster: linje som starter med tall.tall (f.eks. "4.1 Tittel")
     def replace_subchapter(m):
-        num = m.group(1)
         title = m.group(2).strip()
-        return f'## {num} {title}'
+        return f'## {title}'
 
     content = re.sub(
         r'^(\d+\.\d+)\s+(.+)$',

@@ -1,9 +1,9 @@
 ---
-title: "2. Innledning"
+title: "Innledning"
 format: html
 ---
 
-# 2. Innledning
+# Innledning
 
 Rapporten viser utgiftsutviklingen i folketrygden i perioden 2015–2025 og framskrivinger til 2035. Formålet er å beskrive hvordan veksten i folketrygdens utgifter har påvirket handlingsrommet i statsbudsjettet fram til i dag, og hvordan det er anslått å bli påvirket fram mot 2035.
 
@@ -13,7 +13,7 @@ Selv om utgiftene blir sterkt påvirket av befolkningsvekst og endret alderssamm
 
 Rapporten er skrevet av Arbeids- og velferdsdirektoratet og Helsedirektoratet i samarbeid med Arbeids- og inkluderingsdepartementet, Barne- og familiedepartementet, Finansdepartementet og Helse- og omsorgsdepartementet.
 
-## 2.1 De viktigste endringene fra 2025-rapporten
+## De viktigste endringene fra 2025-rapporten
 
 Vi oppgir her de viktigste endringene i framskrivingene fra tilsvarende rapport i 2025, [Nav (2025)](https://www.nav.no/no/nav-og-samfunn/kunnskap/analyser-fra-nav/nav-rapportserie/utviklingstrekk-i-folketrygden-20132033), som omhandlet folketrygdens utgifter i perioden 2013–2033:
 

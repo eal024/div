@@ -1,9 +1,9 @@
 ---
-title: "6. Alderspensjon"
+title: "Alderspensjon"
 format: html
 ---
 
-# 6. Alderspensjon
+# Alderspensjon
 
 Figur 10. Dekomponering av utgiftsendring for alderspensjon 2015–2025 og prognose for utgiftsendring 2025–2035, etter forklaringsfaktorer. Realvekst i milliarder 2026-kroner.
 
@@ -15,7 +15,7 @@ Utgiftene til alderspensjon økte fra 286 milliarder kroner i 2015 til 351 milli
 
 Fra 2025 til 2035 venter vi en utgiftsvekst fra 351 milliarder kroner til 407 milliarder kroner. Befolkningsendringene alene tilsier en utgiftsvekst i perioden på 82 milliarder kroner. Pensjonsreformen inklusive det nye pensjonsforliket fra 2024 (men gjelder primært levealdersjusteringen og årlig regulering lavere enn lønnsveksten) vil imidlertid isolert sett bidra til 47 milliarder kroner i utgiftsnedgang i perioden. Andre regelendringer bidrar i sum med om lag 4 milliarder kroner i utgiftsnedgang. Det gjelder avtakende effekt av tidligere politiske tiltak, nominell videreføring av etterlatterettigheter som en del av etterlattereformen, effekt av bortfall av flyktningerettigheter og utvidet botidskrav, mens innføring av et slitertillegg trekker i motsatt retning. Andre forhold, som vekst i pensjonsopptjeningen og vekst i utenlandsboende pensjonister, trekker opp utgiftene med 24 milliarder kroner fram mot 2035.
 
-## 6.1 Nærmere om utviklingen i alderspensjonsutgiftene
+## Nærmere om utviklingen i alderspensjonsutgiftene
 
 De første årene etter pensjonsreformen var veksten i utgiftene til alderspensjon høy. Den høye veksten skyldes først og fremst en kraftig vekst i antall alderspensjonister som følge av at det ble mulig å starte uttaket av alderspensjon fra 62 år uavhengig av om en fortsatte i arbeid. Høyere opptjening for nye alderspensjonister sammenliknet med de som dør, som i særlig grad gjelder kvinner, har også bidratt til en underliggende vekst i gjennomsnittlige pensjoner og dermed utgiftene i det siste tiåret. Ulike tiltak, som økt grunnpensjon og økt minste pensjonsnivå i flere omganger, har også bidratt til utgiftsveksten.
 

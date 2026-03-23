@@ -1,9 +1,9 @@
 ---
-title: "4. Helserelaterte ytelser"
+title: "Helserelaterte ytelser"
 format: html
 ---
 
-# 4. Helserelaterte ytelser
+# Helserelaterte ytelser
 
 De helserelaterte ytelsene omfatter kapittel 2650 Sykepenger, kapittel 2651 Arbeidsavklaringspenger og kapittel 2655 Uførhet.
 
@@ -15,7 +15,7 @@ Figur 6. Dekomponering av utgiftsendringer for helserelaterte ytelser 2015–202
 
 Kilde: Nav.
 
-## 4.1 Utviklingen fra 2015 til 2025
+## Utviklingen fra 2015 til 2025
 
 Utgiftene til de helserelaterte ytelsene har samlet sett økt med 41,8 milliarder kroner i faste 2026-kroner, fra 227,2 milliarder kroner i 2015 til 269,0 milliarder kroner i 2025. Utgiftene til sykepenger[^7] økte med 14,8 milliarder kroner, mens uføretrygd[^8] økte med 24,9 milliarder kroner. Utgiftene til arbeidsavklaringspenger[^9] økte med 2,1 milliarder kroner.
 
@@ -59,7 +59,7 @@ Utgiftene til uføretrygd økte klart mer enn hva befolkningsutviklingen skulle 
 ### Unge med helserelaterte trygdeytelser
 Andelen som mottar helserelaterte ytelser i aldersgruppen under 30 år, økte noe i årene før koronapandemien, med en andel på 6,7 prosent i 2013 og 7,1 prosent i 2019, og har deretter økt vesentlig, til 8,6 prosent i 2024. Økningen gjelder særlig uføretrygd, der andelen har økt fra 1,3 prosent i 2013 til 2,7 prosent i 2024. For arbeidsavklaringspenger har andelen økt fra 3,4 prosent i 2013 til 3,7 prosent i 2024, mens den for sykepenger har gått opp fra 2,1 prosent til 2,3 prosent. Økningen for uføretrygd skyldes trolig dels en vridningseffekt der unge tidligere enn før går over fra arbeidsavklaringspenger til uføretrygd. I tillegg skyldes det i stor grad at flere enn før blir uføretrygdet når de er 18–19 år. En mulig forklaring til denne veksten kan være at flere blir født med funksjonshemminger og dels at flere tidlig fødte barn overlever med nevrologiske og psykiske senskader ([Nossen 2025](https://data.nav.no/fortelling/omverdensanalysen2025/kapitler/ferdig_versjon/kap10.html#%C3%B8kt-andel-p%C3%A5-helserelaterte-ytelser-blant-dem-under-30-%C3%A5r)).
 
-## 4.2 Utviklingen fra 2025 til 2035
+## Utviklingen fra 2025 til 2035
 
 Utgiftene til de helserelaterte ytelsene ventes å øke med 19,7 milliarder kroner fra 2025 til 2035, til 288,7 milliarder kroner (2026-kroner). Utgiftene til sykepenger (inkl. pleie-, omsorgs- og opplæringspenger) ventes å øke med 3,2 milliarder kroner i løpet av perioden, mens utgiftene til arbeidsavklaringspenger og uføretrygd antas å øke med henholdsvis 6,5 og 10,0 milliarder kroner.
 

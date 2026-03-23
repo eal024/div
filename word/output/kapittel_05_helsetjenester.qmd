@@ -1,11 +1,11 @@
 ---
-title: "5. Helsetjenester"
+title: "Helsetjenester"
 format: html
 ---
 
-# 5. Helsetjenester
+# Helsetjenester
 
-## 5.1 Legemidler mv.
+## Legemidler mv.
 
 I dette kapittelet omtales refusjon til legemidler mv. Med dette menes folketrygdens utgifter til legemidler, unntatt frikortrefusjon av egenandel for legemidler (i rapportens kapittel 1 og 3 inngår imidlertid frikortrefusjon i kategorien legemidler). Refusjonene dekker legemidler, legeerklæringer og medisinsk forbruksmateriell. Refusjon til legemidler som har blitt overført til de regionale helseforetakene er trukket ut av grunnlaget. I det vesentlige består utgiftene av refusjon for legemidler på blå resept med 14,4 milliarder kroner og refusjon for medisinsk forbruksmateriell på blå resept med 2,5 milliarder kroner i 2025 (regnskapstall i 2026-kroner), samlet 16,9 milliarder kroner i 2025.
 
@@ -44,7 +44,7 @@ Den 19. januar 2023 vedtok Direktoratet for medisinske produkter (DMP) at legemi
 
 Effektene av innstrammingene av regelverket rundt fedme- og diabetesprodukter er så betydelige, at vi har definert dem som regelendringer, jf. dekomponering av utgiftene generelt i kapitlene foran i rapporten.
 
-## 5.2 Egenandelstak (frikortordningen)
+## Egenandelstak (frikortordningen)
 
 Formålet med egenandelstaket for helsetjenester er å skjerme innbyggerne fra høye helseutgifter. Pasienter som har betalt egenandeler opp til egenandelstaket, slipper å betale egenandeler resten av kalenderåret. Stortinget fastsetter hvert år egenandelstaket. 
 

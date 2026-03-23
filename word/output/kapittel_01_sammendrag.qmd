@@ -1,9 +1,9 @@
 ---
-title: "1. Sammendrag"
+title: "Sammendrag"
 format: html
 ---
 
-# 1. Sammendrag
+# Sammendrag
 
 Rapporten viser utgiftsutviklingen i folketrygden i perioden 2015–2025 og framskrivinger til 2035 samt hvordan befolkningsendringer og regelendringer påvirker utviklingen. Det er befolkningsendringer som påvirker mest, men også regelendringer har hatt betydelig innvirkning.
 

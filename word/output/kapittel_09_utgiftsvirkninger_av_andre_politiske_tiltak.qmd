@@ -1,9 +1,9 @@
 ---
-title: "3. Utgiftsvirkninger av andre politiske tiltak"
+title: "Utgiftsvirkninger av andre politiske tiltak"
 format: html
 ---
 
-# 3. Utgiftsvirkninger av andre politiske tiltak
+# Utgiftsvirkninger av andre politiske tiltak
 
 Det har i perioden etter 2011 også vært ulike regelendringer for alderspensjon som ikke kan knyttes til pensjonsreformen. De viktigste er vist i figur 13.
 

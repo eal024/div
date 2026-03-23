@@ -1,9 +1,9 @@
 ---
-title: "2. Virkninger av pensjonsforliket"
+title: "Virkninger av pensjonsforliket"
 format: html
 ---
 
-# 2. Virkninger av pensjonsforliket
+# Virkninger av pensjonsforliket
 
 Vinteren 2024 inngikk de daværende regjeringspartiene Arbeiderpartiet og Senterpartiet pensjonsforlik med Høyre, Sosialistisk Venstreparti, Venstre og Miljøpartiet De Grønne. Forliket fulgte av Stortingets behandling av [*Meld. St. 6 (2023–2024) Et forbedret pensjonssystem med en styrket sosial profil*](https://www.regjeringen.no/no/dokumenter/meld.-st.-6-20232024/id3018556/).
 

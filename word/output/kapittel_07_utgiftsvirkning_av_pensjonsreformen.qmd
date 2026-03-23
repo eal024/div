@@ -1,9 +1,9 @@
 ---
-title: "2. Utgiftsvirkning av pensjonsreformen"
+title: "Utgiftsvirkning av pensjonsreformen"
 format: html
 ---
 
-# 2. Utgiftsvirkning av pensjonsreformen
+# Utgiftsvirkning av pensjonsreformen
 
 Figur 11. Årlig utgiftsvirkning av pensjonsreformen. Milliarder 2026-kroner
 
