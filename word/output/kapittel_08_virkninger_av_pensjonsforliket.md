@@ -1,0 +1,55 @@
+2.  <span id="_Toc223446993" class="anchor"></span>Virkninger av pensjonsforliket
+
+Vinteren 2024 inngikk de daværende regjeringspartiene Arbeiderpartiet og Senterpartiet pensjonsforlik med Høyre, Sosialistisk Venstreparti, Venstre og Miljøpartiet De Grønne. Forliket fulgte av Stortingets behandling av [*Meld. St. 6 (2023–2024) Et forbedret pensjonssystem med en styrket sosial profil*](https://www.regjeringen.no/no/dokumenter/meld.-st.-6-20232024/id3018556/).
+
+Forliket innebærer blant annet økte aldersgrenser i folketrygden fra og med 1966-kullet, når vi forutsetter innføring fra 1. januar 2028, ulike tiltak for å forbedre alderspensjonen for tidligere mottakere av uføretrygd, regulering av minstenivåene med lønnsveksten og innføringen av et slitertillegg i folketrygden.
+
+De økonomiske effektene for alderspensjon av pensjonsforliket framkommer av figur 12. Anslåtte merutgifter av slitertillegget inngår også i figuren. Beregningene forutsetter at endringene som følger av pensjonsforliket trer i kraft fra 2028, med unntak av skjermingstillegget for årskullene 1954–1962 som fikk effekt fra 2025.
+
+For alderspensjon isolert bidrar pensjonsforliket til en reduksjon av utgiftene med 2,3 milliarder kroner i 2035 (dette inngår også under utgiftsvirkninger av pensjonsreformen i kapittel 6.2). Ved å inkludere det nye slitertillegget, og økte utgifter til ytelser som sykepenger, arbeidsavklaringspenger og uføretrygd når aldersgrensene øker, innebærer pensjonsforliket merutgifter i 2035 på 1,2 milliarder kroner.
+
+Figur 12. Årlig utgiftsvirkning av pensjonsforliket for folketrygden (inkludert slitertillegg). Milliarder 2026-kroner
+
+<img src="./output/media/media/image12.png" style="width:6.72781in;height:3.84653in" />
+
+Kilde: Nav.
+
+*Økte aldersgrenser for alderspensjon*
+
+Økte aldersgrenser vil bidra til svakere vekst i antall alderspensjonister, ettersom økt nedre aldersgrense fører til at en del vil bli tvunget til å utsette uttaket. Økt aldersgrense for overgang fra uføretrygd til alderspensjon vil også medføre færre alderspensjonister. Vi forventer dessuten at økningen i normert pensjonsalder vil være normgivende. Utover de som blir tvunget til å utsette uttaket, har vi i framskrivingen lagt til grunn at halvparten vil utsette sin uttaksalder i takt med økningen i normert pensjonsalder.
+
+Effekten av økte aldersgrenser på antallet pensjonister vil være begrenset de første årene. I 2035 innebærer framskrivingene om lag 25 000 færre alderspensjonister enn uten økte aldersgrenser.
+
+Forutsetningene om uttaksalder har stor betydning for framskrivingene, og er avgjørende for at vi kommer fram til betydelige innsparinger av økte aldersgrenser – også helt fram til 2060. Økte aldersgrenser er i prinsippet en budsjettnøytral endring, ettersom utsatt uttaksalder gir en innsparing i første omgang, som blir motsvart av høyere utgifter senere som følge av høyere alderspensjon. Endringer i reglene for fastsetting av delingstall, ved at delingstallene for et årskull skal fastsettes ett år før nedre pensjonsalder, i stedet for ved 61 år som i dag, gir noe større effekt av levealdersjusteringen. Det medfører derfor at endringen likevel gir en innsparing totalt sett. Når vi i tillegg forutsetter en stadig utsettelse av uttaksalderen, vil dessuten merutgiftene som følge av høyere pensjoner hele tiden bli delvis skjøvet foran oss.
+
+Dersom vi i stedet hadde valgt andre forutsetninger, for eksempel at en lavere andel hadde utsatt uttaksalderen for alderspensjon, kunne innsparingene for alderspensjon blitt mindre på lang sikt, og eventuelt også snudd til merutgifter. Dersom ikke alle utsetter uttaket når normert pensjonsalder øker, vil man riktignok på lang sikt havne i en situasjon der stadig flere tar ut alderspensjon ved nedre uttaksalder.
+
+Ved valgte forutsetninger viser framskrivingene at utgiftene til alderspensjon reduseres med 6,1 milliarder kroner i 2035 som følge av økte aldersgrenser. Andre elementer ved pensjonsforliket, som regulering av minstenivåene med lønnsveksten og økt opptjening til alderspensjon til tidligere mottakere av uføretrygd, bidrar til å redusere innsparingseffektene.
+
+*Regulering av minstenivåene med lønnsveksten*
+
+Med dagens regler oppjusteres minstenivåene hvert år med gjennomsnittet av pris- og lønnsvekst. Dette gjelder både minstepensjonssatsene i gammel opptjeningsmodell og garantipensjonssatsen i ny opptjeningsmodell.
+
+Med nye regler vil minstenivåene reguleres med lønnsveksten før uttak av alderspensjon. Etter uttak vil mottakere av alderspensjon på minstenivå få en regulering med et gjennomsnitt av pris- og lønnsvekst, tilsvarende som for alle andre alderspensjonister. Endringene innebærer ulike minstesatser mellom nye alderspensjonister og alderspensjonister med alderspensjon på minstenivå som har vært omfattet av regulering etter uttak. Endringene innebærer at det over tid vil bli flere mottakere som vil motta noe garantipensjon som en del av samlet alderspensjon fra folketrygden. I framskrivingene vil denne endringen isolert sett øke utgiftene med 1,3 milliarder kroner i 2035.
+
+*Økt alderspensjon for tidligere mottakere av uføretrygd*
+
+Flere elementer i pensjonsforliket vil innebære at alderspensjonen til uføre øker. Det dreier seg om økt øvre opptjeningsalder til alderspensjon, senere overgang til alderspensjon når aldersgrensene øker og skjermingstillegg for årskullene 1954–1962 i gammel opptjeningsmodell. Utvidelse av skjermingstillegget til å gjelde flere årskull ble innført fra 1. januar 2025.
+
+Pensjonsforliket innebærer også at uføre får opptjening til alderspensjon etter nye opptjeningsregler til og med kalenderåret ved fylte 64 år, mot 61 år i dag. I 2035 er merutgiftene av dette beregnet til rundt 1,9 milliarder kroner.
+
+Uføre vil som hovedregel ha overgang til alderspensjon ved normert pensjonsalder, mot 67 år i dag. Dette innebærer at uføre vil bli skjermet mot deler av levealdersjusteringen, og vil også bidra til en høyere alderspensjon for denne gruppen. For alderspensjon bidrar denne endringen til reduserte utgifter, og dette inngår i den nevnte innsparingen på 6,1 milliarder kroner i 2035 som følge av økte aldersgrenser. Hvor mye av dette som gjelder økt aldersgrense for uføre er ikke tallfestet. Samtidig gir det økte utgifter til uføretrygd, som i 2035 blir anslått til 2,5 milliarder kroner. I sum vil økt aldersgrense for overgang fra uføretrygd til alderspensjon gi merutgifter.
+
+En del av forliket er også at skjermingstillegget til uføre blir utvidet til årskullene 1954–1962 fra 2025 med tilsvarende sats som for 1953-kullet. Anslått effekt av dette er 0,4 milliarder kroner i 2025. Merutgiftene vil deretter øke fram til 2029, før de igjen vil avta som følge av utfasingen av den gamle opptjeningsmodellen for alderspensjon. Rundt 2065 vil merutgiftene gå i null.
+
+*  
+*
+
+*Slitertillegg*
+
+Innføring av et slitertillegg[^18] i folketrygden vil trolig føre til at flere vil starte uttaket av alderspensjon ved den nedre aldersgrensen eller få år etter. Adferdsvirkningene av innføring av et slitertillegg er svært usikre.
+
+I framskrivingen legger vi til grunn at mottakere av slitertillegget vil være de som tar ut alderspensjon ved 5, 4 eller 3 år før normert pensjonsalder, og som har lav eller ingen arbeidsinntekt i årene etter uttak. Det er lagt til grunn at de som ellers ville hatt lav arbeidsinntekt i årene etter uttak, vil slutte tidligere i jobb enn de ellers ville gjort og heller velge slitertillegget i de tilfellene det vil lønne seg.[^19]
+
+I beregningen av utgiftsvirkningene av slitertillegg er det her lagt til grunn at tillegget ikke vil inngå i prøving av vilkåret for uttak av alderspensjon. Basert på gitte forutsetninger gir våre framskrivinger et utgiftsnivå for slitertillegget i 2035 på rundt 0,5 milliarder kroner.[^20]
+
