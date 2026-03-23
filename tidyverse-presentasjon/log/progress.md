@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-03-23 — Word-til-Quarto-konvertering
+
+### Hva ble gjort
+
+**Nytt verktøy: Word → Quarto-konvertering (`word/`)**
+- Opprettet mappe `word/` i div-repoet
+- Installerte og verifiserte pandoc (v3.1.3)
+- Konverterte `Utviklingstrekk i folketrygden 2026 - tredjeutkast.docx` til Markdown med pandoc (`-t gfm --extract-media`)
+- Splittet `full.md` på kapitteloverskrifter → 9 separate `kapittel_*.md`-filer
+- Dokumenterte hele flyten i `convert.sh`
+- Laget `md_to_qmd.py` som post-prosesserer Markdown til Quarto-format:
+  - Overskrifter med `#`/`##`/`###` (uten nummerering)
+  - Bilder fra HTML-tag til Markdown-syntaks, korrigert bildesti
+  - HTML-tekstbokser → `::: {.callout-note}`
+  - Rydder `<span>`, `<u>` og annen HTML
+  - Legger til YAML-frontmatter per fil
+- Alle 9 `kapittel_*.qmd`-filer generert og pushet
+
+### Filer opprettet
+- `word/convert.sh` — komplett konverteringsskript (pandoc + split + qmd)
+- `word/md_to_qmd.py` — Markdown → Quarto post-prosessering
+- `word/output/full.md` — komplett Markdown
+- `word/output/kapittel_01–09_*.qmd` — ni Quarto-filer
+- `word/output/media/` — bilder ekstrahert fra Word
+
+### Kjente problemer ved avslutning
+- Ingen.
+
+---
+
+## 2026-03-21 (økt 5)
+
+### Hva ble gjort
+
+- Fjernet Palmer Penguins-oppgave fra todo — presentasjonen er ferdig
+- Presentasjonen anses som avsluttet
+
+### Kjente problemer ved avslutning
+- Ingen.
+
+---
+
 ## 2026-03-20 (økt 4)
 
 ### Hva ble gjort
