@@ -1,0 +1,39 @@
+---
+title: "6. Alderspensjon"
+format: html
+---
+
+# 6. Alderspensjon
+
+Figur 10. Dekomponering av utgiftsendring for alderspensjon 2015–2025 og prognose for utgiftsendring 2025–2035, etter forklaringsfaktorer. Realvekst i milliarder 2026-kroner.
+
+\*Utgiftsvekst som verken kan forklares av befolkningsendringer eller regelendringer.
+
+Kilde: Nav.
+
+Utgiftene til alderspensjon økte fra 286 milliarder kroner i 2015 til 351 milliarder kroner i 2025 (tall i 2026-kroner). Av nettoøkningen på 65 milliarder kroner, har befolkningsendringer medført 78 milliarder i økte utgifter. Pensjonsreformen har bidratt til om lag 39 milliarder kroner i utgiftsreduksjon i perioden[^13], og andre politiske tiltak (økt grunnpensjon og økt minstenivå) har bidratt med om lag 5 milliarder kroner i økte utgifter. Det innebærer at andre forhold trekker opp med 20 milliarder kroner, som hovedsakelig skyldes høyere pensjonsopptjening blant pensjonistene, særlig blant kvinner.
+
+Fra 2025 til 2035 venter vi en utgiftsvekst fra 351 milliarder kroner til 407 milliarder kroner. Befolkningsendringene alene tilsier en utgiftsvekst i perioden på 82 milliarder kroner. Pensjonsreformen inklusive det nye pensjonsforliket fra 2024 (men gjelder primært levealdersjusteringen og årlig regulering lavere enn lønnsveksten) vil imidlertid isolert sett bidra til 47 milliarder kroner i utgiftsnedgang i perioden. Andre regelendringer bidrar i sum med om lag 4 milliarder kroner i utgiftsnedgang. Det gjelder avtakende effekt av tidligere politiske tiltak, nominell videreføring av etterlatterettigheter som en del av etterlattereformen, effekt av bortfall av flyktningerettigheter og utvidet botidskrav, mens innføring av et slitertillegg trekker i motsatt retning. Andre forhold, som vekst i pensjonsopptjeningen og vekst i utenlandsboende pensjonister, trekker opp utgiftene med 24 milliarder kroner fram mot 2035.
+
+## 6.1 Nærmere om utviklingen i alderspensjonsutgiftene
+
+De første årene etter pensjonsreformen var veksten i utgiftene til alderspensjon høy. Den høye veksten skyldes først og fremst en kraftig vekst i antall alderspensjonister som følge av at det ble mulig å starte uttaket av alderspensjon fra 62 år uavhengig av om en fortsatte i arbeid. Høyere opptjening for nye alderspensjonister sammenliknet med de som dør, som i særlig grad gjelder kvinner, har også bidratt til en underliggende vekst i gjennomsnittlige pensjoner og dermed utgiftene i det siste tiåret. Ulike tiltak, som økt grunnpensjon og økt minste pensjonsnivå i flere omganger, har også bidratt til utgiftsveksten.
+
+### Utvikling i gjennomsnittlig pensjon
+I årene framover vil den underliggende veksten i gjennomsnittlig pensjon som følge av økt opptjening fortsette. Denne effekten vil imidlertid mer enn motsvares av en stadig sterkere effekt av levealdersjusteringen og effekten av at løpende alderspensjoner de fleste år forventes å bli regulert svakere enn lønnsveksten. *Pensjonsforliket* innebærer imidlertid at gjennomsnittlig pensjon vil øke noe mer enn hva som hadde vært tilfelle med reglene som gjelder i dag. Når vi måler i 2026-kroner (i faste lønninger), får vi totalt sett en liten nedgang i pensjonene framover. Dersom flere enn antatt velger å jobbe lenger og/eller utsette pensjonsuttaket framover[^14], kan nedgangen i de gjennomsnittlige pensjonene også bli mindre enn antatt eller snu til en økning. Pensjonene forventes uansett å øke noe sammenliknet med prisutviklingen.
+
+Utviklingen vil også avhenge av forholdet mellom pris- og lønnsvekst framover, som følge av at alderspensjon under utbetaling fra 2022 blir regulert med et gjennomsnitt av lønns- og prisvekst. Basert på prognoser fra Finansdepartementet vil det i 2026 bli en regulering som ligger noe under forventet lønnsvekst. Etter 2026 har vi lagt til grunn en årlig reallønnsvekst på 1,0 prosent. Dette tilsvarer hva som ble lagt til grunn i [Perspektivmeldingen fra 2024](https://www.regjeringen.no/no/dokumenter/meld.-st.-31-20232024/id3049290/). Med denne forutsetningen vil pensjonistene komme bedre ut med de nye reguleringsreglene enn med reglene som gjaldt til og med 2021.[^15]
+
+### Utviklingen i antall alderspensjonister
+Antall alderspensjonister økte sterkt de første årene etter pensjonsreformen. I 2010 var den årlige veksten i antall alderspensjonister på godt under 2 prosent. I 2011 var veksten på over 5 prosent, og økte til 7 prosent i 2012. Den høye veksten skyldes dels at det fra 2011 ble mulig å ta ut alderspensjon fra 62 år, og dels at de store årskullene født etter andre verdenskrig nådde pensjonsalder rundt innfasingen av reformen.
+
+Etter dette har veksten avtatt gradvis. Veksten var på 2,2 prosent i 2025. De neste årene antas den årlige veksten å øke noe som følge av omleggingen av AFP i offentlig sektor fra 2025. Isolert sett har vi lagt til grunn at antall alderspensjonister vil øke med rundt 11 000 fram til 2030 som følge av omleggingen av AFP i offentlig sektor.
+
+Årlig vekst er anslått til rundt 2,5 prosent fram mot 2030. Fra 2030 reduseres veksten som følge av at effekten for alderspensjon av endringen i AFP er innfaset, og at veksten trekkes ned av den gradvise økningen i aldersgrensene i pensjonssystemet. Antall alderspensjonister passerte en million i november 2021, og ventes å være på nærmere 1,4 millioner i gjennomsnitt for 2035.
+
+Veksten i *alderspensjonister som er 67 år eller eldre* forventes å være noe høyere enn befolkningsveksten i samme aldersgruppe de nærmeste årene. Dette skyldes en økning i utenlandsboende alderspensjonister. På den annen side blir det over tid litt flere som utsetter uttaket til etter 67 år, noe som bidrar til å dempe veksten.
+
+For alderspensjonister i alderen 62–66 år kan endringer i uttaksadferden innebære betydelige avvik mellom veksten i antall alderspensjonister og veksten i befolkningen i samme aldersgruppe. Uttaksadferden kan påvirkes av vurderinger om egen helse, preferanser for periodisering av egen inntekt, avveiningen mellom arbeid (inntekt) og fritid, vurderinger av hva som er en tilstrekkelig årlig pensjon og utviklingen på arbeidsmarkedet. Uttaksraten i aldersgruppen 62–66 år, målt som andel med alderspensjon av de som oppfyller vilkårene for uttak, økte år for år fram til 2016. Menn benyttet seg av første mulighet til uttak i klart større grad enn kvinner, og de fleste av disse fortsatte i arbeid. Etter 2016 har uttaksraten falt. Totalt var det om lag 82 000 i aldersgruppen 62–66 år som mottok alderspensjon ved utgangen av 2025. Av disse var nesten 70 prosent menn. Uttaksraten i aldersgruppen 62–66 forventes å øke noe i 2025 som følge av innføring av ny offentlig AFP. Som andel av befolkningen i samme alder ventes antall alderspensjonister i aldersgruppen 62–66 år derfor å øke noe de nærmeste fem årene. At en stadig større andel av befolkningen, og da særlig kvinner, har tilstrekkelig opptjening for å starte uttaket av alderspensjon fra før 67 år, bidrar også til dette.
+
+Anslaget for samlet antall alderspensjonister ved utgangen av 2035 ligger 1 000 lavere enn hva en ren demografisk framskriving med konstante uttaksrater som i 2025 tilsier. Dette skyldes at økte aldersgrenser gjennom Pensjonsforliket isolert sett vil fører til færre alderspensjonister. Denne effekten mer enn oppveier effekten av flere alderspensjonister gjennom omleggingen av AFP i offentlig sektor og til dels vekst i antall utenlandsboende alderspensjonister[^16].
+

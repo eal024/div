@@ -87,6 +87,22 @@ for idx, start in enumerate(split_points[:-1]):
 print("Splitting ferdig.")
 PYEOF
 
+# ---------------------------------------------------------------------------
+# Steg 3: Konverter Markdown-filer til Quarto (.qmd)
+# Gjør følgende transformasjoner per fil:
+#   - Kapitteloverskrift (nummerert liste + span) → # N. Tittel
+#   - Delkapitteloverskrift (N.N Tittel)          → ## N.N Tittel
+#   - Kursiv enelinjetittel (*Tittel*)             → ### Tittel
+#   - HTML <img ...>                               → ![](sti)
+#   - Bildesti ./output/media/ → ./media/
+#   - HTML-tekstboks (<table> med én <th>)         → ::: {.callout-note}
+#   - Rydder <span>, <u>, <mark> og lignende HTML
+#   - Legger til YAML-frontmatter
+# ---------------------------------------------------------------------------
+echo "Konverterer til Quarto-format (.qmd)..."
+
+python3 "$(dirname "$0")/md_to_qmd.py" "$OUTPUT_DIR"/kapittel_*.md
+
 echo ""
 echo "Filer i $OUTPUT_DIR/:"
 ls "$OUTPUT_DIR/"
