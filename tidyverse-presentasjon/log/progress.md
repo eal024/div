@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-03-27 — Dokumentasjon og blogginnlegg
+
+### Hva ble gjort
+
+**Dokumentasjon av fixest-skript**
+- Lagt til utfyllende kommentarer i `regression/2022-11-02 fixest.R`
+- 15 nummererte seksjoner med forklaringer av hva koden gjør og hvorfor
+- Koden er uendret — kun kommentarer lagt til
+
+**Blogginnlegg på hjemmesiden**
+- Skrevet blogginnlegg basert på fixest-skriptet: `homepage/posts/2026-03-27_fixest-intro/index.qmd`
+- Gjennomgang av OLS, faste effekter, IV, ikke-lineære modeller, multimodell-estimering, standardfeil, tabeller og paneldata
+- Publisert til Quarto Pub og pushet til GitHub
+
+### Filer endret
+- `regression/2022-11-02 fixest.R` — dokumentasjon lagt til
+- `homepage/posts/2026-03-27_fixest-intro/index.qmd` — nytt blogginnlegg (i homepage-repoet)
+
+### Kjente problemer ved avslutning
+- Ingen.
+
+---
+
 ## 2026-03-23 — Word-til-Quarto-konvertering
 
 ### Hva ble gjort
