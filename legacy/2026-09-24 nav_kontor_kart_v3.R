@@ -52,19 +52,12 @@ fn_ringer <- function(geom, id) {
     }))
 }
 
-# Norges landareal med ekte kystlinje: geoBoundaries ADM0 (OpenStreetMap),
-# forenklet med Douglas-Peucker (~100 m) for hovedkartet og klippet i full
-# oppløsning til Oslo-utsnittet. Forbehandlet i Python, se notat.md.
-# Kartverkets fylkespolygoner går ut til grunnlinjen og fyller fjordene.
-fn_les_kyst <- function(fil) {
-    jsonlite::fromJSON(file.path(path_data, fil), simplifyVector = FALSE) |>
-        map_dfr(\(r) {
-            m <- matrix(unlist(r$c), ncol = 2, byrow = TRUE)
-            bind_cols(tibble(gruppe = r$id), fn_utm33(m[, 1], m[, 2]))
-        })
-}
-df_norge      <- fn_les_kyst("norge_kyst_hoved.json")
-df_norge_oslo <- fn_les_kyst("norge_kyst_oslo.json")
+# Fylkesgrenser fra Kartverket, allerede i EPSG:25833
+df_fylker <- list.files(path_data, pattern = "^fylke25833_.*\\.json$", full.names = TRUE) |>
+    map_dfr(\(f) {
+        d <- jsonlite::fromJSON(f, simplifyVector = FALSE)
+        fn_ringer(d$omrade, d$fylkesnummer) |> rename(x = lon, y = lat)
+    })
 
 # Naboland fra Natural Earth 50m (lon/lat), klippet i lengdegrad før projeksjon
 df_naboland <- jsonlite::fromJSON(file.path(path_data, "naboland_ne50m.json"),
@@ -83,15 +76,17 @@ df_kontor <- helper::nav_kontor |>
     arrange(desc(coalesce(antall_ansatte, 0L)))
 
 df_byer <- tribble(
-    ~by,         ~lon,     ~lat,    ~hjust, ~dx,     ~dy,
-    "Oslo",      10.7522,  59.9139,  0,      36000,  -22000,
-    "Bergen",     5.3221,  60.3913,  1,     -26000,  10000,
-    "Stavanger",  5.7331,  58.9700,  1,     -26000,  -4000,
-    "Trondheim", 10.3951,  63.4305,  0,      48000,  26000,
-    "Bodø",      14.4049,  67.2804,  1,     -18000,  -4000,
-    "Tromsø",    18.9553,  69.6492,  1,     -22000,  10000
-)
-df_byer <- bind_cols(df_byer, fn_utm33(df_byer$lon, df_byer$lat))
+    ~by,            ~lon,     ~lat,    ~hjust, ~dx,     ~dy,
+    "Oslo",         10.7522,  59.9139,  0,      36000,  -22000,
+    "Bergen",        5.3221,  60.3913,  1,     -26000,  10000,
+    "Stavanger",     5.7331,  58.9700,  1,     -26000,  -4000,
+    "Kristiansand",  7.9956,  58.1599,  0.5,        0, -22000,
+    "Trondheim",    10.3951,  63.4305,  0,      38000,  24000,
+    "Bodø",         14.4049,  67.2804,  1,     -18000,  -4000,
+    "Tromsø",       18.9553,  69.6492,  1,     -22000,  10000,
+    "Alta",         23.2717,  69.9689,  0,      14000,  14000
+) |> bind_cols(fn_utm33(c(10.7522, 5.3221, 5.7331, 7.9956, 10.3951, 14.4049, 18.9553, 23.2717),
+                         c(59.9139, 60.3913, 58.9700, 58.1599, 63.4305, 67.2804, 69.6492, 69.9689)))
 
 # Utsnitt Oslo og omegn (UTM 33, meter)
 utsnitt <- list(x = c(238000, 278000), y = c(6632000, 6664000))
@@ -100,21 +95,23 @@ df_oslo <- df_kontor |>
 
 # 4. Plot ----------------------------------------------------------------
 
-farge_sjo   <- "#dfe9f2"
-farge_land  <- "#fdfcfa"
-farge_nabo  <- "#ebe9e4"
-farge_kyst  <- "#7d8790"
-farge_data  <- okabe_ito[6]
-farge_tekst <- "grey30"
+farge_sjo   <- "#e9f0f5"
+farge_land  <- "#f4f2ee"
+farge_nabo  <- "#e3e1dc"
+farge_kyst  <- "#b8b4ad"
+farge_data  <- okabe_ito[5]
+farge_tekst <- "grey35"
 
-fn_kart <- function(df_punkt, df_land, xlim, ylim, max_size, stroke = 0.35, kyst = 0.22) {
+fn_kart <- function(df_punkt, xlim, ylim, max_size, stroke = 0.35, grense = 0.15) {
     ggplot() +
         geom_polygon(data = df_naboland, aes(x, y, group = gruppe),
-                     fill = farge_nabo, colour = farge_nabo, linewidth = 0.1) +
-        geom_polygon(data = df_land, aes(x, y, group = gruppe),
-                     fill = farge_land, colour = farge_kyst, linewidth = kyst) +
+                     fill = farge_nabo, colour = farge_kyst, linewidth = grense) +
+        geom_polygon(data = df_fylker, aes(x, y, group = gruppe),
+                     fill = farge_land, colour = "white", linewidth = grense) +
+        geom_polygon(data = df_fylker, aes(x, y, group = gruppe),
+                     fill = NA, colour = farge_kyst, linewidth = grense * 0.7) +
         geom_point(data = df_punkt |> filter(!har_ansatte), aes(x, y),
-                   shape = 21, fill = "white", colour = farge_data, size = 1.5, stroke = 0.5) +
+                   shape = 21, fill = "white", colour = farge_data, size = 1.6, stroke = 0.5) +
         geom_point(data = df_punkt |> filter(har_ansatte), aes(x, y, size = antall_ansatte),
                    shape = 21, fill = farge_data, colour = "white", stroke = stroke) +
         scale_size_area(max_size = max_size, breaks = c(10, 50, 150),
@@ -131,7 +128,7 @@ fn_kart <- function(df_punkt, df_land, xlim, ylim, max_size, stroke = 0.35, kyst
 xlim_no <- c(-280000, 1135000)
 ylim_no <- c(6420000, 7960000)
 
-p_norge <- fn_kart(df_kontor, df_norge, xlim_no, ylim_no, max_size = 7.5) +
+p_norge <- fn_kart(df_kontor, xlim_no, ylim_no, max_size = 7.5) +
     geom_text(data = df_byer, aes(x + dx, y + dy, label = by, hjust = hjust),
               colour = farge_tekst, size = 3.1, family = fn_eal_base_family()) +
     annotate("rect", xmin = utsnitt$x[1], xmax = utsnitt$x[2],
@@ -148,25 +145,27 @@ p_norge <- fn_kart(df_kontor, df_norge, xlim_no, ylim_no, max_size = 7.5) +
           legend.text = element_text(colour = farge_tekst, size = 9),
           legend.background = element_rect(fill = NA, colour = NA))
 
-p_oslo <- fn_kart(df_oslo, df_norge_oslo, utsnitt$x, utsnitt$y, max_size = 7.5, stroke = 0.4, kyst = 0.3) +
+p_oslo <- fn_kart(df_oslo, utsnitt$x, utsnitt$y, max_size = 7.5, stroke = 0.4, grense = 0.25) +
     guides(size = "none") +
-    annotate("text", x = utsnitt$x[1] + 1500, y = utsnitt$y[2] - 2500, label = "Oslo",
+    annotate("text", x = utsnitt$x[1] + 1500, y = utsnitt$y[2] - 2500, label = "Oslo og omegn",
              hjust = 0, colour = farge_tekst, size = 3, family = fn_eal_base_family()) +
     theme(panel.border = element_rect(fill = NA, colour = "grey30", linewidth = 0.35))
 
 p <- p_norge +
     inset_element(p_oslo, left = 0.02, bottom = 0.64, right = 0.36, top = 0.88) +
     plot_annotation(
-        title    = "Navs 243 lokalkontor",
-        subtitle = paste0("Symbolets areal: ansatte i Enhetsregisteret. Hule ringer: ",
-                          sum(!df_kontor$har_ansatte), " kontor uten registrert antall."),
-        caption  = kilde_caption("nav.no, Enhetsregisteret, Kartverket, OpenStreetMap/geoBoundaries", "2026-09-24"),
+        title    = "Nav har 243 lokalkontor: store i byene,\nmange små langs kysten og i innlandet",
+        subtitle = paste0("Ett symbol per kontor, plassert på beliggenhetsadressen.\nArealet viser antall ansatte ",
+                          "registrert i Enhetsregisteret. Hule ringer: ", sum(!df_kontor$har_ansatte),
+                          " kontor uten registrert antall."),
+        caption  = paste0(kilde_caption("nav.no (NORG), Enhetsregisteret, Kartverket, Natural Earth", "2026-09-24"),
+                          ". Projeksjon UTM 33 (EPSG:25833)."),
         theme = theme(
-            plot.title    = element_text(size = 15, face = "bold", colour = "grey15",
+            plot.title    = element_text(size = 14, face = "bold", colour = "grey15", lineheight = 1.05,
                                          family = fn_eal_base_family(), hjust = 0),
-            plot.subtitle = element_text(size = 9.5, colour = farge_tekst,
+            plot.subtitle = element_text(size = 10, colour = farge_tekst, lineheight = 1.15,
                                          family = fn_eal_base_family(), margin = margin(b = 6)),
-            plot.caption  = element_text(size = 7.5, colour = "grey55", hjust = 0,
+            plot.caption  = element_text(size = 7.5, colour = "grey50", hjust = 0,
                                          family = fn_eal_base_family()),
             plot.background = element_rect(fill = "white", colour = NA),
             plot.margin = margin(8, 8, 6, 8)

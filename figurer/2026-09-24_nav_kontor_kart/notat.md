@@ -40,3 +40,22 @@ om Norge-kart) ga disse endringene:
 
 Kjente svakheter: Trondheim-etiketten ligger tett på symbolene; Sverige og
 Finland tar mye plass til høyre; 64 kontor mangler ansatt-tall i Brreg.
+
+## Versjon 4: ekte kystlinje, roligere farger, mindre tekst (2026-09-24, sent)
+
+Eiriks kritikk av v3: uklare landlinjer, Oslo-kontorene lå «på vannet»,
+matte farger, for mye tekst, æøå vistes ikke. Årsak til de to første:
+Kartverkets fylkespolygoner går ut til grunnlinjen og fyller fjordene.
+
+- Kyst: geoBoundaries ADM0 (OpenStreetMap, 1,7 mill. punkter). Forbehandlet
+  i Python (kjørt i økten, ikke lagret som skript): Douglas-Peucker med
+  toleranse 0,0015° (~100 m) og øyer under ~0,5 km fjernet → 73 000 punkter
+  (`data/norge_kyst_hoved.json`); Sutherland-Hodgman-klipp av full
+  oppløsning til boksen 10,30–11,15 Ø / 59,70–60,10 N → 9 400 punkter
+  (`data/norge_kyst_oslo.json`). GADM 4.1 ble prøvd og forkastet: trappete
+  i Oslo-målestokk og gamle fylkesgrenser.
+- Farger: sjø #dfe9f2, land #fdfcfa, naboland #ebe9e4, kyst #7d8790,
+  data Okabe-Ito rødoransje med hvit kant. Ingen fylkesgrenser.
+- Tekst: tittel, én undertittel, kilde. Seks bynavn.
+- æøå: `div.Rproj` sto med `Encoding: ASCII`; satt til UTF-8. Skriptet må
+  åpnes på nytt i RStudio etter endringen.
