@@ -20,3 +20,23 @@ Skript på div-rota: `2026-09-24 nav_kontor_kart.R`. Fil
 lokalkontor per fylke (fylke fra kommunenummer, 2024-inndeling). Vestland
 har flest kontor (34), Vestfold færrest (6); de største kontorene ligger i
 Oslo, Bergen, Stavanger, Kristiansand, Trondheim og Tromsø.
+
+## Versjon 3: kartografisk omarbeiding (2026-09-24, kveld)
+
+Eirik var ikke fornøyd med v2. Kritikk og web-søk (Axis Maps Cartography
+Guide, Field 2014 om gjennomsiktighet, Wilke kap. 15, ggplot2-boka, Roelfs
+om Norge-kart) ga disse endringene:
+
+- Projeksjon UTM 33 (EPSG:25833) i stedet for rå lon/lat. Egen base-R-funksjon
+  `fn_utm33()` (Karneys serie), sjekket mot Kartverket: avvik under 1 cm.
+- Figur/grunn: sjø i svak blå, Norge lys varm grå, naboland (Natural Earth
+  50m) i mørkere grå med lavere kontrast, tynn kystlinje.
+- Symboler skalert etter areal, største tegnes først, hvit kant i stedet for
+  gjennomsiktighet. Kontor uten ansatt-tall som hule ringer, ikke «minste punkt».
+- Åtte bynavn i grått, manuelt plassert. Oslo i innfelt ramme i havet vest for
+  Nordland, med samme ramme på hovedkartet. Målestokk 200 km.
+- Tittel som sier budskapet, undertittel med definisjoner, kilde nederst.
+- Stolpepanelet fjernet: kartet er figuren.
+
+Kjente svakheter: Trondheim-etiketten ligger tett på symbolene; Sverige og
+Finland tar mye plass til høyre; 64 kontor mangler ansatt-tall i Brreg.
