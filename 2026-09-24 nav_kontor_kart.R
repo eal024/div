@@ -38,7 +38,7 @@ df_fylker <- list.files(path_fylker, pattern = "^fylke_.*\\.json$", full.names =
 df_fylkesnavn <- df_fylker |> distinct(fylkesnr, fylke)
 
 # Kontor: fylke fra de to første sifrene i kommunenummeret (2024-inndeling)
-df_kontor <- nav_kontor |>
+df_kontor <- helper::nav_kontor |>
     as_tibble() |>
     mutate(fylkesnr = str_sub(kommunenr, 1, 2),
            ansatte  = coalesce(antall_ansatte, 0L)) |>
