@@ -59,3 +59,21 @@ Kartverkets fylkespolygoner går ut til grunnlinjen og fyller fjordene.
 - Tekst: tittel, én undertittel, kilde. Seks bynavn.
 - æøå: `div.Rproj` sto med `Encoding: ASCII`; satt til UTF-8. Skriptet må
   åpnes på nytt i RStudio etter endringen.
+
+## Versjon 5: interaktivt kart (2026-09-25)
+
+Eirik ba om vurdering av v4 og alternative verktøy, særlig JavaScript med
+zoom til Oslo og Trondheim. Vurderingen av v4: nasjonalt nivå ferdig, men
+tittelen er en etikett, bynavn kolliderer med symboler, og Oslo-utsnittet
+svarer ikke på hvilket kontor som er hvilket. Bynivået er der et statisk
+kart kommer til kort.
+
+Løsning: Leaflet.js-kart med Kartverkets gråtonefliser, publisert som
+blogginnlegg på homepage. Filene ligger i
+`figurer/2026-09-25_nav_kontor_interaktivt/` (kopi fra homepage, som er
+privat). Se README der. Verktøy vurdert: leaflet (R), mapgl, tmap, ren
+Leaflet.js, MapLibre, Observable Plot. Ren Leaflet.js valgt for full
+kontroll og null avhengigheter ved render.
+
+Det statiske kartet beholdes: det bærer budskapet i rapport og slides,
+det interaktive er et oppslagsverktøy.
