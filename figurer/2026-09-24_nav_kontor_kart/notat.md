@@ -77,3 +77,19 @@ kontroll og null avhengigheter ved render.
 
 Det statiske kartet beholdes: det bærer budskapet i rapport og slides,
 det interaktive er et oppslagsverktøy.
+
+### Lærdommer fra v5 (2026-09-25)
+
+- **Statisk først, så interaktivt.** Svakhetene i v4 (bynivå, hvilket kontor er hvilket) definerte
+  hva det interaktive kartet måtte gjøre. Uten v4 hadde v5 blitt et generisk kart.
+- **Flisopasitet gir sømmer.** Demp grunnkartet med et hvitt rektangel i egen pane, ikke `opacity`
+  på flislaget. Opasiteten kan da variere med zoom (svak i Norge-visning, sterk i by-visning).
+- **Symbolskala og tegnforklaring hører sammen.** Radius = k(zoom)·√ansatte, og tegnforklaringen
+  tegnes på nytt ved hver zoom. Nøstede sirkler fungerer bare når største radius > 12 px.
+- **Tre vurderingsagenter fant tre ulike feiltyper.** Kartografen: sømmer og manglende kilde.
+  Kodeleseren: Leaflet-hendelser som ikke fyrer (`focus`, `mouseout` fra markør), touch-scroll.
+  Tekstleseren: privat repo-lenke, feil linjetall, «ni kolonner» med sju oppramset. Verifiser før
+  retting: én agent tok feil om at data ikke var sortert.
+- **Kartverkets fliser dekker bare Norge**, og det er en fordel for et Norge-kart.
+- **Playwright-skjermdumper** (desktop, mobil, alle tilstander) var det som gjorde vurderingen
+  konkret. Ta dem før agentene settes i gang. `domcontentloaded`, ikke `load`, med Kartverket-fliser.
