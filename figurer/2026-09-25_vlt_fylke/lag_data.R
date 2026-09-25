@@ -92,51 +92,74 @@ df_nae <- ned_filer |>
     }) |>
     arrange(fylke, periode)
 
-# 3. Sammenlikning: fylkets andel av landet ---------------------------------
+# 3. Sammenlikning: plasser per person med nedsatt arbeidsevne -------------
 
-# Andel av nedsatt arbeidsevne (fordelingsnøkkelen) mot andel av VLT-plassene,
-# målt i desember 2025, siste måned før budsjettåret 2026.
-ref <- "2025-12-01"
+# Klassifisering på gjennomsnittet for 2024, ikke på én måned, for å unngå
+# at fylker som lå tilfeldig høyt eller lavt i bruddmåneden faller tilbake.
+df_vlt_varig <- df_vlt |> filter(tiltak == "Varig lønnstilskudd")
 
-df_andel <- df_vlt |>
-    filter(tiltak == "Varig lønnstilskudd", periode == ref) |>
-    transmute(fylke, vlt = antall) |>
-    inner_join(df_nae |> filter(periode == ref) |> select(fylke, nae = antall, pst_befolkning),
+df_andel <- df_vlt_varig |>
+    filter(periode < "2025-01-01") |>
+    group_by(fylke) |>
+    summarise(vlt = mean(antall), .groups = "drop") |>
+    inner_join(df_nae |> filter(periode < "2025-01-01") |>
+                   group_by(fylke) |>
+                   summarise(nae = mean(antall), pst_befolkning = mean(pst_befolkning), .groups = "drop"),
                by = "fylke") |>
-    mutate(andel_vlt   = vlt / sum(vlt),
-           andel_nae   = nae / sum(nae),
-           vlt_per_1000_nae = 1000 * vlt / nae,
-           ratio       = andel_vlt / andel_nae) |>
-    arrange(desc(ratio))
-
-# Grupper til siste figur: fire fylker med høyest og fire med lavest ratio
-df_andel <- df_andel |>
+    mutate(vlt_per_1000_nae = 1000 * vlt / nae) |>
+    arrange(desc(vlt_per_1000_nae)) |>
     mutate(gruppe = case_when(
-        row_number() <= 4                     ~ "Flest VLT per nedsatt arbeidsevne",
-        row_number() > n() - 4                ~ "Færrest VLT per nedsatt arbeidsevne",
-        TRUE                                  ~ "Midt imellom"
+        row_number() <= 4        ~ "Flest VLT per nedsatt arbeidsevne",
+        row_number() > n() - 4   ~ "Færrest VLT per nedsatt arbeidsevne",
+        TRUE                     ~ "Midt imellom"
     ))
 
-# Indeksert VLT-serie (desember 2025 = 100) med gruppe
-df_indeks <- df_vlt |>
-    filter(tiltak == "Varig lønnstilskudd") |>
-    group_by(fylke) |>
-    mutate(indeks = 100 * antall / antall[periode == ref]) |>
-    ungroup() |>
-    left_join(df_andel |> select(fylke, gruppe, ratio), by = "fylke")
+# Gruppeserier: plasser per 1 000 per måned, og differansen mellom ytterpunktene
+df_gruppe <- df_vlt_varig |>
+    inner_join(df_nae |> select(fylke, periode, nae = antall), by = c("fylke", "periode")) |>
+    inner_join(df_andel |> select(fylke, gruppe), by = "fylke") |>
+    group_by(gruppe, periode) |>
+    summarise(vlt = sum(antall), nae = sum(nae), per_1000 = 1000 * vlt / nae, .groups = "drop")
+
+df_diff <- df_gruppe |>
+    filter(gruppe != "Midt imellom") |>
+    select(gruppe, periode, per_1000) |>
+    pivot_wider(names_from = gruppe, values_from = per_1000) |>
+    transmute(periode,
+              differanse = `Flest VLT per nedsatt arbeidsevne` - `Færrest VLT per nedsatt arbeidsevne`)
+
+# Januar mot januar: prosentvis endring desember til januar per gruppe
+df_januar <- df_vlt_varig |>
+    inner_join(df_andel |> select(fylke, gruppe), by = "fylke") |>
+    filter(periode %in% c("2024-12-01", "2025-01-01", "2025-12-01", "2026-01-01")) |>
+    mutate(aar = if_else(periode < "2025-06-01", 2025L, 2026L),
+           mnd = if_else(str_detect(periode, "-12-"), "des", "jan")) |>
+    group_by(gruppe, aar, mnd) |>
+    summarise(antall = sum(antall), .groups = "drop") |>
+    pivot_wider(names_from = mnd, values_from = antall) |>
+    mutate(endring_pst = 100 * (jan / des - 1))
+
+# Fylkesserie med gruppe, til tooltip
+df_fylke_serie <- df_vlt_varig |>
+    inner_join(df_nae |> select(fylke, periode, nae = antall), by = c("fylke", "periode")) |>
+    inner_join(df_andel |> select(fylke, gruppe), by = "fylke") |>
+    mutate(per_1000 = 1000 * antall / nae)
 
 # 4. Skriv -----------------------------------------------------------------
 
 write_json(df_vlt,    "data/web/lonnstilskudd_fylke.json", digits = NA)
 write_json(df_nae,    "data/web/nedsatt_fylke.json",       digits = NA)
 write_json(df_andel,  "data/web/andel_fylke.json",         digits = NA)
-write_json(df_indeks, "data/web/vlt_indeks.json",          digits = NA)
-write_json(list(sist_oppdatert = max(df_vlt$periode), referanse = ref,
+write_json(df_gruppe, "data/web/gruppe_serie.json",        digits = NA)
+write_json(df_diff,   "data/web/gruppe_differanse.json",   digits = NA)
+write_json(df_januar, "data/web/januar.json",              digits = NA)
+write_json(df_fylke_serie, "data/web/fylke_serie.json",    digits = NA)
+write_json(list(sist_oppdatert = max(df_vlt$periode), referanse = "2024",
                 generert = format(Sys.time(), "%Y-%m-%d")),
            "data/web/metadata.json", auto_unbox = TRUE)
 
 cat("VLT:", nrow(df_vlt), "rader |", "NAE:", nrow(df_nae), "rader |",
     "perioder:", n_distinct(df_vlt$periode), "\n")
-print(df_andel |> mutate(across(c(andel_vlt, andel_nae), \(v) round(100 * v, 1)),
-                         ratio = round(ratio, 2), vlt_per_1000_nae = round(vlt_per_1000_nae, 1)) |>
-      as.data.frame(), row.names = FALSE)
+print(df_andel |> mutate(across(c(vlt, nae, vlt_per_1000_nae), \(v) round(v, 1))) |> as.data.frame(), row.names = FALSE)
+print(df_januar |> mutate(endring_pst = round(endring_pst, 1)) |> as.data.frame(), row.names = FALSE)
+print(df_diff |> filter(periode %in% c("2024-01-01", "2025-12-01", "2026-01-01", "2026-08-01")) |> as.data.frame(), row.names = FALSE)
