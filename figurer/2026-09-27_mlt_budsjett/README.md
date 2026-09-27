@@ -2,7 +2,8 @@
 
 Laget 2026-09-27. Datapipeline for blogginnlegget «Da pengene tok slutt:
 midlertidig lønnstilskudd i andre halvår 2025» på homepage (privat repo,
-derfor kopi i div). Utkast, ikke publisert.
+derfor kopi i div):
+https://eirikala.quarto.pub/along-the-way-in-time/posts/2026-09-27_mlt_budsjett/
 
 Spørsmål: sommeren 2025 hadde flere Nav-fylker brukt mer enn rammen for
 arbeidsmarkedstiltak, og direktoratet ga beskjed om at nye plasser ikke skulle
