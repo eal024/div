@@ -31,3 +31,15 @@ innen 5 km, 96 prosent innen 20 km. Avstand er storsirkel, ikke vei.
 Vurdering før publisering (to agenter): de 37 må være figuren, ikke Nav-prikkene;
 butikk-canvas over kommune-SVG blokkerte klikk (løst ved felles canvas i samme
 pane); hjelpemiddelsentralenes mottak lå i nav_mottak og forskjøv avstandene.
+
+## Tillegg 2026-09-27 (senere samme dag)
+
+- Nav-kontor tegnes som kryss (divIcon med SVG), mottak utenfor kontoret som hul ring.
+- Kommunegrenser tydeligere (mørkere kant, 0,8 px nasjonalt, 1,6 px i by-zoom).
+- Bydelsgrenser for Oslo (17), Bergen (8), Trondheim (4) og Stavanger (8) fra
+  OpenStreetMap, admin_level 9, hentet med Overpass (`hent_bydeler_overpass.txt`,
+  rå svar i `data/bydeler_osm.json`, ikke i git). `overpass-api.de` ga 504,
+  `z.overpass-api.de` fungerte. Konvertert med `npx osmtogeojson`, forenklet 15 %
+  med mapshaper til `data/web/bydeler.geojson` (79 KB). Vises fra zoom 9,5,
+  stiplet, med navn ved hover. Lisens ODbL, attribusjon i kartet.
+  Geonorge/Kartverket har ikke bydelsgrenser som åpent datasett; SSB har bare kodene.

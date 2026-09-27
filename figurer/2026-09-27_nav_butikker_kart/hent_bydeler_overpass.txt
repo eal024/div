@@ -1,0 +1,8 @@
+[out:json][timeout:180];
+(
+  rel["boundary"="administrative"]["admin_level"="9"](59.75,10.45,60.15,11.05);
+  rel["boundary"="administrative"]["admin_level"="9"](60.20,5.10,60.55,5.70);
+  rel["boundary"="administrative"]["admin_level"="9"](63.30,10.10,63.55,10.75);
+  rel["boundary"="administrative"]["admin_level"="9"](58.85,5.55,59.05,5.85);
+);
+out geom;

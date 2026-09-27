@@ -2,3 +2,4 @@ data/kommuner/
 data/kommuner_raa.geojson
 data/*_pkt.geojson
 data/*_koblet.geojson
+data/bydeler_osm.json

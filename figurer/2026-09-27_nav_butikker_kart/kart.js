@@ -24,7 +24,7 @@
       tittel: "37 municipalities have a grocery store but no Nav",
       l_status: "Municipality has", l_kontor: "a Nav office", l_mottak: "a reception point only", l_ingen: "no Nav",
       l_butikk: "Grocery stores", l_butikk_rad: "grocery store (from zoom level 8)",
-      l_nav: "Nav", l_nav_kontor: "Nav office", l_nav_mottak: "reception point outside the office",
+      l_nav: "Nav", l_nav_kontor: "Nav office", l_nav_mottak: "reception point outside the office", l_bydel: "city district border (Oslo, Bergen, Trondheim, Stavanger)",
       p_kontor: "Nav office in the municipality", p_mottak: "Reception point only, office elsewhere", p_ingen: "No Nav office or reception point",
       butikker: "grocery stores", kiosker: "kiosks", median: "Median distance from a store to Nav",
       naermeste: "Nearest Nav", km: "km", dager: "days open a week", dropin: "with walk-in service",
@@ -38,7 +38,7 @@
       tittel: "37 kommuner har dagligvarebutikk, men ikke Nav",
       l_status: "Kommunen har", l_kontor: "Nav-kontor", l_mottak: "bare publikumsmottak", l_ingen: "ikke Nav",
       l_butikk: "Dagligvarebutikker", l_butikk_rad: "dagligvarebutikk (fra zoomnivå 8)",
-      l_nav: "Nav", l_nav_kontor: "Nav-kontor", l_nav_mottak: "mottak utenfor kontoret",
+      l_nav: "Nav", l_nav_kontor: "Nav-kontor", l_nav_mottak: "mottak utenfor kontoret", l_bydel: "bydelsgrense (Oslo, Bergen, Trondheim, Stavanger)",
       p_kontor: "Nav-kontor i kommunen", p_mottak: "Bare publikumsmottak, kontoret ligger et annet sted", p_ingen: "Verken Nav-kontor eller mottak",
       butikker: "dagligvarebutikker", kiosker: "kiosker", median: "Medianavstand fra butikk til Nav",
       naermeste: "Nærmeste Nav", km: "km", dager: "dager åpent i uka", dropin: "med drop-in",
@@ -61,7 +61,8 @@
 
   // De 37 kommunene uten Nav er figuren; kontor og mottak er grunn.
   var farge_status      = { kontor: "#a7c2b3", mottak: "#e4eae6", ingen: "#D55E00" };
-  var farge_status_kant = { kontor: "#8fa79a", mottak: "#b5c3bb", ingen: "#7a3a1e" };
+  var farge_status_kant = { kontor: "#5f7a6c", mottak: "#5f7a6c", ingen: "#7a3a1e" };
+var farge_bydel = "#3b4a55";
   var farge_butikk = "#5d6d66";
   var farge_nav    = "#1C2B3A";
   var farge_fylke  = "#7c8891";
@@ -87,6 +88,7 @@
   map.createPane("demp");     map.getPane("demp").style.zIndex = 350;  map.getPane("demp").style.pointerEvents = "none";
   map.createPane("kommuner"); map.getPane("kommuner").style.zIndex = 400;
   map.createPane("fylker");   map.getPane("fylker").style.zIndex = 410;  map.getPane("fylker").style.pointerEvents = "none";
+  map.createPane("bydeler");  map.getPane("bydeler").style.zIndex = 415;
   map.createPane("nav");      map.getPane("nav").style.zIndex = 430;
 
   var demp = L.rectangle([[-90, -180], [90, 180]], { pane: "demp", fillColor: "#f6f6f4", fillOpacity: 0.25, stroke: false, interactive: false }).addTo(map);
@@ -223,9 +225,10 @@
       seksjon("kommuner", t("l_status"),
         '<div class="nk-legend-rad">' + rute(farge_status.kontor, farge_status_kant.kontor) + t("l_kontor") + "</div>" +
         '<div class="nk-legend-rad">' + rute(farge_status.mottak, farge_status_kant.mottak) + t("l_mottak") + "</div>" +
-        '<div class="nk-legend-rad">' + rute(farge_status.ingen,  farge_status_kant.ingen)  + t("l_ingen")  + "</div>") +
+        '<div class="nk-legend-rad">' + rute(farge_status.ingen,  farge_status_kant.ingen)  + t("l_ingen")  + "</div>" +
+        '<div class="nk-legend-rad"><svg width="14" height="14" viewBox="0 0 14 14"><line x1="0" y1="7" x2="14" y2="7" stroke="' + farge_bydel + '" stroke-width="1.6" stroke-dasharray="4 3"/></svg>' + t("l_bydel") + "</div>") +
       seksjon("nav", t("l_nav"),
-        '<div class="nk-legend-rad">' + prikk(farge_nav, "#fff", 5) + t("l_nav_kontor") + "</div>" +
+        '<div class="nk-legend-rad">' + krysssvg(14, 2.4) + t("l_nav_kontor") + "</div>" +
         '<div class="nk-legend-rad">' + prikk("#fff", farge_nav, 4.5, 1.8) + t("l_nav_mottak") + "</div>") +
       seksjon("butikker", t("l_butikk"),
         '<div class="nk-legend-rad">' + prikk(farge_butikk, "#fff", 3.5) + t("l_butikk_rad") + "</div>") +
@@ -244,7 +247,7 @@
 
   // Data -----------------------------------------------------------------
 
-  var kommune_lag, fylke_lag, butikk_lag, nav_lag, ingen_ringer;
+  var kommune_lag, fylke_lag, bydel_lag, butikk_lag, nav_lag, ingen_ringer;
   var kommune_stat = {}, kommune_features = {}, butikk_markers = [], nav_markers = [], kommuner_gj;
   // Kommuner og butikker deler ett canvas i samme pane, slik at klikk treffer
   // begge (øverste vinner). Et canvas over SVG-en ville ellers skjule polygonene.
@@ -280,13 +283,24 @@
     var z = map.getZoom();
     var ingen = s === "ingen";
     return { pane: "kommuner", renderer: canvas,
-             color: farge_status_kant[s], weight: ingen ? (z >= 8 ? 2 : 1.5) : (z >= 8 ? 1 : 0.5), opacity: 0.9,
+             color: farge_status_kant[s], weight: ingen ? (z >= 8 ? 2.2 : 1.5) : (z >= 8 ? 1.6 : 0.8), opacity: 0.9,
              fillColor: farge_status[s], fillOpacity: ingen ? (z >= 10 ? 0.45 : 0.6) : (z >= 10 ? 0.2 : 0.6) };
   }
+  // Kontor tegnes som kryss (divIcon med SVG), mottak som hul ring
+  function krysssvg(px, strek) {
+    var m = px * 0.18;
+    return '<svg width="' + px + '" height="' + px + '" viewBox="0 0 ' + px + " " + px + '" style="display:block">' +
+      '<line x1="' + m + '" y1="' + m + '" x2="' + (px - m) + '" y2="' + (px - m) + '" stroke="#fff" stroke-width="' + (strek + 2.2) + '" stroke-linecap="round"/>' +
+      '<line x1="' + (px - m) + '" y1="' + m + '" x2="' + m + '" y2="' + (px - m) + '" stroke="#fff" stroke-width="' + (strek + 2.2) + '" stroke-linecap="round"/>' +
+      '<line x1="' + m + '" y1="' + m + '" x2="' + (px - m) + '" y2="' + (px - m) + '" stroke="' + farge_nav + '" stroke-width="' + strek + '" stroke-linecap="round"/>' +
+      '<line x1="' + (px - m) + '" y1="' + m + '" x2="' + m + '" y2="' + (px - m) + '" stroke="' + farge_nav + '" stroke-width="' + strek + '" stroke-linecap="round"/></svg>';
+  }
+  function kryssIkon(z) {
+    var px = z < 8 ? 7 : z < 11 ? 13 : 17;
+    return L.divIcon({ className: "nk-kryss", html: krysssvg(px, z < 8 ? 1.5 : 2.4), iconSize: [px, px], iconAnchor: [px / 2, px / 2], popupAnchor: [0, -px / 2] });
+  }
   function stilNav(d, z) {
-    return d.type === "kontor"
-      ? { pane: "nav", radius: r_nav(z), color: "#ffffff", weight: z < 8 ? 0.5 : 1.2, fillColor: farge_nav, fillOpacity: z < 8 ? 0.75 : 0.95 }
-      : { pane: "nav", radius: r_nav(z), color: farge_nav, weight: z < 8 ? 1 : 1.8, fillColor: "#ffffff", fillOpacity: 0.95 };
+    return { pane: "nav", radius: r_nav(z), color: farge_nav, weight: z < 8 ? 1 : 1.8, fillColor: "#ffffff", fillOpacity: 0.95 };
   }
 
   function visLag() {
@@ -295,6 +309,7 @@
     sett(kommune_lag, lag_paa.kommuner);
     sett(ingen_ringer, lag_paa.kommuner && z < 8);
     sett(fylke_lag, lag_paa.kommuner && z < 9);
+    sett(bydel_lag, lag_paa.kommuner && z >= 9.5);
     sett(butikk_lag, lag_paa.butikker && visButikker(z));
     sett(nav_lag, lag_paa.nav);
   }
@@ -306,7 +321,7 @@
     if (kommune_lag) kommune_lag.setStyle(stilKommune);
     if (fylke_lag) fylke_lag.setStyle({ weight: z >= 8 ? 1.2 : 0.8 });
     if (sist_z === null || r_butikk(z) !== r_butikk(sist_z)) butikk_markers.forEach(function (m) { m.setRadius(r_butikk(z)); });
-    nav_markers.forEach(function (m) { m.setStyle(stilNav(m.nkData, z)); });
+    nav_markers.forEach(function (m) { if (m.nkData.type === "kontor") m.setIcon(kryssIkon(z)); else m.setStyle(stilNav(m.nkData, z)); });
     sist_z = z;
     visLag();
   }
@@ -316,9 +331,9 @@
     return fetch(sti + fil).then(function (r) { if (!r.ok) throw new Error(r.status + " " + fil); return r.json(); });
   }
 
-  Promise.all([hent("kommune_stat.json"), hent("kommuner.geojson"), hent("fylker.geojson"), hent("butikker.json"), hent("navpunkter.json")])
+  Promise.all([hent("kommune_stat.json"), hent("kommuner.geojson"), hent("fylker.geojson"), hent("butikker.json"), hent("navpunkter.json"), hent("bydeler.geojson")])
     .then(function (res) {
-      var stat = res[0], kommuner = res[1], fylker = res[2], navpkt = res[4];
+      var stat = res[0], kommuner = res[1], fylker = res[2], navpkt = res[4], bydeler = res[5];
       // butikker.json er kompakt: {felt: [...], rader: [[...], ...]}
       var butikker = res[3].rader.map(function (r) {
         var o = {}; res[3].felt.forEach(function (f, i) { o[f] = r[i]; }); return o;
@@ -345,6 +360,11 @@
         ingen_ringer.addLayer(L.circleMarker(c, { pane: "nav", radius: 5, color: farge_status_kant.ingen, weight: 1.5, fill: false, interactive: false }));
       });
       fylke_lag = L.geoJSON(fylker, { pane: "fylker", style: { color: farge_fylke, weight: 0.8, fill: false, interactive: false } });
+      // Bydeler (OpenStreetMap): stiplet linje fra by-zoom, navn ved hover på linjen
+      bydel_lag = L.geoJSON(bydeler, {
+        pane: "bydeler", style: { color: farge_bydel, weight: 1.4, dashArray: "5 4", fill: false, opacity: 0.85 },
+        onEachFeature: function (f, lag) { lag.bindTooltip(esc(f.properties.bydel), { sticky: true, opacity: 0.95 }); }
+      });
 
       // Butikker (samme canvas)
       butikk_lag = L.layerGroup();
@@ -358,7 +378,9 @@
       // Nav-punkter (SVG øverst): fylt = kontor, hul = mottak utenfor kontoret
       nav_lag = L.layerGroup();
       navpkt.forEach(function (d) {
-        var m = L.circleMarker([d.lat, d.lon], stilNav(d, z));
+        var m = d.type === "kontor"
+          ? L.marker([d.lat, d.lon], { pane: "nav", icon: kryssIkon(z), keyboard: false })
+          : L.circleMarker([d.lat, d.lon], stilNav(d, z));
         m.nkData = d;
         m.bindTooltip(esc(d.kontor_navn), { direction: "top", offset: [0, -4], opacity: 0.95 })
          .bindPopup(function () { return popupNav(d); }, { maxWidth: 300, closeButton: false });
@@ -405,10 +427,9 @@
     var full = el.querySelector('a[data-rolle="full"]');
     if (full) { full.title = t("full"); full.setAttribute("aria-label", t("full")); }
     if (sok_input) { sok_input.placeholder = t("sok"); sok_input.setAttribute("aria-label", t("sok")); }
-    if (!smal) {
-      if (kilde_vist) map.attributionControl.removeAttribution(kilde_vist);
-      kilde_vist = t("kilde"); map.attributionControl.addAttribution(kilde_vist);
-    }
+    if (kilde_vist) map.attributionControl.removeAttribution(kilde_vist);
+    kilde_vist = (smal ? "" : t("kilde") + ", ") + '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+    map.attributionControl.addAttribution(kilde_vist);
     if (legend_div) tegnLegend();
     tegnTittel();
     map.closePopup();

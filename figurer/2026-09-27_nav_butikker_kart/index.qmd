@@ -34,7 +34,7 @@ resources:
 
 ::: {.lang-en}
 
-<p class="nk-bildetekst">Municipalities coloured by Nav presence, with the 37 that have none in orange. Nav offices are filled dots, reception points outside an office are hollow. Grocery stores appear as small dots from zoom level 8. Click a municipality, a store or a Nav point for details, and use the checkboxes in the legend to switch layers off. <a href="kart.html" target="_blank" rel="noopener">Open full screen</a>.</p>
+<p class="nk-bildetekst">Municipalities coloured by Nav presence, with the 37 that have none in orange. Nav offices are crosses, reception points outside an office are hollow rings. Grocery stores appear as small dots from zoom level 8, and city district borders in Oslo, Bergen, Trondheim and Stavanger as dashed lines. Click a municipality, a store or a Nav point for details, and use the checkboxes in the legend to switch layers off. <a href="kart.html" target="_blank" rel="noopener">Open full screen</a>.</p>
 
 ## Two Networks on One Map
 
@@ -68,13 +68,13 @@ For most of the country, Nav is as close as the supermarket. The map is for the 
 
 Two caveats. Distance is a straight line, not a road, so mountain municipalities are further than they look. And about 2 700 of the stores have no chain match in the register; the chain is shown in the pop-up where it is known.
 
-The map is Leaflet on Kartverket's grey base map, as [described earlier](../2026-09-25_nav_kontor_interaktivt/). The municipal polygons come from Kartverket's municipality API, simplified with mapshaper. The pipeline, including the store and reception data as JSON, is in the [div repository](https://github.com/eal024/div) under `figurer/2026-09-27_nav_butikker_kart/`. Data: `helper::dagligvare`, `helper::nav_mottak`, `helper::nav_kontor`. Svalbard's six stores are left out because Svalbard is not a municipality.
+The map is Leaflet on Kartverket's grey base map, as [described earlier](../2026-09-25_nav_kontor_interaktivt/). The municipal polygons come from Kartverket's municipality API, simplified with mapshaper. The city district borders are from OpenStreetMap (© OpenStreetMap contributors, ODbL), fetched through the Overpass API. The pipeline, including the store and reception data as JSON, is in the [div repository](https://github.com/eal024/div) under `figurer/2026-09-27_nav_butikker_kart/`. Data: `helper::dagligvare`, `helper::nav_mottak`, `helper::nav_kontor`. Svalbard's six stores are left out because Svalbard is not a municipality.
 
 :::
 
 ::: {.lang-no}
 
-<p class="nk-bildetekst">Kommuner farget etter Nav-tilstedeværelse, med de 37 uten Nav i oransje. Nav-kontor er fylte prikker, publikumsmottak utenfor kontor er hule. Dagligvarebutikker vises som små prikker fra zoomnivå 8. Klikk på en kommune, en butikk eller et Nav-punkt for detaljer, og bruk avkrysningsboksene i tegnforklaringen for å slå av lag. <a href="kart.html" target="_blank" rel="noopener">Åpne i fullskjerm</a>.</p>
+<p class="nk-bildetekst">Kommuner farget etter Nav-tilstedeværelse, med de 37 uten Nav i oransje. Nav-kontor er kryss, publikumsmottak utenfor kontor er hule ringer. Dagligvarebutikker vises som små prikker fra zoomnivå 8, og bydelsgrenser i Oslo, Bergen, Trondheim og Stavanger som stiplede linjer. Klikk på en kommune, en butikk eller et Nav-punkt for detaljer, og bruk avkrysningsboksene i tegnforklaringen for å slå av lag. <a href="kart.html" target="_blank" rel="noopener">Åpne i fullskjerm</a>.</p>
 
 ## To nettverk på ett kart
 
@@ -108,6 +108,6 @@ For det meste av landet er Nav like nært som matbutikken. Kartet er til for res
 
 To forbehold. Avstanden er en rett linje, ikke vei, så fjellkommuner ligger lenger unna enn de ser ut til. Og rundt 2 700 av butikkene har ingen kjedematch i registeret; kjeden vises i popupen der den er kjent.
 
-Kartet er Leaflet på Kartverkets gråtonekart, som [beskrevet tidligere](../2026-09-25_nav_kontor_interaktivt/). Kommunepolygonene kommer fra Kartverkets kommune-API, forenklet med mapshaper. Pipelinen, med butikk- og mottaksdata som JSON, ligger i [div-repoet](https://github.com/eal024/div) under `figurer/2026-09-27_nav_butikker_kart/`. Data: `helper::dagligvare`, `helper::nav_mottak`, `helper::nav_kontor`. Svalbards seks butikker er holdt utenfor, siden Svalbard ikke er en kommune.
+Kartet er Leaflet på Kartverkets gråtonekart, som [beskrevet tidligere](../2026-09-25_nav_kontor_interaktivt/). Kommunepolygonene kommer fra Kartverkets kommune-API, forenklet med mapshaper. Bydelsgrensene er fra OpenStreetMap (© OpenStreetMap-bidragsyterne, ODbL), hentet via Overpass-API-et. Pipelinen, med butikk- og mottaksdata som JSON, ligger i [div-repoet](https://github.com/eal024/div) under `figurer/2026-09-27_nav_butikker_kart/`. Data: `helper::dagligvare`, `helper::nav_mottak`, `helper::nav_kontor`. Svalbards seks butikker er holdt utenfor, siden Svalbard ikke er en kommune.
 
 :::

@@ -304,3 +304,16 @@
   background: #fff;
   color: #111;
 }
+
+/* Nav-kontor som kryss */
+.nk-kart .nk-kryss {
+  background: none;
+  border: none;
+}
+.nk-kart .nk-kryss svg {
+  display: block;
+}
+.nk-legend .nk-legend-rad svg {
+  flex: none;
+  margin-right: 6px;
+}
