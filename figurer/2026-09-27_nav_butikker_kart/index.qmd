@@ -1,0 +1,113 @@
+---
+title: "Every Municipality Has a Grocery Store. 37 Have No Nav."
+date: 2026-09-27
+description: "The Nav office map, now with municipal borders and 5 900 grocery stores. Click a municipality to see whether it has a Nav office, a reception point or nothing, and how far its stores are from the nearest Nav."
+categories:
+  - Nav
+  - data
+  - maps
+  - javascript
+image: kart_forhandsvisning.png
+include-before-body: ../../_lang-toggle.html
+resources:
+  - kart.js
+  - kart.css
+  - kart.html
+  - data/*
+---
+
+<span class="title-en" hidden>Every Municipality Has a Grocery Store. 37 Have No Nav.</span>
+<span class="title-no" hidden>Alle kommuner har en dagligvarebutikk. 37 har ikke Nav.</span>
+<span class="desc-en" hidden>The Nav office map, now with municipal borders and 5 900 grocery stores. Click a municipality to see whether it has a Nav office, a reception point or nothing, and how far its stores are from the nearest Nav.</span>
+<span class="desc-no" hidden>Kartet over Nav-kontor, nå med kommunegrenser og 5 900 dagligvarebutikker. Klikk på en kommune for å se om den har Nav-kontor, publikumsmottak eller ingenting, og hvor langt butikkene ligger fra nærmeste Nav.</span>
+
+```{=html}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="kart.css">
+<div id="nk-kart" class="nk-kart" data-sti="data/"
+     role="region" aria-label="Interactive map of Nav offices, grocery stores and municipalities"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="kart.js"></script>
+```
+
+::: {.lang-en}
+
+<p class="nk-bildetekst">Municipalities coloured by Nav presence, with the 37 that have none in orange. Nav offices are filled dots, reception points outside an office are hollow. Grocery stores appear as small dots from zoom level 8. Click a municipality, a store or a Nav point for details, and use the checkboxes in the legend to switch layers off. <a href="kart.html" target="_blank" rel="noopener">Open full screen</a>.</p>
+
+## Two Networks on One Map
+
+The [previous map](../2026-09-25_nav_kontor_interaktivt/) showed where Nav's 243 local offices are. It could not show what is around them. This one adds two things: the borders of the 357 municipalities, and the 5 922 grocery stores in those municipalities, from the same open sources as before: Enhetsregisteret and Kartverket's address search. Kiosks are shown in the municipality pop-ups but are not drawn and not included in the counts.
+
+Grocery stores are a useful yardstick. Every municipality has at least one, because people have to buy food wherever they live. So a store is a reasonable place to stand and ask: how far is it from here to Nav?
+
+## Where Nav Is, and Is Not
+
+Nav is present in most municipalities, but not with an office in all of them.
+
+| Municipality has | Municipalities |
+|---|---|
+| A Nav office | 221 |
+| A reception point only | 99 |
+| Neither | 37 |
+
+The 99 with a reception point only are served by a joint office based in a neighbouring municipality. The local reception point is open most weekdays, but walk-in service is limited to at most three days a week, and 39 of them have none. The 37 with neither are also covered by a joint office next door, and most are small: together they have 186 grocery stores. Time and Volda are the exceptions, with 21 and 16 stores, served from Klepp and Ørsta. The furthest away is Træna, whose three stores are 35 kilometres from the nearest Nav. Lesja follows at 34, Øystre Slidre and Nore og Uvdal at 33.
+
+## From the Store to Nav
+
+Measured from every store to the nearest Nav office or reception point:
+
+| Distance | Share of stores |
+|---|---|
+| Within 5 km | 70 % |
+| Within 20 km | 96 % |
+| Median | 2 km |
+
+For most of the country, Nav is as close as the supermarket. The map is for the rest: zoom into Innlandet, Nordland or Finnmark and the orange municipalities show where a visit means a drive.
+
+Two caveats. Distance is a straight line, not a road, so mountain municipalities are further than they look. And about 2 700 of the stores have no chain match in the register; the chain is shown in the pop-up where it is known.
+
+The map is Leaflet on Kartverket's grey base map, as [described earlier](../2026-09-25_nav_kontor_interaktivt/). The municipal polygons come from Kartverket's municipality API, simplified with mapshaper. The pipeline, including the store and reception data as JSON, is in the [div repository](https://github.com/eal024/div) under `figurer/2026-09-27_nav_butikker_kart/`. Data: `helper::dagligvare`, `helper::nav_mottak`, `helper::nav_kontor`. Svalbard's six stores are left out because Svalbard is not a municipality.
+
+:::
+
+::: {.lang-no}
+
+<p class="nk-bildetekst">Kommuner farget etter Nav-tilstedeværelse, med de 37 uten Nav i oransje. Nav-kontor er fylte prikker, publikumsmottak utenfor kontor er hule. Dagligvarebutikker vises som små prikker fra zoomnivå 8. Klikk på en kommune, en butikk eller et Nav-punkt for detaljer, og bruk avkrysningsboksene i tegnforklaringen for å slå av lag. <a href="kart.html" target="_blank" rel="noopener">Åpne i fullskjerm</a>.</p>
+
+## To nettverk på ett kart
+
+[Forrige kart](../2026-09-25_nav_kontor_interaktivt/) viste hvor Navs 243 lokalkontor ligger. Det kunne ikke vise hva som er rundt dem. Dette kartet legger til to ting: grensene for de 357 kommunene, og de 5 922 dagligvarebutikkene i disse kommunene, fra de samme åpne kildene som før: Enhetsregisteret og Kartverkets adressesøk. Kiosker vises i kommunepopupen, men er ikke tegnet og ikke med i tallene.
+
+Dagligvarebutikker er en nyttig målestokk. Alle kommuner har minst én, fordi folk må kjøpe mat der de bor. En butikk er derfor et rimelig sted å stå og spørre: hvor langt er det herfra til Nav?
+
+## Hvor Nav er, og ikke er
+
+Nav er til stede i de fleste kommuner, men ikke med kontor i alle.
+
+| Kommunen har | Kommuner |
+|---|---|
+| Nav-kontor | 221 |
+| Bare publikumsmottak | 99 |
+| Ingen av delene | 37 |
+
+De 99 med bare mottak betjenes av et felleskontor med sete i nabokommunen. Mottaket er åpent de fleste hverdager, men drop-in er begrenset til høyst tre dager i uka, og 39 av dem har ingen. De 37 uten noen av delene dekkes også av et felleskontor i nabokommunen, og de fleste er små: til sammen har de 186 dagligvarebutikker. Time og Volda er unntakene, med 21 og 16 butikker, betjent fra Klepp og Ørsta. Lengst unna ligger Træna, der de tre butikkene er 35 kilometer fra nærmeste Nav. Lesja følger med 34, Øystre Slidre og Nore og Uvdal med 33.
+
+## Fra butikken til Nav
+
+Målt fra hver butikk til nærmeste Nav-kontor eller publikumsmottak:
+
+| Avstand | Andel av butikkene |
+|---|---|
+| Innen 5 km | 70 % |
+| Innen 20 km | 96 % |
+| Median | 2 km |
+
+For det meste av landet er Nav like nært som matbutikken. Kartet er til for resten: zoom inn på Innlandet, Nordland eller Finnmark, og de oransje kommunene viser hvor et besøk betyr en kjøretur.
+
+To forbehold. Avstanden er en rett linje, ikke vei, så fjellkommuner ligger lenger unna enn de ser ut til. Og rundt 2 700 av butikkene har ingen kjedematch i registeret; kjeden vises i popupen der den er kjent.
+
+Kartet er Leaflet på Kartverkets gråtonekart, som [beskrevet tidligere](../2026-09-25_nav_kontor_interaktivt/). Kommunepolygonene kommer fra Kartverkets kommune-API, forenklet med mapshaper. Pipelinen, med butikk- og mottaksdata som JSON, ligger i [div-repoet](https://github.com/eal024/div) under `figurer/2026-09-27_nav_butikker_kart/`. Data: `helper::dagligvare`, `helper::nav_mottak`, `helper::nav_kontor`. Svalbards seks butikker er holdt utenfor, siden Svalbard ikke er en kommune.
+
+:::
