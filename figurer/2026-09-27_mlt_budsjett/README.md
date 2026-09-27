@@ -23,6 +23,7 @@ kuttet andre tiltak mest (korrelasjon 0,35 i prosent over 99 kommuner).
 |---|---|
 | `lag_data.R` | Leser Excel-filene i `data/raw/`, beregner halvår, nabopar og substitusjon, skriver JSON til `data/web/` |
 | `data/raw/tilt1x0_*.xlsx` | Nav TILT100–TILT180, desember 2024, desember 2025 og august 2026. Ark «Tiltak og fylke» (alle år) og «Tiltak og kommune» (2025 og 2026; TILT100: «Tiltaksdeltakere og kommune») |
+| `data/raw/harb100_202608.xlsx` | Nav HARB100 Sesongjusterte hovedtall om arbeidsmarkedet, august 2026 (helt ledige, delvis ledige, tiltaksdeltakere, arbeidssøkere) |
 | `data/raw/kommuner.geojson` | 357 kommunepolygoner (Kartverket, forenklet), kopi fra `2026-09-27_nav_butikker_kart/data/web/` |
 | `data/web/mlt_fylke.json` | fylke × måned × tiltak (midlertidig, varig), antall |
 | `data/web/landet_tiltak.json` | landet: tiltaksgruppe × måned |
@@ -31,6 +32,7 @@ kuttet andre tiltak mest (korrelasjon 0,35 i prosent over 99 kommuner).
 | `data/web/kommune_serie.json` | kommune × måned 2025–2026: lønnstilskudd (NA ved prikking) og alle tiltak |
 | `data/web/kommune_halvaar.json` | per kommune: halvårssnitt, endringer, `paalitelig` (≥ 15 i H1 2025 og ingen prikking) |
 | `data/web/kommune_tiltak_halvaar.json` | kommune × tiltaksgruppe, halvår 2025 |
+| `data/web/hovedtall_sesongjustert.json` | landet × måned 2022–2026: helt ledige, delvis ledige, tiltak, arbeidssøkere i alt (sesongjustert) |
 | `data/web/nabo_par.json` | kommunepar som deler grense, begge pålitelige, med endring og `kryss_fylke` |
 
 Forbehold: celler under 4 er prikket, som gir 99 pålitelige av 358 kommuner.

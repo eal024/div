@@ -13,6 +13,8 @@
 #   TILT180 jobbskaping og tilrettelegging. Ark «Tiltak og fylke» (alle år) og
 #   «Tiltak og kommune» (fra 2025-fila). Desember-filene dekker hele året.
 #   Celler under 4 er prikket («*») og leses som NA.
+#   HARB100 Sesongjusterte hovedtall om arbeidsmarkedet (august 2026): helt ledige, delvis
+#   ledige, tiltaksdeltakere og arbeidssøkere i alt per måned, sesongjustert, brudd april 2025.
 #   kommuner.geojson: 357 kommunepolygoner fra Kartverket, forenklet, kopiert fra
 #   div/figurer/2026-09-27_nav_butikker_kart/data/web/. Brukes til nabopar.
 # Kjør fra denne mappa: Rscript lag_data.R
@@ -250,6 +252,36 @@ df_nabo_par <- df_nabo |>
     select(-paalitelig_a, -paalitelig_b) |>
     arrange(desc(abs(differanse)))
 
+
+# 5b. Sesongjusterte hovedtall: hvor ble det av deltakerne? -------------------
+
+# HARB100 har ett ark per serie, år som rader og måneder som kolonner. Tiltaks-
+# deltakere er Navs definisjon i denne fila (arbeidssøkere og andre på tiltak,
+# uten ARR, tilrettelegging og nedsatt arbeidsevne på tiltak).
+fn_harb <- function(ark, navn) {
+    x <- as.data.frame(suppressMessages(read_excel("data/raw/harb100_202608.xlsx", sheet = ark, col_names = FALSE)))
+    hdr <- which(x[[2]] == "Januar")[1]
+    mnd <- as.character(x[hdr, 2:13])
+    x[(hdr + 1):nrow(x), 1:13] |>
+        set_names(c("aar", mnd)) |>
+        filter(!is.na(aar)) |>
+        pivot_longer(-aar, names_to = "mnd", values_to = "verdi") |>
+        mutate(aar     = as.integer(aar),
+               mnd_nr  = match(str_to_lower(mnd), mnd_navn),
+               periode = sprintf("%d-%02d-01", aar, mnd_nr),
+               verdi   = suppressWarnings(as.numeric(verdi))) |>
+        filter(!is.na(verdi), aar >= 2022) |>
+        select(periode, {{ navn }} := verdi)
+}
+
+df_harb <- fn_harb("Helt ledige", helt_ledige) |>
+    inner_join(fn_harb("Delvis ledige", delvis_ledige), by = "periode") |>
+    inner_join(fn_harb("Helt ledige og tiltaksdeltakere", helt_og_tiltak), by = "periode") |>
+    inner_join(fn_harb("Arbeidssøkere", arbeidssokere), by = "periode") |>
+    mutate(tiltak = helt_og_tiltak - helt_ledige) |>
+    select(periode, helt_ledige, delvis_ledige, tiltak, arbeidssokere) |>
+    arrange(periode)
+
 # 6. Skriv -------------------------------------------------------------------
 
 write_json(df_mlt,                "data/web/mlt_fylke.json",            digits = NA)
@@ -260,6 +292,7 @@ write_json(df_kom_serie,          "data/web/kommune_serie.json",        digits =
 write_json(df_kom_halvaar,        "data/web/kommune_halvaar.json",      digits = NA, na = "null")
 write_json(df_kom_andre_halvaar,  "data/web/kommune_tiltak_halvaar.json", digits = NA, na = "null")
 write_json(df_nabo_par,           "data/web/nabo_par.json",             digits = NA)
+write_json(df_harb,               "data/web/hovedtall_sesongjustert.json", digits = NA)
 write_json(list(sist_oppdatert = max(df_mlt$periode), generert = format(Sys.time(), "%Y-%m-%d"),
                 n_kommuner = nrow(df_kom_halvaar), n_paalitelig = sum(df_kom_halvaar$paalitelig),
                 n_nabopar = nrow(df_nabo_par), n_nabopar_kryss = sum(df_nabo_par$kryss_fylke)),
@@ -288,4 +321,6 @@ cat("\n== Nabopar innen fylke, størst forskjell ==\n")
 print(df_nabo_par |> filter(!kryss_fylke) |> head(15) |>
           select(kommune_a, kommune_b, fylke_a, mlt_endring_pst_a, mlt_endring_pst_b, differanse) |>
           mutate(across(where(is.numeric), r1)) |> as.data.frame(), row.names = FALSE)
+cat("\n== Sesongjusterte hovedtall, juni og desember ==\n")
+print(df_harb |> filter(str_detect(periode, "-(06|12)-"), periode >= "2024-01-01") |> as.data.frame(), row.names = FALSE)
 cat("\nnabopar:", nrow(df_nabo), "| med pålitelige tall:", nrow(df_nabo_par), "| kryss fylke:", sum(df_nabo_par$kryss_fylke), "\n")
